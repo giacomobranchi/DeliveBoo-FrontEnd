@@ -40,7 +40,7 @@ export default {
             <ul class="list-unstyled my-2">
               <li><a href="">Team di sviluppo</a></li>
               <li><a href="">Ristoranti</a></li>
-              <li><a href="">Altro</a></li>
+              <li><a href="">Altro </a></li>
             </ul>
             <div class="icons col-12 d-flex flex-wrap">
               <div class="facebook rounded-circle">
