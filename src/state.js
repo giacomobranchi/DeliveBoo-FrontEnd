@@ -17,6 +17,7 @@ export const state = reactive({
         axios.get(this.base_url + 'api/types/')
             .then(response => {
                 this.types = response.data.result;
+                console.log(this.types);
             }).catch(err => {
                 console.error(err);
             })

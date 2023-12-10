@@ -25,8 +25,11 @@ export default {
             <div class="row py-5">
                 <div class="col-3 bg-danger">
                     <h3>Filtra per tipologia</h3>
-                    <div v-for="type in this.state.types" class="border border-secondary rounded-3 p-2 m-1">
-                        {{ type.name }}
+                    <div v-for="type in this.state.types">
+                        <router-link :to="{ name: 'type', params: { slug: type.slug } }"
+                            class="border border-secondary rounded-3 p-2 m-1">
+                            {{ type.name }}
+                        </router-link>
                     </div>
                 </div>
                 <!-- /.col -->
