@@ -23,21 +23,21 @@ export default {
 
         <div class="container">
             <div class="row py-5">
-                <div class="col-3 bg-danger">
+                <div class="col-3">
                     <h3>Filtra per tipologia</h3>
-                    <div v-for="type in this.state.types">
-                        <router-link :to="{ name: 'type', params: { slug: type.slug } }"
-                            class="border border-secondary rounded-3 p-2 m-1">
+                    <div class="text-decoration-none m-1" v-for="type in this.state.types">
+                        <router-link :to="{ name: 'singleType', params: { slug: type.slug } }"
+                            class="text-decoration-none btn btn-primary">
                             {{ type.name }}
                         </router-link>
                     </div>
                 </div>
                 <!-- /.col -->
 
-                <div class="col-9 row row-cols-3 bg-warning">
+                <div class="col-9 row row-cols-3">
 
                     <div v-for="restaurant in this.state.restaurants" class="col-4 py-1  px-3">
-                        <router-link :to="{ name: 'restaurant', params: { slug: restaurant.slug } }"
+                        <router-link :to="{ name: 'singleRestaurant', params: { slug: restaurant.slug } }"
                             class="card bg-transparent border-0 text-decoration-none">
                             <img src="https://imgs.search.brave.com/Q37xS1P9QR74fgVCUo7CA6Zpn_woGWjzvP9x8e4nUCk/rs:fit:500:0:0/g:ce/aHR0cHM6Ly93d3cu/cmlzdG9yYW50ZXJv/Y2NhLmNvbS93cC1j/b250ZW50L3VwbG9h/ZHMvZWxlbWVudG9y/L3RodW1icy9yZXN0/YXVyYW50X2Rvd25z/dGFpcnNfcm9vbS1v/ODYxdmd6cjQ0emlh/M25tMm5zdzlpd2N3/MDc2MW83YXlyeTcz/bXFobXMuanBn"
                                 class="img-fluid" alt="...">

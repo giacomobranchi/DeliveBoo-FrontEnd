@@ -12,17 +12,17 @@ const router = createRouter({
     routes: [
         {
             path: '/restaurants',
-            name: 'restaurants',
+            name: 'restaurantsList',
             component: RestaurantsView
         },
         {
             path: '/restaurant/:slug',
-            name: 'restaurant',
+            name: 'singleRestaurant',
             component: SingleRestaurantView
         },
         {
             path: '/type/:slug',
-            name: 'typeRestaurants',
+            name: 'singleType',
             component: TypeRestaurantsView
         },
     ]
