@@ -1,18 +1,30 @@
 <script>
 import { state } from '../state.js';
+import axios from 'axios';
+
 export default {
-    name: 'RestaurantsView',
+    name: 'TypeRestaurantsView',
     components: {},
     data() {
         return {
             state,
+            typeRestaurants: null,
+            typeRestaurants: { users: [] },
 
         }
     },
 
 
     mounted() {
-        this.state.fetchRestaurants()
+
+        axios.get(this.state.base_url + `api/types/${this.$route.params.slug}`)
+            .then(response => {
+                this.typeRestaurants = response.data.result;
+                //console.log(this.typeRestaurants);
+            }).catch(err => {
+                console.error(err);
+            })
+
         this.state.fetchTypes()
     }
 }
@@ -20,8 +32,8 @@ export default {
 
 <template>
     <main>
-
         <div class="container">
+            restaurant for type
             <div class="row py-5">
                 <div class="col-3">
                     <h3>Filtra per tipologia</h3>
@@ -34,9 +46,9 @@ export default {
                 </div>
                 <!-- /.col -->
 
-                <div class="col-9 row row-cols-3">
+                <div v-if="typeRestaurants" class="col-9 row row-cols-3">
 
-                    <div v-for="restaurant in this.state.restaurants" class="col-4 py-1  px-3">
+                    <div v-for="restaurant in typeRestaurants.users" class="col-4 py-1  px-3">
                         <router-link :to="{ name: 'singleRestaurant', params: { slug: restaurant.slug } }"
                             class="card bg-transparent border-0 text-decoration-none">
                             <img src="https://imgs.search.brave.com/Q37xS1P9QR74fgVCUo7CA6Zpn_woGWjzvP9x8e4nUCk/rs:fit:500:0:0/g:ce/aHR0cHM6Ly93d3cu/cmlzdG9yYW50ZXJv/Y2NhLmNvbS93cC1j/b250ZW50L3VwbG9h/ZHMvZWxlbWVudG9y/L3RodW1icy9yZXN0/YXVyYW50X2Rvd25z/dGFpcnNfcm9vbS1v/ODYxdmd6cjQ0emlh/M25tMm5zdzlpd2N3/MDc2MW83YXlyeTcz/bXFobXMuanBn"
