@@ -1,6 +1,6 @@
 <script>
 export default {
-    name: 'ComponentFooter'
+  name: 'ComponentFooter'
 }
 </script>
 
@@ -9,7 +9,7 @@ export default {
     <div class="footer-top">
       <div class="container footer flex-wrap">
         <div class="lists d-flex flex-wrap justify-content-around">
-          
+
           <div class="about col-12 col-lg-6 col-xl-3 p-3">
             <h5>Aiuto</h5>
             <div class="line"></div>
@@ -17,11 +17,11 @@ export default {
               <li><a href="">Contatti</a></li>
               <li><a href="">FAQ</a></li>
               <li><a href="">Tipi di cucina</a></li>
-            </ul>   
+            </ul>
           </div>
 
           <!-- End section Aiuto -->
-          
+
           <div class="about col-12 col-lg-6 col-xl-3 p-3">
             <h5>Note Legali</h5>
             <div class="line"></div>
@@ -33,7 +33,7 @@ export default {
           </div>
 
           <!-- End section Note legali -->
-          
+
           <div class="about col-12 col-lg-6 col-xl-3 p-3">
             <h5>Scopri DeliveBoo</h5>
             <div class="line"></div>
@@ -74,7 +74,7 @@ export default {
         </div>
         <div class="right d-flex">
           <img src="" alt="">
-          <p>&#169; 2023  All Rights Reserved.</p>
+          <p>&#169; 2023 All Rights Reserved.</p>
         </div>
       </div>
     </div>
@@ -82,88 +82,93 @@ export default {
 </template>
           
 <style lang="scss" scoped>
-  @use '../assets/scss/partials/variables' as *;
+@use '../assets/scss/partials/variables' as *;
 
-  footer {
-    background: linear-gradient(rgba(23, 32, 43, 0.9), rgba(55, 67, 81, 0.753));
+footer {
+  background: linear-gradient(rgba(23, 32, 43, 0.9), rgba(55, 67, 81, 0.753));
 
-    .lists {
-      color: $d_boo_light;
-      padding-top: 2rem;
-
-      .icons {
-        .facebook, .twitter, .linkedin, .instagram, .pinterest {
-          justify-content: space-between; 
-          width: 40px;
-          height: 40px;
-          padding-left: 13px;
-          padding-right: 14px;
-          padding-top: 5px;
-          margin-right: 0.5rem;
-          margin-bottom: 0.5rem;
-          cursor: pointer; 
-
-          &:hover {
-            background-color: transparent;
-          }
-        }
-
-        .facebook {
-          background-color: $d_boo_facebook;
-          padding-left: 16px;
-          padding-right: 16px;
-        }
-
-        .twitter {
-          background-color: $d_boo_twitter;
-        }
-
-        .linkedin {
-          background-color: $d_boo_linkedin;
-        }
-
-        .instagram {
-          background-color: $d_boo_instagram;
-          padding-left: 12px;
-        }
-
-        .pinterest {
-          background-color: $d_boo_pinterest;
-          padding-left: 12px;
-          padding-right: 18px;
-        }
-      }
-    }
+  .lists {
+    color: $d_boo_light;
+    padding-top: 2rem;
 
     .icons {
-      justify-content: space-between; 
-    }
 
-    .line {
-      border: 2px solid $d_boo_orange; 
-      width: 40px;
-    }
+      .facebook,
+      .twitter,
+      .linkedin,
+      .instagram,
+      .pinterest {
+        justify-content: space-between;
+        width: 40px;
+        height: 40px;
+        padding-left: 13px;
+        padding-right: 14px;
+        padding-top: 5px;
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        transition: .5s;
 
-    .list-unstyled a {
-      text-decoration: none; 
-      color: white;
-      margin-bottom: 10px;
-    }
+        &:hover {
+          background-color: transparent;
+        }
+      }
 
-    .list-unstyled li {
-      margin-bottom: 10px;
-    }
+      .facebook {
+        background-color: $d_boo_facebook;
+        padding-left: 16px;
+        padding-right: 16px;
+      }
 
-    .footer_bottom {
-      color: $d_boo_light;
-    }
+      .twitter {
+        background-color: $d_boo_twitter;
+      }
 
-    p {
-      padding-right: 2rem;
-    }
+      .linkedin {
+        background-color: $d_boo_linkedin;
+      }
 
-    span {
-      color: $d_boo_primary;
+      .instagram {
+        background-color: $d_boo_instagram;
+        padding-left: 12px;
+      }
+
+      .pinterest {
+        background-color: $d_boo_pinterest;
+        padding-left: 12px;
+        padding-right: 18px;
+      }
     }
   }
-</style>
+
+  .icons {
+    justify-content: space-between;
+  }
+
+  .line {
+    border: 2px solid $d_boo_orange;
+    width: 40px;
+  }
+
+  .list-unstyled a {
+    text-decoration: none;
+    color: white;
+    margin-bottom: 10px;
+  }
+
+  .list-unstyled li {
+    margin-bottom: 10px;
+  }
+
+  .footer_bottom {
+    color: $d_boo_light;
+  }
+
+  p {
+    padding-right: 2rem;
+  }
+
+  span {
+    color: $d_boo_primary;
+  }
+}</style>

@@ -13,7 +13,20 @@ export const state = reactive({
                 console.error(err);
             })
     },
-    fetchSingleRestaurant() {
+    fetchTypes() {
+        axios.get(this.base_url + 'api/types/')
+            .then(response => {
+                this.types = response.data.result;
+            }).catch(err => {
+                console.error(err);
+            })
+    },
+
+
+
+
+
+    /* fetchSingleRestaurant() {
         axios.get(this.base_url + `api/restaurants/${this.$route.params.slug}`)
             .then(response => {
                 console.log('topperia');
@@ -22,6 +35,6 @@ export const state = reactive({
             }).catch(err => {
                 console.error(err);
             })
-    },
+    }, */
 })
 /* this.$route.params.slug */

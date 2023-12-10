@@ -6,7 +6,6 @@ export default {
     components: {},
     data() {
         return {
-            message: 'HOLAAAAA',
             state,
             singleRestaurant: null,
             base_url: 'http://127.0.0.1:8000/',
@@ -29,7 +28,6 @@ export default {
 </script>
 
 <template>
-    <h1>{{ message }}</h1>
     <div v-if="singleRestaurant">
         <h2>{{ singleRestaurant.name }}</h2>
     </div>
