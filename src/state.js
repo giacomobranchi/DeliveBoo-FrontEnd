@@ -37,4 +37,3 @@ export const state = reactive({
             })
     }, */
 })
-/* this.$route.params.slug */

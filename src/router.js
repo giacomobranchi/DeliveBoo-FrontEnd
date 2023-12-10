@@ -3,6 +3,7 @@ import { createWebHashHistory, createRouter } from 'vue-router';
 
 import RestaurantsView from './views/RestaurantsView.vue';
 import SingleRestaurantView from './views/SingleRestaurantView.vue';
+import TypeRestaurantsView from './views/TypeRestaurantsView.vue';
 
 const router = createRouter({
 
@@ -18,6 +19,11 @@ const router = createRouter({
             path: '/restaurant/:slug',
             name: 'restaurant',
             component: SingleRestaurantView
+        },
+        {
+            path: '/type/:slug',
+            name: 'typeRestaurants',
+            component: TypeRestaurantsView
         },
     ]
 });
