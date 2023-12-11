@@ -15,10 +15,10 @@ export default {
 
 
     mounted() {
-        axios.get(this.base_url + `api/restaurants/${this.$route.params.slug}`)
+        axios.get(this.base_url + `api/restaurants/user/${this.$route.params.slug}`)
             .then(response => {
                 console.log('topperia');
-                console.log(`http://localhost:8000/api/restaurants/${this.$route.params.slug}`);
+                console.log(`http://localhost:8000/api/restaurants/user/${this.$route.params.slug}`);
                 this.singleRestaurant = response.data.result;
             }).catch(err => {
                 console.error(err);
@@ -64,10 +64,10 @@ export default {
                 </div>
                 <!-- /.row -->
             </div>
-        <!-- /.container -->
-        
+            <!-- /.container -->
+
         </section>
-        
+
 
     </main>
 </template>
@@ -81,7 +81,8 @@ main {
     background-size: cover;
     background-position: center;
 }
-section{
+
+section {
     background-color: rgba(0, 0, 0, 0.500);
 }
 </style>

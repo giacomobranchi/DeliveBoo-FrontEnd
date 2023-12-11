@@ -6,7 +6,7 @@ export const state = reactive({
     base_url: 'http://127.0.0.1:8000/',
 
     fetchRestaurants() {
-        axios.get(this.base_url + 'api/restaurants/')
+        axios.get(this.base_url + 'api/restaurants/user/')
             .then(response => {
                 this.restaurants = response.data.result;
             }).catch(err => {
