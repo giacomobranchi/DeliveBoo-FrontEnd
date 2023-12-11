@@ -22,7 +22,7 @@ export default {
   </main>
 
 
-  <!-- <ComponentFooter /> -->
+  <ComponentFooter />
 </template>
 
 <style lang="scss" scoped>

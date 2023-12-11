@@ -64,15 +64,15 @@ export default {
                 </div>
                 <!-- /.row -->
             </div>
-        <!-- /.container -->
-        
+            <!-- /.container -->
+
         </section>
-        
+
 
     </main>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @use '../assets/scss/partials/variables' as *;
 
 main {
@@ -81,7 +81,8 @@ main {
     background-size: cover;
     background-position: center;
 }
-section{
+
+section {
     background-color: rgba(0, 0, 0, 0.500);
 }
 </style>
