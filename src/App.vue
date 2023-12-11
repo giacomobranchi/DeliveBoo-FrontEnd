@@ -29,6 +29,6 @@ export default {
 @use './assets/scss/partials/variables' as *;
 
 main {
-  background-color: #1B1215;
+  background-color: $d_boo_bg;
 }
 </style>
