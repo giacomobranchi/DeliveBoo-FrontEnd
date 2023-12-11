@@ -28,8 +28,6 @@ export const state = reactive({
 
 
 
-
-
     /* fetchSingleRestaurant() {
         axios.get(this.base_url + `api/restaurants/${this.$route.params.slug}`)
             .then(response => {

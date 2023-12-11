@@ -53,6 +53,7 @@ export default {
 
 <template>
     <main>
+
       <div class="container" v-if="singleRestaurant">
         <div class="row">
           <div class="col-md-3">
@@ -96,14 +97,21 @@ export default {
           </div>
         </div>
       </div>
+
     </main>
   </template>
   
 
-<style lang="scss">
+<style lang="scss" scoped>
 @use '../assets/scss/partials/variables' as *;
 
 main {
-    background-color: $d_boo_primary;
+    background-image: url(https://w0.peakpx.com/wallpaper/1019/191/HD-wallpaper-restaurant-and-bar-with-gorgeous-view-city-restaurant-view-bar.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+section{
+    background-color: rgba(0, 0, 0, 0.500);
 }
 </style>
