@@ -39,7 +39,7 @@ export default {
                     </div>
                     <!-- /.col -->
                     <div class="col-12 col-md-9 row row-cols-1  row-cols-md-2 ">
-                        <div v-for="dish in singleRestaurant.dish" class="col col-md-6 py-1  p-3">
+                        <div v-for="dish in singleRestaurant.dish" class="col col-md-6 py-1 p-3">
                             <div class="card bg-transparent border-0 text-decoration-none">
                                 <img :src="base_url + 'storage/' + dish.img" class="img-fluid" alt="">
 

@@ -38,38 +38,45 @@ export default {
                     <!-- /.col -->
 
                     <div class="col-9">
-                        <div class="row row-cols-3">
-                            <div v-for="restaurant in this.state.restaurants" class="col-4 py-1  px-3">
-                            <router-link :to="{ name: 'singleRestaurant', params: { slug: restaurant.slug } }"
-                                class="restaurant card bg-transparent border-0 text-decoration-none">
-                                <img src="https://imgs.search.brave.com/Q37xS1P9QR74fgVCUo7CA6Zpn_woGWjzvP9x8e4nUCk/rs:fit:500:0:0/g:ce/aHR0cHM6Ly93d3cu/cmlzdG9yYW50ZXJv/Y2NhLmNvbS93cC1j/b250ZW50L3VwbG9h/ZHMvZWxlbWVudG9y/L3RodW1icy9yZXN0/YXVyYW50X2Rvd25z/dGFpcnNfcm9vbS1v/ODYxdmd6cjQ0emlh/M25tMm5zdzlpd2N3/MDc2MW83YXlyeTcz/bXFobXMuanBn"
-                                    class="card-img-top rounded-3" alt="...">
-                                <div class="card-body px-0 py-3">
-                                    <h5 class="card-title m-0 text-white"><strong>
-                                            {{ restaurant.name }}
-                                        </strong></h5>
-                                    <div class="row">
-                                        <div class="col" v-for="type in restaurant.types">
-                                            <div class="badge bg-danger">
-                                                {{ type.name }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /.row -->
-                                </div>
-                            </router-link>
-                            <!-- /.card -->
 
+                        <div class="row row-cols-3 g-4">
+
+                            <div v-for="restaurant in this.state.restaurants" class="col-4">
+                                
+                                <router-link :to="{ name: 'singleRestaurant', params: { slug: restaurant.slug } }" class="text-decoration-none">
+                                    <div class="card bg-black overlay bg-transparent border-0">
+                                        <img class="card-img-top rounded-3 img-fluid" src="https://imgs.search.brave.com/Q37xS1P9QR74fgVCUo7CA6Zpn_woGWjzvP9x8e4nUCk/rs:fit:500:0:0/g:ce/aHR0cHM6Ly93d3cu/cmlzdG9yYW50ZXJv/Y2NhLmNvbS93cC1j/b250ZW50L3VwbG9h/ZHMvZWxlbWVudG9y/L3RodW1icy9yZXN0/YXVyYW50X2Rvd25z/dGFpcnNfcm9vbS1v/ODYxdmd6cjQ0emlh/M25tMm5zdzlpd2N3/MDc2MW83YXlyeTcz/bXFobXMuanBn" alt="...">
+                                        
+                                        <div class="card-body shadow py-3 overflow_hidden rounded-3">
+                                            <div class="row">
+                                                <div class="col" v-for="type in restaurant.types">
+                                                    <div class="badge bg-danger">
+                                                        {{ type.name }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- /.row -->
+                                        </div>
+                                        <!-- /.card -->
+                                    </div>
+                                    <div class="card-title">
+                                        <h5 class="card-title m-0 text-white text-center pt-2 fw-bold">
+                                            {{ restaurant.name }}
+                                        </h5>
+                                    </div>
+                                </router-link>
+                                
                             </div>
+
                         </div>
                         
                     </div>
                     <!-- /.col -->
 
                 </div>
-            <!-- /.row -->
-        </div>
-        <!-- /.container -->
+                <!-- /.row -->
+            </div>
+            <!-- /.container -->
 
         </section>
         
@@ -106,8 +113,27 @@ section{
 .btn:hover{
     color: greenyellow;
 }
-.restaurant:hover{
-    width: 320px;
-    height: 200px;
+img{
+    object-fit: cover;
+}
+img:hover .overlay{
+    display: block;
+}
+.overlay{
+    position: relative;
+}
+.overlay:hover .shadow{
+    display: block;
+}
+.shadow{
+    padding: 1rem;
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.500);
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
 }
 </style>

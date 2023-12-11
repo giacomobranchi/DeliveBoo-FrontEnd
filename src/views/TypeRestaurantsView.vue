@@ -49,26 +49,27 @@ export default {
                     </div>
                     <!-- /.col -->
 
-                    <div v-if="typeRestaurants" class="col-9 row row-cols-3">
+                    <div v-if="typeRestaurants" class="col-9 row row-cols-3 g-4">
 
-                        <div v-for="restaurant in typeRestaurants.users" class="col-4 py-1  px-3">
-                            <router-link :to="{ name: 'singleRestaurant', params: { slug: restaurant.slug } }"
-                                class="card bg-transparent border-0 text-decoration-none">
-                                <img src="https://imgs.search.brave.com/Q37xS1P9QR74fgVCUo7CA6Zpn_woGWjzvP9x8e4nUCk/rs:fit:500:0:0/g:ce/aHR0cHM6Ly93d3cu/cmlzdG9yYW50ZXJv/Y2NhLmNvbS93cC1j/b250ZW50L3VwbG9h/ZHMvZWxlbWVudG9y/L3RodW1icy9yZXN0/YXVyYW50X2Rvd25z/dGFpcnNfcm9vbS1v/ODYxdmd6cjQ0emlh/M25tMm5zdzlpd2N3/MDc2MW83YXlyeTcz/bXFobXMuanBn"
-                                    class="img-fluid" alt="...">
-                                <div class="card-body p-0">
-                                    <h5 class="card-title m-0"><strong>
-                                            {{ restaurant.name }}
-                                        </strong></h5>
+                        <div v-for="restaurant in typeRestaurants.users" class="col-4">
+                            <router-link :to="{ name: 'singleRestaurant', params: { slug: restaurant.slug } }" class="text-decoration-none">
+                                <div class="card bg-transparent border-0">
+                                    <img class="card-img-top rounded-3 img-fluid" src="https://imgs.search.brave.com/Q37xS1P9QR74fgVCUo7CA6Zpn_woGWjzvP9x8e4nUCk/rs:fit:500:0:0/g:ce/aHR0cHM6Ly93d3cu/cmlzdG9yYW50ZXJv/Y2NhLmNvbS93cC1j/b250ZW50L3VwbG9h/ZHMvZWxlbWVudG9y/L3RodW1icy9yZXN0/YXVyYW50X2Rvd25z/dGFpcnNfcm9vbS1v/ODYxdmd6cjQ0emlh/M25tMm5zdzlpd2N3/MDc2MW83YXlyeTcz/bXFobXMuanBn" alt="...">
+                                    <div class="card-body px-0 py-3">
+                                    <h5 class="card-title m-0 text-white fw-bold">
+                                        {{ restaurant.name }}
+                                    </h5>
                                     <div class="row">
-                                        <div class="col text-center" v-for="type in restaurant.types">
-                                            <div class="badge bg-danger">
-                                                {{ type.name }}
+                                            <div class="col text-center" v-for="type in restaurant.types">
+                                                <div class="badge bg-danger">
+                                                    {{ type.name }}
+                                                </div>
                                             </div>
                                         </div>
+                                        <!-- /.row -->
                                     </div>
-                                    <!-- /.row -->
                                 </div>
+                                
                             </router-link>
                             <!-- /.card -->
 
