@@ -1,11 +1,12 @@
 <script>
 export default {
-    name: 'ComponentNavbar'
+  name: 'ComponentNavbar'
 }
+
 </script>
 
 <template>
-    <header>
+  <header>
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
       <div class="container">
         <a class="navbar-brand" href="#">DeliveBoo</a>
@@ -16,13 +17,13 @@ export default {
         <div class="collapse navbar-collapse" id="mainNav">
           <ul class="navbar-nav me-auto mt-2 mt-lg-0">
             <li class="nav-item">
-              <router-link class="nav-link active" to="/" aria-current="page">Home<span
-                  class="visually-hidden">(current)</span></router-link>
+              <router-link class="nav-link active" to="/" aria-current="page">
+                Home<span class="visually-hidden">(current)</span>
+              </router-link>
             </li>
-            <!-- <li class="nav-item">
-              <router-link class="nav-link" to="/about">About</router-link>
-            </li> -->
-
+            <li class="nav-item">
+              <router-link class="nav-link" to="/restaurants">Restaurants</router-link>
+            </li>
             <li class="nav-item">
               <router-link class="nav-link" to="/food">Food</router-link>
             </li>
@@ -31,26 +32,15 @@ export default {
             </li>
           </ul>
           <div class="admin">
-            <a href="http://127.0.0.1:8000/admin" class="btn" target="__blank">
-              Admin <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-box-arrow-in-right" viewBox="0 0 16 16">
-                <path fill-rule="evenodd"
-                  d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0v-2z" />
-                <path fill-rule="evenodd"
-                  d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z" />
-              </svg>
+            <a href="http://127.0.0.1:8000/admin" class="btn admin-btn p-2" target="__blank">
+              Registrati o Accedi
             </a>
           </div>
-
         </div>
       </div>
     </nav>
-
   </header>
 </template>
-<style scoped>
-</style>
-
 
 <style lang="scss" scoped>
 @use '../assets/scss/partials/variables' as *;
@@ -63,20 +53,26 @@ export default {
   color: $d_boo_orange;
 }
 
-.nav-link:hover {
-    color:$d_boo_orange;
+.nav-link {
+  color: $d_boo_light;
+
+  &:hover {
+    color: $d_boo_orange;
+  }
 }
 
 .btn:hover {
-    color:$d_boo_orange;
-}
-  
-.my-bg {
-    background-color: transparent;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+  color: $d_boo_orange;
 }
 
+.admin .btn {
+  background-color: transparent;
+  color: $d_boo_orange;
+  border: 1px solid $d_boo_orange;
+
+  &:hover {
+    color: $d_boo_light;
+    border-color: transparent;
+  }
+}
 </style>
