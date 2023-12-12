@@ -8,15 +8,28 @@ export default {
         return {
             state,
             typeRestaurants: { users: [] },
-            selectedTypes: []
-
+            selectedTypes: [],
+            selectedTypeParams: '',
+            test: null,
         }
     },
+
     methods: {
-        if($route) {
-
+        filterRestaurants() {
+            // Filtra i ristoranti in base alle tipologie selezionate
+            this.selectedTypeParams = this.selectedTypes.join('');
+            console.log('topperia');
+            axios.get(this.state.base_url + `api/restaurants/filter?${this.selectedTypeParams}`)
+                .then(response => {
+                    this.test = response.data;
+                    console.log(this.state.base_url + `api/restaurants/filter?${this.selectedTypeParams}`);
+                })
+                .catch(err => {
+                    console.error(err);
+                });
         }
     },
+
 
     mounted() {
         this.state.fetchRestaurants()
@@ -38,6 +51,8 @@ export default {
 <template>
     <div class="container text-white">
         <div class="row py-5">
+
+            <!-- SIDEBAR -->
             <div class="col-3">
                 <h3 class="text-uppercase">Filtra per tipologia</h3>
                 <div class="type_list overflow_hidden">
@@ -51,8 +66,10 @@ export default {
 
                         </div>
 
+
                     </div>
                 </div>
+                <button @click="filterRestaurants" class="btn btn-primary mt-2">Filtra</button>
             </div>
             <!-- /.col -->
 
@@ -61,6 +78,39 @@ export default {
                 <div v-if="this.typeRestaurants.users" class="row row-cols-3 g-4">
 
                     <div v-for="restaurant in this.typeRestaurants.users" class="col-4">
+
+                        <router-link :to="{ name: 'singleRestaurant', params: { slug: restaurant.slug } }"
+                            class="text-decoration-none">
+                            <div class="card bg-black overlay bg-transparent border-0">
+                                <img class="card-img-top rounded-3 img-fluid"
+                                    src="https://imgs.search.brave.com/Q37xS1P9QR74fgVCUo7CA6Zpn_woGWjzvP9x8e4nUCk/rs:fit:500:0:0/g:ce/aHR0cHM6Ly93d3cu/cmlzdG9yYW50ZXJv/Y2NhLmNvbS93cC1j/b250ZW50L3VwbG9h/ZHMvZWxlbWVudG9y/L3RodW1icy9yZXN0/YXVyYW50X2Rvd25z/dGFpcnNfcm9vbS1v/ODYxdmd6cjQ0emlh/M25tMm5zdzlpd2N3/MDc2MW83YXlyeTcz/bXFobXMuanBn"
+                                    alt="...">
+
+                                <div class="card-body shadow py-3 overflow_hidden rounded-3">
+                                    <div class="row">
+                                        <div class="col" v-for="singleType in restaurant.types">
+                                            <div class="badge bg-danger">
+                                                {{ singleType.name }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.row -->
+                                </div>
+                                <!-- /.card -->
+                            </div>
+                            <div class="card-title">
+                                <h5 class="card-title m-0 text-white text-center pt-2 fw-bold">
+                                    {{ restaurant.name }}
+                                </h5>
+                            </div>
+                        </router-link>
+
+                    </div>
+
+                </div>
+                <div v-else-if="this.test" class="row row-cols-3 g-4">
+
+                    <div v-for="restaurant in this.test" class="col-4">
 
                         <router-link :to="{ name: 'singleRestaurant', params: { slug: restaurant.slug } }"
                             class="text-decoration-none">
