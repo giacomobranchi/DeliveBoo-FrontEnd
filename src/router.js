@@ -3,7 +3,7 @@ import { createWebHashHistory, createRouter } from 'vue-router';
 import AppHome from './views/AppHome.vue';
 import RestaurantsView from './views/RestaurantsView.vue';
 import SingleRestaurantView from './views/SingleRestaurantView.vue';
-import TypeRestaurantsView from './views/TypeRestaurantsView.vue';
+import AllRestaurantsView from './views/AllRestaurantsView.vue';
 import CheckoutView from './views/CheckoutView.vue';
 
 const router = createRouter({
@@ -16,22 +16,25 @@ const router = createRouter({
             name: 'home',
             component: AppHome,
         },
-
         {
             path: '/restaurant/:slug',
             name: 'singleRestaurant',
             component: SingleRestaurantView
         },
         {
-            path: '/restaurants/:slug?',
+            path: '/restaurants/:slug',
             name: 'restaurantsList',
             component: RestaurantsView
         },
         {
-            path: '/checkout/:slug',
+            path: '/restaurants',
+            name: 'allRestaurantsList',
+            component: AllRestaurantsView
+        },
+        {
+           path: '/checkout/:slug',
             name: 'CheckoutView',
             component: CheckoutView,
-
         },
     ]
 });
