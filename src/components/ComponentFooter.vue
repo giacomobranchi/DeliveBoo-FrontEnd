@@ -8,9 +8,9 @@ export default {
   <footer>
     <div class="footer-top">
       <div class="container footer flex-wrap">
-        <div class="lists d-flex flex-wrap justify-content-around p-1">
+        <div class="lists d-flex flex-wrap justify-content-between">
 
-          <div class="about col-12 col-lg-6 col-xl-3 p-3">
+          <div class="about col-12 col-lg-6 col-xl-4 p-3">
             <h5>Aiuto</h5>
             <div class="line"></div>
             <ul class="list-unstyled my-2">
@@ -22,7 +22,7 @@ export default {
 
           <!-- End section Aiuto -->
 
-          <div class="about col-12 col-lg-6 col-xl-3 p-3">
+          <div class="about col-12 col-lg-6 col-xl-4 p-4">
             <h5>Note Legali</h5>
             <div class="line"></div>
             <ul class="list-unstyled my-2">
@@ -34,7 +34,7 @@ export default {
 
           <!-- End section Note legali -->
 
-          <div class="about col-12 col-lg-6 col-xl-3 p-3">
+          <div class="about col-12 col-lg-6 col-xl-3 p-4">
               <h5>Scopri DeliveBoo</h5>
               <div class="line"></div>
               <ul class="list-unstyled my-2">
