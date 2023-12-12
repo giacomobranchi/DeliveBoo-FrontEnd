@@ -19,6 +19,7 @@ export default {
       const dishWithQuantity = {
         name: dish.name,
         price: Number(dish.price),
+        description: dish.description,
         img: dish.img, // Include the image URL
         quantity: this.quantities[dish.id] || 1 // Use the quantity from the quantities object
       };
@@ -56,7 +57,9 @@ export default {
 
 <template>
   <div class="container" v-if="singleRestaurant">
-    <div class="row">
+    <div class="row flex-column">
+
+      <!-- column with name and address -->
       <div class="col-md-3">
         <h1>{{ singleRestaurant.name }}</h1>
         <p>{{ singleRestaurant.address }}</p>
