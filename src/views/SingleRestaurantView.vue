@@ -10,7 +10,8 @@ export default {
       state,
       singleRestaurant: null,
       base_url: 'http://127.0.0.1:8000/',
-      quantities: {} // Add a quantities object
+      quantities: {},
+      selectedRestaurant: '',
     };
   },
   methods: {
@@ -64,6 +65,10 @@ export default {
       // You can add additional logic if the item is not found (optional)
     },
 
+    showCheckout() {
+      return this.dishes.some(dish => dish.restaurant === this.selectedRestaurant);
+    },
+
     incrementQuantity(dish) {
       if (!this.quantities[dish.id]) {
         this.quantities[dish.id] = 1;
@@ -87,6 +92,9 @@ export default {
       }).catch(err => {
         console.error(err);
       })
+
+
+
   }
 }
 </script>
@@ -201,41 +209,46 @@ export default {
               Non hai aggiunto prodotti al momento, quando lo farai appariranno qua!
             </p>
 
-            <!-- view you add element on cart -->
-            <ul v-else class="list-unstyled">
+            <!-- wrapper for all carts infos and items -->
+            <div v-else>
 
-              <!-- vfor to generate li orders -->
-              <li v-for="dish in state.cart" class="pb-3">
-                <div class="d-flex justify-content-between align-items-center">
+              <!-- view you add element on cart -->
+              <ul class="list-unstyled">
 
-                  <!-- decrement -->
-                  <button class="btn my_check_btn" @click="decrementQuantityCart(dish)">
-                    -
+                <!-- vfor to generate li orders -->
+                <li v-for="dish in state.cart" class="pb-3">
+                  <div class="d-flex justify-content-between align-items-center">
+
+                    <!-- decrement -->
+                    <button class="btn my_check_btn" @click="decrementQuantityCart(dish)">
+                      -
+                    </button>
+
+                    <!-- name order with counter -->
+                    <span class="px-3 fw-semibold">
+                      {{ dish.name }} - {{ dish.quantity }}x
+                    </span>
+
+                    <!-- increment -->
+                    <button class="btn my_check_btn" @click="incrementQuantityCart(dish)">
+                      +
+                    </button>
+
+                  </div>
+                </li>
+              </ul>
+
+              <!-- checkout button -->
+              <div class="text-center py-3">
+                <router-link :to="{ name: 'CheckoutView', params: { slug: singleRestaurant.slug } }">
+                  <button class="btn">
+                    Go to Checkout
                   </button>
+                </router-link>
+              </div>
 
-                  <!-- name order with counter -->
-                  <span class="px-3 fw-semibold">
-                    {{ dish.name }} - {{ dish.quantity }}x
-                  </span>
+            </div>
 
-                  <!-- increment -->
-                  <button class="btn my_check_btn" @click="incrementQuantityCart(dish)">
-                    +
-                  </button>
-
-                </div>
-              </li>
-            </ul>
-
-          </div>
-
-          <!-- checkout button -->
-          <div class="text-center py-3">
-            <router-link :to="{ name: 'CheckoutView', params: { slug: singleRestaurant.slug } }">
-              <button class="btn">
-                Go to Checkout
-              </button>
-            </router-link>
           </div>
 
         </div>
