@@ -45,11 +45,10 @@ export default {
                         <div class="text-decoration-none m-1" v-for="(singleType, index) in this.state.types"
                             :key="singleType.slug">
 
-
-                            <input v-model="selectedTypes" @change="handleChange(event, index)" class="form-check-input"
-                                :for="singleType.id" type="checkbox" :value="'types[]=' + singleType.slug + '&'"
-                                :id="singleType.id" />
+                            <input v-model="selectedTypes" class="form-check-input" :for="singleType.id" type="checkbox"
+                                :value="'types[]=' + singleType.slug + '&'" :id="singleType.id" />
                             <label class="form-check-label" :for="singleType.id"> {{ singleType.name }} </label>
+
                         </div>
 
                     </div>
