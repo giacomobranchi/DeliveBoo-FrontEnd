@@ -33,7 +33,7 @@ export default {
                 Home<span class="visually-hidden">(current)</span>
               </router-link>
             </li>
-            <li @click="reload" class="nav-item">
+            <li class="nav-item">
               <router-link class="nav-link" to="/restaurants">Restaurants</router-link>
             </li>
 

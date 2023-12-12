@@ -17,7 +17,7 @@ export default {
 <template>
   <ComponentNavbar />
 
-  <main>
+  <main class="min-vh-100">
     <router-view></router-view>
   </main>
 

@@ -30,12 +30,12 @@ export default {
                     console.error(err);
                 });
         },
-        removeFilter() {
+        /* removeFilter() {
             this.typeRestaurants = null
 
             this.test = null
             this.selectedTypes = []
-        },
+        }, */
         fetchTypeRestaurants() {
             this.typeRestaurants = { users: [] }
 
@@ -84,7 +84,8 @@ export default {
                     </div>
                 </div>
                 <button @click="filterRestaurants" class="btn btn-primary mt-2">Filtra</button>
-                <button @click="removeFilter" class="btn btn-warning mt-2">Svuota</button>
+                <!-- <button @click="removeFilter" class="btn btn-warning mt-2">Svuota</button> -->
+                <router-link to="/restaurants" class="btn btn-warning mt-2">Svuota</router-link>
             </div>
             <!-- /.col -->
 
