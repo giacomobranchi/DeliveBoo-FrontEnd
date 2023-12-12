@@ -68,8 +68,10 @@ export default {
 
                     </div>
                 </div>
-                <button @click="filterRestaurants" class="btn btn-primary mt-2">Filtra</button>
-                <button @click="removeFilter" class="btn btn-warning mt-2">Svuota</button>
+
+                <button @click="filterRestaurants" class="btn my_btn mt-2 me-3">Filtra</button>
+                <button @click="removeFilter" class="btn my_btn_clear mt-2">Svuota</button>
+
             </div>
             <!-- /.col -->
 
@@ -171,13 +173,34 @@ export default {
 
 }
 
-.btn {
-    color: white;
-    font-size: 24px;
+.my_btn {
+    background-color: $d_boo_orange;
+    margin: auto;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+    color: black;
+    border: 1px solid transparent;
+
+    &:hover {
+        border: 1px solid black;
+    }
+
 }
 
-.btn:hover {
-    color: greenyellow;
+.my_btn_clear {
+    background-color: black;
+    margin: auto;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    color: $d_boo_orange;
+    font-weight: 600;
+    border: 1px solid transparent;
+
+    &:hover {
+        border: 1px solid $d_boo_orange;
+    }
+
 }
 
 img {
