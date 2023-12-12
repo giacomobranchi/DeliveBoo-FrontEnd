@@ -16,7 +16,6 @@ const router = createRouter({
             name: 'home',
             component: AppHome,
         },
-
         {
             path: '/restaurant/:slug',
             name: 'singleRestaurant',
@@ -33,10 +32,9 @@ const router = createRouter({
             component: AllRestaurantsView
         },
         {
-            path: '/checkout',
+           path: '/checkout/:slug',
             name: 'CheckoutView',
             component: CheckoutView,
-
         },
     ]
 });

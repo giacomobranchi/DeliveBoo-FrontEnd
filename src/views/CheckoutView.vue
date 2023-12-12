@@ -6,7 +6,9 @@ export default {
   data() {
     return {
       state,
-      isTop: true
+      isTop: true,
+      singleRestaurant: ({}),
+
     }
   },
   methods: {
@@ -31,7 +33,10 @@ export default {
     },
     backToTop() {
       window.scrollTo(0, 0);
-    }
+    },
+    // selectRestaurant(restaurant) {
+    // this.singleRestaurant = restaurant;
+    // } 
   },
   computed: {
   total() {
@@ -54,27 +59,31 @@ mounted() {
 </script>
 
 <template>
-    <main id="container_cart">
+    <main id="container_cart" v-if="singleRestaurant">
 
       <div class="container">
+        
         <div v-if="state.cart && state.cart.length" class="row">
           <div class="col-12">
-            <h1 class="text-center m-3 ">Benvenuto al tuo Carrello</h1>
+            <h1 class="text-center m-3 ">Benvenuto al tuo Carrello {{ singleRestaurant.slug }}</h1>
             <div v-for="(dish, index) in state.cart" class="card mb-3">
               <div class="card-body d-flex justify-content-around shadow flex-wrap  card_body">
-                <img :src="this.state.base_url + 'storage/' + dish.img" class="img-fluid" alt="">
-                <div class="mx-5">
+                <div class="col-lg-3">
+                  <img v-if="dish.img.indexOf('http') !== -1" :src="dish.img" alt="External Image">
+                  <img v-else :src="this.state.base_url + 'storage/' + dish.img" alt="Local Image">
+                </div>
+                <div class="col-lg-3  mx-5">
                   <h5 class="card-title mb-3">{{ dish.name }}</h5>
                   <hr>
-                  <p class="card-text mb-3">Price: € {{ dish.price }}</p>
-                  <p class="card-text mb-3">Quantita': {{ dish.quantity }}</p>
+                  <p class="card-text mb-3">Prezzo: € {{ dish.price }}</p>
+                  <p class="card-text mb-3">Quantita': {{ dish.quantity }}pz</p>
                 </div>
-                <div>
+                <div class="col-lg-3 mb-3">
                   <h5>Descrizione prodotto</h5>
                   <hr>
                   <p class="card-text">{{ dish.description }}</p>
                 </div>
-                <div>
+                <div class="col-lg-3">
                   <button class="btn btn-danger mr-2 mx-2" @click="removeItem(index)"><i class="fa-solid fa-trash"></i></button>
                 </div>
               </div>
@@ -93,8 +102,8 @@ mounted() {
       </div>
       <div v-else class="row">
         <div class="col-12 vh-100 text-white m-5 text-center">
-          <h1>Il tuo carrello e' vuoto</h1>
-          <button class="btn btn-secondary" @click="goBack">Torna indietro</button>
+          <h1 class="pb-5">Il tuo carrello e' vuoto</h1>
+          <button class="btn btn-outline-secondary text-dark border-2" @click="goBack">Torna indietro</button>
         </div>
       </div>
     </div>
