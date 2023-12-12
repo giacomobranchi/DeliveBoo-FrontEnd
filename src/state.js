@@ -4,6 +4,8 @@ import axios from 'axios';
 
 export const state = reactive({
     base_url: 'http://127.0.0.1:8000/',
+    cart: [],
+        
 
     fetchRestaurants() {
         axios.get(this.base_url + 'api/restaurants/user/')
@@ -22,6 +24,7 @@ export const state = reactive({
                 console.error(err);
             })
     },
+    
 
 
 

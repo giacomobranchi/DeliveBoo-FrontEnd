@@ -2,3 +2,6 @@
 @use './partials/variables' as *;
 
 
+body::-webkit-scrollbar {
+    display: none;
+}

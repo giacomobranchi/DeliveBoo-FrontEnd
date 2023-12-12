@@ -1,15 +1,21 @@
 import { createWebHashHistory, createRouter } from 'vue-router';
 
-
+import AppHome from './views/AppHome.vue';
 import RestaurantsView from './views/RestaurantsView.vue';
 import SingleRestaurantView from './views/SingleRestaurantView.vue';
 import TypeRestaurantsView from './views/TypeRestaurantsView.vue';
+import CheckoutView from './views/CheckoutView.vue';
 
 const router = createRouter({
 
     history: createWebHashHistory(),
 
     routes: [
+        {
+            path: '/',
+            name: 'home',
+            component: AppHome,
+        },
         {
             path: '/restaurants',
             name: 'restaurantsList',
@@ -24,6 +30,12 @@ const router = createRouter({
             path: '/type/:slug',
             name: 'singleType',
             component: TypeRestaurantsView
+        },
+        {
+            path: '/checkout',
+            name: 'CheckoutView',
+            component: CheckoutView,
+           
         },
     ]
 });
