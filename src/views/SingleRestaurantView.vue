@@ -10,22 +10,65 @@ export default {
       state,
       singleRestaurant: null,
       base_url: 'http://127.0.0.1:8000/',
-      quantities: {} // Add a quantities object
+      quantities: {},
+      selectedRestaurant: '',
     };
   },
   methods: {
-    addToCart(dish) {
-      // Create a new object containing the dish and its quantity
-      const dishWithQuantity = {
-        name: dish.name,
-        price: Number(dish.price),
-        img: dish.img, // Include the image URL
-        quantity: this.quantities[dish.id] || 1 // Use the quantity from the quantities object
-      };
 
-      // Push the dish with quantity to the local state cart
-      this.state.cart.push(dishWithQuantity);
+    addToCart(dish) {
+      // Check if the dish is already in the cart
+      const existingDishIndex = this.state.cart.findIndex(item => item.name === dish.name);
+
+      if (existingDishIndex !== -1) {
+        // If the dish is already in the cart, update its quantity
+        this.state.cart[existingDishIndex].quantity += this.quantities[dish.id] || 1;
+      } else {
+        // If the dish is not in the cart, add a new instance with quantity 1
+        const dishWithQuantity = {
+          name: dish.name,
+          price: Number(dish.price),
+          description: dish.description,
+          img: dish.img,
+          quantity: this.quantities[dish.id] || 1
+        };
+
+        // Push the dish with quantity to the cart
+        this.state.cart.push(dishWithQuantity);
+      }
     },
+
+    // Function to increment the quantity of a dish in the cart
+    incrementQuantityCart(dish) {
+      const existingItemIndex = this.state.cart.findIndex(item => item.name === dish.name);
+
+      if (existingItemIndex !== -1) {
+        // If the dish is in the cart, increment its quantity
+        this.state.cart[existingItemIndex].quantity += 1;
+      }
+      // You can add additional logic if the item is not found (optional)
+    },
+
+    // Function to decrement the quantity of a dish in the cart
+    decrementQuantityCart(dish) {
+      const existingItemIndex = this.state.cart.findIndex(item => item.name === dish.name);
+
+      if (existingItemIndex !== -1) {
+        // If the dish is in the cart and its quantity is greater than 1, decrement the quantity
+        if (this.state.cart[existingItemIndex].quantity > 1) {
+          this.state.cart[existingItemIndex].quantity -= 1;
+        } else {
+          // Optionally, remove the item from the cart if the quantity becomes 0
+          this.state.cart.splice(existingItemIndex, 1);
+        }
+      }
+      // You can add additional logic if the item is not found (optional)
+    },
+
+    showCheckout() {
+      return this.dishes.some(dish => dish.restaurant === this.selectedRestaurant);
+    },
+
     incrementQuantity(dish) {
       if (!this.quantities[dish.id]) {
         this.quantities[dish.id] = 1;
@@ -49,65 +92,171 @@ export default {
       }).catch(err => {
         console.error(err);
       })
+
+
+
   }
 }
 </script>
 
 
 <template>
-  <div class="container" v-if="singleRestaurant">
-    <div class="row">
-      <div class="col-md-3">
-        <h1>{{ singleRestaurant.name }}</h1>
-        <p>{{ singleRestaurant.address }}</p>
-      </div>
+  <div class="container py-4" v-if="singleRestaurant">
 
-      <div class="col-12 col-md-9">
+
+
+
+    <h1>{{ singleRestaurant.name }}</h1>
+    <p class="text-light pt-2">
+      <i class="fa-solid fa-location-dot fa-xl me-2"></i>
+      {{ singleRestaurant.address }}
+    </p>
+
+    <!-- row that contains dishes and checkout -->
+    <div class="row py-3">
+
+      <!-- column with dishes -->
+      <div class="col-9">
+
         <div class="row row-cols-1 row-cols-md-2">
-          <div v-for="dish in singleRestaurant.dish" class="col col-md-6 py-3">
-            <div class="card">
 
-              <!-- <div v-if="base_url + 'storage/' + dish.img">
-                <img :src="base_url + 'storage/' + dish.img" class="img-fluid" alt="">
-              </div>
-              <div v-else>
-                <img :src="dish.img" alt="">
-              </div> -->
-              <img v-if="dish.img.indexOf('http') !== -1" :src="dish.img" alt="External Image">
-              <img v-else :src="base_url + 'storage/' + dish.img" alt="Local Image">
+          <!-- dinamic generation of dish column with cards -->
+          <div v-for="dish in singleRestaurant.dish" class="col col-md-6 pb-3">
 
-              <div class="card-body p-3">
-                <h5 class="card-title mb-0"><strong>{{ dish.name }}</strong></h5>
+            <div class="my_card text-break d-flex flex-column">
 
-                <div class="row">
-                  <div class="col text-center">
-                    <div class="badge bg-danger">
-                      {{ dish.price }}
+              <div class="row">
+
+                <!-- top column with image and description, name and ingredients -->
+                <div class="col-12 d-flex mb-4">
+
+                  <!-- image col -->
+                  <div>
+                    <img v-if="dish.img.indexOf('http') !== -1" :src="dish.img" alt="External Image"
+                      class="img-fluid rounded-2">
+                    <img v-else :src="base_url + 'storage/' + dish.img" alt="Local Image" class="img-fluid rounded-2">
+                  </div>
+
+                  <!-- infos col -->
+                  <div class="col-8 px-2 ms-1">
+                    <h5 class="fw-bolder text-truncate">
+                      {{ dish.name }}
+                    </h5>
+                    <p>
+                      {{ dish.ingredients }}
+                    </p>
+                  </div>
+
+                </div>
+
+                <!-- bottom column with price and action -->
+                <div class="col-12">
+
+                  <div class="row justify-content-between align-items-center">
+
+                    <!-- price -->
+                    <div class="fs-5 fw-bolder col-3">
+                      €{{ dish.price }}
                     </div>
-                  </div>
-                </div>
 
-                <div class="d-flex justify-content-between">
-                  <div class="d-flex">
-                    <button class="btn btn-primary" @click="decrementQuantity(dish)">-</button>
-                    <span>{{ quantities[dish.id] || 1 }}</span>
-                    <button class="btn btn-primary" @click="incrementQuantity(dish)">+</button>
+                    <!-- actions -->
+                    <div class="col-7">
+                      <div id="actions" class="d-flex justify-content-between align-items-center">
+                        <button class="btn btn-primary" @click="decrementQuantity(dish)">
+                          -
+                        </button>
+                        <div class="counter">
+                          <span class="fs-5">
+                            {{ quantities[dish.id] || 1 }}
+                          </span>
+                        </div>
+
+                        <button class="btn btn-primary" @click="incrementQuantity(dish)">
+                          +
+                        </button>
+                        <button class="btn btn-primary mr-2" @click="addToCart(dish)">
+                          Add to Cart
+                        </button>
+                      </div>
+                    </div>
+
                   </div>
 
-                  <button class="btn btn-primary mr-2" @click="addToCart(dish)">Add to Cart</button>
-                  <router-link :to="{ name: 'CheckoutView' }">
-                    <button class="btn btn-secondary">Go to Checkout</button>
-                  </router-link>
                 </div>
               </div>
+
             </div>
           </div>
+
         </div>
+      </div>
 
 
+      <!-- col with checkout order -->
+      <div class="col-3">
+
+        <!-- card with order -->
+        <div class="card checkout text-break text-center">
+
+          <h4 class="py-3">
+            Your order
+          </h4>
+
+          <div class="card-body p-2">
+
+            <!-- view if no element on cart -->
+            <p v-if="state.cart.length === 0" class="fw-bold">
+              Non hai aggiunto prodotti al momento, quando lo farai appariranno qua!
+            </p>
+
+            <!-- wrapper for all carts infos and items -->
+            <div v-else>
+
+              <!-- view you add element on cart -->
+              <ul class="list-unstyled">
+
+                <!-- vfor to generate li orders -->
+                <li v-for="dish in state.cart" class="pb-3">
+                  <div class="d-flex justify-content-between align-items-center">
+
+                    <!-- decrement -->
+                    <button class="btn my_check_btn" @click="decrementQuantityCart(dish)">
+                      -
+                    </button>
+
+                    <!-- name order with counter -->
+                    <span class="px-3 fw-semibold">
+                      {{ dish.name }} - {{ dish.quantity }}x
+                    </span>
+
+                    <!-- increment -->
+                    <button class="btn my_check_btn" @click="incrementQuantityCart(dish)">
+                      +
+                    </button>
+
+                  </div>
+                </li>
+              </ul>
+
+              <!-- checkout button -->
+              <div class="text-center py-3">
+                <router-link :to="{ name: 'CheckoutView', params: { slug: singleRestaurant.slug } }">
+                  <button class="btn">
+                    Go to Checkout
+                  </button>
+                </router-link>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
 
       </div>
     </div>
+
+
   </div>
   <!-- /.container -->
 </template>
@@ -115,4 +264,64 @@ export default {
 
 <style lang="scss" scoped>
 @use '../assets/scss/partials/variables' as *;
+
+h1 {
+  color: $d_boo_orange;
+}
+
+img {
+  max-height: 115px;
+  max-width: 150px;
+  min-height: 115px;
+  min-width: 150px;
+}
+
+.checkout {
+  background-color: $d_boo_orange;
+
+  .my_check_btn {
+    padding: .2rem .6rem;
+  }
+
+  button {
+    background-color: black;
+    color: $d_boo_orange;
+    border: 1px solid transparent;
+    font-weight: 600;
+
+    &:hover {
+      background-color: $d_boo_bg;
+      border: 1px solid $d_boo_bg;
+    }
+  }
+}
+
+.my_card {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 10px;
+  max-height: 210px;
+  max-width: 470px;
+  min-height: 210px;
+  min-width: 470px;
+  transition: .2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+
+}
+
+#actions {
+  button {
+    background-color: $d_boo_orange;
+    border: 1px solid transparent;
+    color: black;
+    font-weight: 600;
+
+    &:hover {
+      border: 1px solid black;
+    }
+  }
+}
 </style>
