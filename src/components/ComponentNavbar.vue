@@ -1,6 +1,18 @@
 <script>
+import { state } from '../state.js';
+
 export default {
-  name: 'ComponentNavbar'
+  name: 'ComponentNavbar',
+  data() {
+    return {
+      state,
+    }
+  },
+  methods: {
+    reload() {
+      window.location.reload()
+    }
+  },
 }
 
 </script>
@@ -21,15 +33,10 @@ export default {
                 Home<span class="visually-hidden">(current)</span>
               </router-link>
             </li>
-            <li class="nav-item">
+            <li @click="reload" class="nav-item">
               <router-link class="nav-link" to="/restaurants">Restaurants</router-link>
             </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/food">Food</router-link>
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/contacts">Contacts</router-link>
-            </li>
+
           </ul>
           <div class="admin">
             <a href="http://127.0.0.1:8000/admin" class="btn admin-btn p-2" target="__blank">

@@ -16,28 +16,29 @@ const router = createRouter({
             name: 'home',
             component: AppHome,
         },
-        {
-            path: '/restaurants',
-            name: 'restaurantsList',
-            component: RestaurantsView
-        },
+
         {
             path: '/restaurant/:slug',
             name: 'singleRestaurant',
             component: SingleRestaurantView
         },
         {
-            path: '/type/:slug',
-            name: 'singleType',
-            component: TypeRestaurantsView
+            path: '/restaurants/:slug?',
+            name: 'restaurantsList',
+            component: RestaurantsView
         },
         {
             path: '/checkout',
             name: 'CheckoutView',
             component: CheckoutView,
-           
+
         },
     ]
 });
 
 export { router }
+/*                 {
+                    path: '/restaurants',
+                    name: 'restaurantsList',
+                    component: RestaurantsView
+                }, */
