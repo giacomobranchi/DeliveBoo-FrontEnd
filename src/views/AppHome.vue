@@ -116,7 +116,7 @@ export default {
 
                     <div class="my_card_types">
 
-                        <router-link :to="{ name: 'singleType', params: { slug: single_type.slug } }"
+                        <router-link :to="{ name: 'restaurantsList', params: { slug: single_type.slug } }"
                             class="text-decoration-none">
                             <h6>
                                 {{ single_type.name }}
