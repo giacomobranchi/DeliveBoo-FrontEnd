@@ -26,6 +26,7 @@ export default {
                 .catch(err => {
                     console.error(err);
                 });
+            this.test = null
         },
         removeFilter() {
 
