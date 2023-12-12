@@ -39,16 +39,19 @@ export default {
       }
     },
   },
-  mounted() {
-  // Make an asynchronous call to load the `singleRestaurant` data
-  axios.get(this.base_url + `api/restaurants/${this.$route.params.slug}`)
-    .then(response => {
-      this.singleRestaurant = response.data.result;
-    });
-  },
-};
-</script>
 
+    mounted() {
+        axios.get(this.base_url + `api/restaurants/user/${this.$route.params.slug}`)
+            .then(response => {
+                console.log('topperia');
+                console.log(`http://localhost:8000/api/restaurants/user/${this.$route.params.slug}`);
+                this.singleRestaurant = response.data.result;
+            }).catch(err => {
+                console.error(err);
+            })
+    }
+}
+</script>
 
 
 <template>
@@ -94,9 +97,13 @@ export default {
                 </div>
               </div>
             </div>
+
+            
+
           </div>
         </div>
       </div>
+      <!-- /.container -->
 
     </main>
   </template>
@@ -111,7 +118,8 @@ main {
     background-size: cover;
     background-position: center;
 }
-section{
+
+section {
     background-color: rgba(0, 0, 0, 0.500);
 }
 </style>
