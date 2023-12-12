@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export default {
   name: 'SingleRestaurant',
-  
+
   data() {
     return {
       state,
@@ -39,79 +39,80 @@ export default {
       }
     },
   },
+
   mounted() {
-  // Make an asynchronous call to load the `singleRestaurant` data
-  axios.get(this.base_url + `api/restaurants/${this.$route.params.slug}`)
-    .then(response => {
-      this.singleRestaurant = response.data.result;
-    });
-  },
-};
+    axios.get(this.base_url + `api/restaurants/user/${this.$route.params.slug}`)
+      .then(response => {
+        console.log('topperia');
+        console.log(`http://localhost:8000/api/restaurants/user/${this.$route.params.slug}`);
+        this.singleRestaurant = response.data.result;
+      }).catch(err => {
+        console.error(err);
+      })
+  }
+}
 </script>
 
 
-
 <template>
-    <main>
+  <div class="container" v-if="singleRestaurant">
+    <div class="row">
+      <div class="col-md-3">
+        <h1>{{ singleRestaurant.name }}</h1>
+        <p>{{ singleRestaurant.address }}</p>
+      </div>
 
-      <div class="container" v-if="singleRestaurant">
-        <div class="row">
-          <div class="col-md-3">
-            <h1>{{ singleRestaurant.name }}</h1>
-            <p>{{ singleRestaurant.address }}</p>
-          </div>
-  
-          <div class="col-12 col-md-9">
-            <div class="row row-cols-1 row-cols-md-2">
-              <div v-for="dish in singleRestaurant.dish" class="col col-md-6 py-3">
-                <div class="card">
-                  <img :src="base_url + 'storage/' + dish.img" class="img-fluid" alt="">
-  
-                  <div class="card-body p-3">
-                    <h5 class="card-title mb-0"><strong>{{ dish.name }}</strong></h5>
-  
-                    <div class="row">
-                      <div class="col text-center">
-                        <div class="badge bg-danger">
-                          {{ dish.price }}
-                        </div>
-                      </div>
-                    </div>
-  
-                    <div class="d-flex justify-content-between">
-                      <div class="d-flex">
-                        <button class="btn btn-primary" @click="decrementQuantity(dish)">-</button>
-                        <span>{{ quantities[dish.id] || 1 }}</span>
-                        <button class="btn btn-primary" @click="incrementQuantity(dish)">+</button>
-                      </div>
-  
-                      <button class="btn btn-primary mr-2" @click="addToCart(dish)">Add to Cart</button>
-                      <router-link :to="{ name: 'CheckoutView' }">
-                        <button class="btn btn-secondary">Go to Checkout</button>
-                      </router-link>
+      <div class="col-12 col-md-9">
+        <div class="row row-cols-1 row-cols-md-2">
+          <div v-for="dish in singleRestaurant.dish" class="col col-md-6 py-3">
+            <div class="card">
+
+              <!-- <div v-if="base_url + 'storage/' + dish.img">
+                <img :src="base_url + 'storage/' + dish.img" class="img-fluid" alt="">
+              </div>
+              <div v-else>
+                <img :src="dish.img" alt="">
+              </div> -->
+              <img v-if="dish.img.indexOf('http') !== -1" :src="dish.img" alt="External Image">
+              <img v-else :src="base_url + 'storage/' + dish.img" alt="Local Image">
+
+              <div class="card-body p-3">
+                <h5 class="card-title mb-0"><strong>{{ dish.name }}</strong></h5>
+
+                <div class="row">
+                  <div class="col text-center">
+                    <div class="badge bg-danger">
+                      {{ dish.price }}
                     </div>
                   </div>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                  <div class="d-flex">
+                    <button class="btn btn-primary" @click="decrementQuantity(dish)">-</button>
+                    <span>{{ quantities[dish.id] || 1 }}</span>
+                    <button class="btn btn-primary" @click="incrementQuantity(dish)">+</button>
+                  </div>
+
+                  <button class="btn btn-primary mr-2" @click="addToCart(dish)">Add to Cart</button>
+                  <router-link :to="{ name: 'CheckoutView' }">
+                    <button class="btn btn-secondary">Go to Checkout</button>
+                  </router-link>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-    </main>
-  </template>
+
+
+      </div>
+    </div>
+  </div>
+  <!-- /.container -->
+</template>
   
 
 <style lang="scss" scoped>
 @use '../assets/scss/partials/variables' as *;
-
-main {
-    background-image: url(https://w0.peakpx.com/wallpaper/1019/191/HD-wallpaper-restaurant-and-bar-with-gorgeous-view-city-restaurant-view-bar.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-}
-section{
-    background-color: rgba(0, 0, 0, 0.500);
-}
 </style>

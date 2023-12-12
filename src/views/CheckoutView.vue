@@ -55,6 +55,7 @@ mounted() {
 
 <template>
     <main id="container_cart">
+
       <div class="container">
         <div v-if="state.cart && state.cart.length" class="row">
           <div class="col-12">
