@@ -44,6 +44,7 @@ export default {
 
     methods: {
 
+
         loadMore() {
             let start = this.displayedTypes.length
             let end = start + this.items
@@ -92,11 +93,11 @@ export default {
 
                 <!-- to all restaurants button -->
                 <button class="my_btn_rest my-4" v-if="this.displayedRestaurants < this.restaurants">
-                    <router-link to="/restaurants" class="text-decoration-none">
-                        <h6>
-                            Look at all our restaurants!
-                        </h6>
-                    </router-link>
+                        <router-link to="/restaurants" class="text-decoration-none">
+                            <h6>
+                                Look at all our restaurants!
+                            </h6>
+                        </router-link>
                 </button>
 
             </div>
