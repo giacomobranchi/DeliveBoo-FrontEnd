@@ -184,51 +184,60 @@ export default {
       </div>
 
 
-      <!-- col with checkout -->
+      <!-- col with checkout order -->
       <div class="col-3">
 
+        <!-- card with order -->
         <div class="card checkout text-break text-center">
 
-          <div class="card-header">
-            <h4>
-              Your order
-            </h4>
-          </div>
+          <h4 class="py-3">
+            Your order
+          </h4>
+
           <div class="card-body p-2">
 
+            <!-- view if no element on cart -->
             <p v-if="state.cart.length === 0" class="fw-bold">
               Non hai aggiunto prodotti al momento, quando lo farai appariranno qua!
             </p>
 
-
+            <!-- view you add element on cart -->
             <ul v-else class="list-unstyled">
+
+              <!-- vfor to generate li orders -->
               <li v-for="dish in state.cart" class="pb-3">
                 <div class="d-flex justify-content-between align-items-center">
+
+                  <!-- decrement -->
                   <button class="btn my_check_btn" @click="decrementQuantityCart(dish)">
                     -
                   </button>
 
-                  <span class="px-3">
+                  <!-- name order with counter -->
+                  <span class="px-3 fw-semibold">
                     {{ dish.name }} - {{ dish.quantity }}x
                   </span>
 
+                  <!-- increment -->
                   <button class="btn my_check_btn" @click="incrementQuantityCart(dish)">
                     +
                   </button>
+
                 </div>
               </li>
             </ul>
 
           </div>
-          <div class="card-footer d-flex justify-content-center">
 
+          <!-- checkout button -->
+          <div class="text-center py-3">
             <router-link :to="{ name: 'CheckoutView', params: { slug: singleRestaurant.slug } }">
               <button class="btn">
                 Go to Checkout
               </button>
             </router-link>
-
           </div>
+
         </div>
 
       </div>
@@ -282,6 +291,12 @@ img {
   max-width: 470px;
   min-height: 210px;
   min-width: 470px;
+  transition: .2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+
 }
 
 #actions {
