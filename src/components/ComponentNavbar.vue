@@ -34,7 +34,7 @@ export default {
               </router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/restaurants">Restaurants</router-link>
+              <router-link class="nav-link" to="/all-restaurants">Restaurants</router-link>
             </li>
 
           </ul>

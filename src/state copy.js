@@ -8,17 +8,15 @@ export const state = reactive({
     selectedTypes: [],
     selectedTypeParams: '',
 
-
-
-    async fetchRestaurants() {
-        const fetchedRestaurants = await axios.get(this.base_url + 'api/restaurants/')
+    fetchRestaurants() {
+        axios.get(this.base_url + 'api/restaurants/')
             .then(response => {
                 this.restaurants = response.data.result;
             }).catch(err => {
                 console.error(err);
             })
-        return fetchedRestaurants
     },
+
     fetchTypes() {
         axios.get(this.base_url + 'api/types/')
             .then(response => {
@@ -29,4 +27,17 @@ export const state = reactive({
             })
     },
 
-})    
+
+
+
+    /* fetchSingleRestaurant() {
+        axios.get(this.base_url + `api/restaurants/${this.$route.params.slug}`)
+            .then(response => {
+                console.log('topperia');
+                console.log(`http://localhost:8000/api/restaurants/${this.$route.params.slug}`);
+                this.singleRestaurant = response.data.result;
+            }).catch(err => {
+                console.error(err);
+            })
+    }, */
+})
