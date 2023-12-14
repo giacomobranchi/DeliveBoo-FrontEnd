@@ -1,5 +1,6 @@
 <script>
 import { state } from '../state.js';
+import axios from 'axios';
 import braintree from 'braintree-web';
 
 export default {
@@ -28,7 +29,14 @@ export default {
             this.error = err.message;
           })
       }
-    }
+    },
+    fetchPayments() {
+      axios.post(this.state.base_url + 'payment')
+        .then(response => {
+          console.log(response);
+
+        })
+    },
   },
   computed: {
 
