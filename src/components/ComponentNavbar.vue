@@ -1,18 +1,41 @@
 <script>
+import { RouterLink } from 'vue-router';
 import { state } from '../state.js';
+import axios from 'axios';
 
 export default {
   name: 'ComponentNavbar',
+  components: { RouterLink },
   data() {
     return {
       state,
+      showedRest: null,
+      restaurants: []
     }
   },
   methods: {
     reload() {
       window.location.reload()
-    }
+    },
+    removeFilter() {
+      this.showedRest = this.restaurants
+      this.state.selectedTypes = []
+    },
+    filterHome() {
+      axios
+        .get(this.state.base_url + `api/restaurants/filter?${this.$route.params.slug}`)
+        .then(response => {
+          this.showedRest = response.data
+          console.log(this.showedRest);
+        })
+        .catch(err => {
+          console.error(err);
+        })
+      }
   },
+  created() {
+    this.filterHome()
+  }
 }
 
 </script>
@@ -33,7 +56,7 @@ export default {
                 Home<span class="visually-hidden">(current)</span>
               </router-link>
             </li>
-            <li class="nav-item">
+            <li @click="reload" class="nav-item">
               <router-link class="nav-link" to="/all-restaurants">Restaurants</router-link>
             </li>
 
