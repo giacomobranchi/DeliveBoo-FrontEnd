@@ -1,10 +1,13 @@
 <script>
 import { useCheckoutStore } from '../state';
+import { state } from '../state.js';
+
 export default {
   name: 'CheckoutView',
   data() {
     const checkoutStore = useCheckoutStore();
     return {
+      state,
       checkoutStore,
       singleRestaurant: null, // Aggiungi la definizione di singleRestaurant qui se necessario
       isTop: true,
@@ -51,45 +54,46 @@ export default {
 
 <template>
   <main id="container_cart">
-    
+
     <div class="container">
-      
+
       <div class="row">
         <!-- <h2>{{ item.name }}</h2> -->
         <div class="col-12">
-            <h1 class="text-center mb-3 pt-3">Benvenuto al tuo Carrello {{ checkoutStore.singleRestaurant.name }}</h1>
-            <div v-for="(dish, index) in checkoutStore.cart" class="card mb-3">
-              <div class="card-body d-flex justify-content-around shadow flex-wrap  card_body">
-                <div class="col-lg-3">
-                  <img v-if="dish.img.indexOf('http') !== -1" :src="dish.img" alt="External Image">
-                  <img v-else :src="this.state.base_url + 'storage/' + dish.img" alt="Local Image">
-                </div>
-                <div class="col-lg-3  mx-5">
-                  <h5 class="card-title mb-3">{{ dish.name }}</h5>
-                  <hr>
-                  <p class="card-text mb-3">Prezzo: € {{ dish.price }}</p>
-                  <p class="card-text mb-3">Quantita': {{ dish.quantity }}pz</p>
-                </div>
-                <div class="col-lg-3 mb-3">
-                  <h5>Descrizione prodotto</h5>
-                  <hr>
-                  <p class="card-text">{{ dish.description }}</p>
-                </div>
-                <div class="col-lg-3">
-                  <button class="btn btn-danger mr-2 mx-2" @click="removeItem(index)"><i class="fa-solid fa-trash"></i></button>
-                </div>
+          <h1 class="text-center mb-3 pt-3">Benvenuto al tuo Carrello {{ checkoutStore.singleRestaurant.name }}</h1>
+          <div v-for="(dish, index) in checkoutStore.cart" class="card mb-3">
+            <div class="card-body d-flex justify-content-around shadow flex-wrap  card_body">
+              <div class="col-lg-3">
+                <img v-if="dish.img.indexOf('http') !== -1" :src="dish.img" alt="External Image">
+                <img v-else :src="this.state.base_url + 'storage/' + dish.img" alt="Local Image">
               </div>
-            
+              <div class="col-lg-3  mx-5">
+                <h5 class="card-title mb-3">{{ dish.name }}</h5>
+                <hr>
+                <p class="card-text mb-3">Prezzo: € {{ dish.price }}</p>
+                <p class="card-text mb-3">Quantita': {{ dish.quantity }}pz</p>
+              </div>
+              <div class="col-lg-3 mb-3">
+                <h5>Descrizione prodotto</h5>
+                <hr>
+                <p class="card-text">{{ dish.description }}</p>
+              </div>
+              <div class="col-lg-3">
+                <button class="btn btn-danger mr-2 mx-2" @click="removeItem(index)"><i
+                    class="fa-solid fa-trash"></i></button>
+              </div>
             </div>
-            <h1 class="text-center my-5">Totale: € {{ total }}</h1>
-            <div class="d-flex justify-content-center flex-wrap mb-5 gap-2">
-              <button class="btn btn-outline-secondary text-dark border-2" @click="goBack">Torna indietro</button>
-              <button class="btn btn-outline-danger text-dark border-2" @click="emptyCart">Svuota il carrello</button>
-              <button class="btn btn-outline-primary text-dark border-2" @click="checkout">Procedi al Pagamento</button>
-            </div>
-            <div class="d-flex justify-content-end">
+
+          </div>
+          <h1 class="text-center my-5">Totale: € {{ total }}</h1>
+          <div class="d-flex justify-content-center flex-wrap mb-5 gap-2">
+            <button class="btn btn-outline-secondary text-dark border-2" @click="goBack">Torna indietro</button>
+            <button class="btn btn-outline-danger text-dark border-2" @click="emptyCart">Svuota il carrello</button>
+            <button class="btn btn-outline-primary text-dark border-2" @click="checkout">Procedi al Pagamento</button>
+          </div>
+          <div class="d-flex justify-content-end">
             <button v-if="!isTop" @click="backToTop" class="scrollToTop"><i class="fas fa-angle-up"></i></button>
-            </div>
+          </div>
         </div>
       </div>
       <div v-if="checkoutStore.cart.length === 0" class="row">
@@ -99,47 +103,48 @@ export default {
         </div>
       </div>
     </div>
-       
-    </main>
+
+  </main>
 </template>
   
 <style lang="scss">
-  @use '../assets/scss/partials/variables' as *;
-  
-  #container_cart {
-    background-color: $d_boo_orange;
-    min-height: 100vh;
-    
-    .card_body {
-      
-      img {
-        width: 200px;
-        height: 150px;
-        object-fit: cover;
-        border-radius: 10px;
-        border: 1px solid black;
-      }
-      &:hover {
-        cursor: pointer;
-        background-color: antiquewhite;
-      }
+@use '../assets/scss/partials/variables' as *;
+
+#container_cart {
+  background-color: $d_boo_orange;
+  min-height: 100vh;
+
+  .card_body {
+
+    img {
+      width: 200px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid black;
     }
 
-    .scrollToTop{
-      width: 50px; 
-      height: 50px; 
-      font-size: 20px; 
-      color: $d_boo_orange;
-      &:hover {
+    &:hover {
+      cursor: pointer;
+      background-color: antiquewhite;
+    }
+  }
+
+  .scrollToTop {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    color: $d_boo_orange;
+
+    &:hover {
       background-color: $d_boo_orange;
       color: $d_boo_light;
       border: 2px solid;
-      
-      }
+
     }
-    
   }
 
+}
 </style>
                   <!-- <template>
                     <div class="text-white">
