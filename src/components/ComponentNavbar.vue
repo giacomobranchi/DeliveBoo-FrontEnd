@@ -1,5 +1,6 @@
 <script>
 import { state } from '../state.js';
+import AllRestaurantsView from '../views/AllRestaurantsView.vue';
 
 export default {
   name: 'ComponentNavbar',
@@ -10,9 +11,14 @@ export default {
   },
   methods: {
     reload() {
+      this.$router.push({
+        name: 'allRestaurantsList',
+        params: { slug: '' }
+      })
       window.location.reload()
-    }
-  },
+    },
+
+  }
 }
 
 </script>
@@ -33,8 +39,9 @@ export default {
                 Home<span class="visually-hidden">(current)</span>
               </router-link>
             </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/all-restaurants">Restaurants</router-link>
+            <li @click="reload" class="nav-item">
+              <router-link :to="{ name: 'allRestaurantsList', params: { slug: '' } }"
+                class="nav-link">Restaurants</router-link>
             </li>
 
           </ul>
