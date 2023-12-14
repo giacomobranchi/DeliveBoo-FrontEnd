@@ -1,72 +1,64 @@
 <script>
-import { state } from '../state.js';
-import axios from 'axios';
+import { useCheckoutStore } from '../state';
 export default {
   name: 'CheckoutView',
   data() {
+    const checkoutStore = useCheckoutStore();
     return {
-      state,
+      checkoutStore,
+      singleRestaurant: null, // Aggiungi la definizione di singleRestaurant qui se necessario
       isTop: true,
-      singleRestaurant: ({}),
-
-    }
+    };
   },
   methods: {
     checkout() {
-      axios.post(this.state.base_url + 'api/checkout', this.state.cart)
+      axios.post(this.checkoutStore.base_url + 'api/checkout', this.checkoutStore.cart)
         .then(response => {
           console.log(response);
-          this.state.cart = [];
+          this.checkoutStore.cart = [];
         })
         .catch(err => {
           console.error(err);
         });
     },
     emptyCart() {
-      this.state.cart = [];
+      this.checkoutStore.cart = [];
     },
     goBack() {
       this.$router.go(-1);
     },
     removeItem(index) {
-    this.state.cart.splice(index, 1);
+      this.checkoutStore.cart.splice(index, 1);
     },
     backToTop() {
       window.scrollTo(0, 0);
     },
-    // selectRestaurant(restaurant) {
-    // this.singleRestaurant = restaurant;
-    // } 
   },
   computed: {
-  total() {
-    let total = this.state.cart.reduce((total, dish) => total + dish.price * dish.quantity, 0);
-    return total.toFixed(2);
-  }
-},
-mounted() {
-  this.$watch('state.cart', () => {
-    this.total = this.state.cart.reduce((total, dish) => total + dish.price * dish.quantity, 0);
-  });
-  this.$nextTick(() => {
-    this.total = this.state.cart.reduce((total, dish) => total + dish.price * dish.quantity, 0);
-  });
-  window.addEventListener('scroll', () => {
+    total() {
+      let total = this.checkoutStore.cart.reduce((total, dish) => total + dish.price * dish.quantity, 0);
+      return total.toFixed(2);
+    }
+  },
+  mounted() {
+    window.addEventListener('scroll', () => {
       this.isTop = scrollY > 100 ? false : true;
-  });
- }
-}
+    });
+  },
+};
 </script>
 
-<template>
-    <main id="container_cart" v-if="singleRestaurant">
 
-      <div class="container">
-        
-        <div v-if="state.cart && state.cart.length" class="row">
-          <div class="col-12">
-            <h1 class="text-center m-3 ">Benvenuto al tuo Carrello {{ singleRestaurant.slug }}</h1>
-            <div v-for="(dish, index) in state.cart" class="card mb-3">
+<template>
+  <main id="container_cart">
+    
+    <div class="container">
+      
+      <div class="row">
+        <!-- <h2>{{ item.name }}</h2> -->
+        <div class="col-12">
+            <h1 class="text-center mb-3 pt-3">Benvenuto al tuo Carrello {{ checkoutStore.singleRestaurant.name }}</h1>
+            <div v-for="(dish, index) in checkoutStore.cart" class="card mb-3">
               <div class="card-body d-flex justify-content-around shadow flex-wrap  card_body">
                 <div class="col-lg-3">
                   <img v-if="dish.img.indexOf('http') !== -1" :src="dish.img" alt="External Image">
@@ -100,10 +92,10 @@ mounted() {
             </div>
         </div>
       </div>
-      <div v-else class="row">
+      <div v-if="checkoutStore.cart.length === 0" class="row">
         <div class="col-12 vh-100 text-white m-5 text-center">
           <h1 class="pb-5">Il tuo carrello e' vuoto</h1>
-          <button class="btn btn-outline-secondary text-dark border-2" @click="goBack">Torna indietro</button>
+          <!-- <button class="btn btn-outline-secondary text-dark border-2" @click="goBack">Torna indietro</button> -->
         </div>
       </div>
     </div>
@@ -116,6 +108,7 @@ mounted() {
   
   #container_cart {
     background-color: $d_boo_orange;
+    min-height: 100vh;
     
     .card_body {
       
@@ -148,3 +141,20 @@ mounted() {
   }
 
 </style>
+                  <!-- <template>
+                    <div class="text-white">
+                      
+                      
+                      
+                      <div v-for="(item, index) in checkoutStore.cart" :key="index">
+                        <h2>{{ item.name }}</h2>
+                        <p>Quantità: {{ item.quantity }}</p>
+                        <p>Prezzo: {{ item.price }}</p>
+                      </div>
+                      <h1>{{ checkoutStore.singleRestaurant.name }}</h1>
+                      <p>{{ checkoutStore.singleRestaurant.address }}</p>
+                      
+                      
+                      <p>Totale: {{ total }}</p>
+                    </div>
+                  </template> -->

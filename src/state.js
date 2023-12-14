@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export const state = reactive({
     base_url: 'http://127.0.0.1:8000/',
-    cart: [],
+    
 
 
     fetchRestaurants() {
@@ -39,3 +39,28 @@ export const state = reactive({
             })
     }, */
 })
+
+
+// Store Pinia per CheckoutView
+import { defineStore } from 'pinia';
+
+export const useCheckoutStore = defineStore({
+  id: 'checkout',
+  state: () => ({
+    cart: [],
+    singleRestaurant: null, // Aggiungi singleRestaurant allo stato del tuo store
+    // altri stati...
+  }),
+  actions: {
+    addToCart(dish) {
+      // il tuo metodo addToCart...
+    },
+    setSingleRestaurant(restaurant) {
+      // Aggiungi un metodo per aggiornare singleRestaurant
+      
+      this.singleRestaurant = restaurant;
+    },
+    // altre azioni...
+  },
+  persist: true, // Add this line to persist the state of this store
+});
