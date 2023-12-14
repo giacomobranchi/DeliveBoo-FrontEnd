@@ -9,6 +9,7 @@ export default {
     return {
       state,
       hostedFieldInstance: false,
+      amount: '',
       nonce: '',
       error: '',
     }
@@ -16,27 +17,62 @@ export default {
   methods: {
     payWithCreditCard() {
       if (this.hostedFieldInstance) {
-
         this.error = "";
         this.nonce = "";
-
         this.hostedFieldInstance.tokenize().then(payload => {
           console.log(payload);
-          this.nonce = payload.nonce
+          this.nonce = payload.nonce;
+
+          // Aggiungi la chiamata <link>axios</link> per inviare i dati al backend
+          axios.post(this.state.base_url + 'api/payment', {
+            amount: this.amount,
+            nonce: this.nonce
+          }).then(response => {
+            console.log(response);
+            // Gestisci la risposta dal backend, ad esempio:
+            if (response.data.success) {
+              // Se il backend restituisce un messaggio di successo, gestiscilo qui
+              console.log("Pagamento completato con successo!");
+            } else {
+              // Se il backend restituisce un messaggio di errore, gestiscilo qui
+              console.error("Errore durante il pagamento: " + response.data.error);
+            }
+          }).catch(error => {
+            console.error(error);
+            // Gestisci l'errore della chiamata al backend, se necessario
+          });
         })
           .catch(err => {
             console.error(err);
             this.error = err.message;
           })
       }
+      console.log(this.amount);
     },
-    fetchPayments() {
-      axios.post(this.state.base_url + 'payment')
-        .then(response => {
-          console.log(response);
-
-        })
-    },
+    /*    payWithCreditCard() {
+         if (this.hostedFieldInstance) {
+   
+           this.error = "";
+           this.nonce = "";
+           this.hostedFieldInstance.tokenize().then(payload => {
+             console.log(payload);
+             this.nonce = payload.nonce
+           })
+             .catch(err => {
+               console.error(err);
+               this.error = err.message;
+             })
+         }
+         console.log(this.amount);
+       }, */
+    /*     fetchPayments() {
+          axios.post(this.state.base_url + 'payment')
+            .then(response => {
+              console.log(response);
+    
+    
+            })
+        }, */
   },
   computed: {
 
@@ -102,7 +138,7 @@ export default {
               <label for="amount">Amount</label>
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text">$</span></div>
-                <input type="number" id="amount" class="form-control" placeholder="Enter Amount">
+                <input type="number" v-model="amount" id="amount" class="form-control" placeholder="Enter Amount">
               </div>
             </div>
             <hr />
