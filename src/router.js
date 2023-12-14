@@ -27,12 +27,12 @@ const router = createRouter({
             component: RestaurantsView
         },
         {
-            path: '/restaurants',
+            path: '/all-restaurants/:slug*',
             name: 'allRestaurantsList',
             component: AllRestaurantsView
         },
         {
-           path: '/checkout/:slug',
+            path: '/checkout/:slug',
             name: 'CheckoutView',
             component: CheckoutView,
         },
