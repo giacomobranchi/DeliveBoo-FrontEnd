@@ -50,7 +50,7 @@ export default {
 
         filterRestaurants() {
             this.state.selectedTypeParams = this.state.selectedTypes.join('');
-            //this.$router.push({ name: 'allRestaurantsList' });
+            this.$router.push({ name: 'allRestaurantsList', params: { slug: this.state.selectedTypeParams } });
         }
     }
 }    
@@ -142,13 +142,13 @@ export default {
 
                 </div>
 
-                <button class="my_btn_types my-4">
-                    <router-link :to="{ name: 'allRestaurantsList', params: { slug: this.state.selectedTypeParams } }"
-                        class="text-decoration-none" @click="filterRestaurants">
+                <button class="my_btn_types my-4" @click="filterRestaurants">Filtra ristoranti
+                    <!-- <router-link :to="{ name: 'allRestaurantsList', params: { slug: this.state.selectedTypeParams } }"
+                        class="text-decoration-none">
                         <h6>
-                            Filtra ristoranti
+                            
                         </h6>
-                    </router-link>
+                    </router-link> -->
                 </button>
 
             </div>

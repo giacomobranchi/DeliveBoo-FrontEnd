@@ -1,9 +1,10 @@
 <script>
+import { RouterLink } from 'vue-router';
 import { state } from '../state.js';
 import axios from 'axios';
 export default {
     name: 'AllRestaurantsView',
-    components: {},
+    components: { RouterLink },
     data() {
         return {
             state,
@@ -18,18 +19,21 @@ export default {
             const fetchedRestaurants = await axios.get(this.state.base_url + 'api/restaurants/')
                 .then(response => {
                     this.restaurants = response.data.result;
-                    this.showedRest = this.restaurants
+                    if (!this.$route.params.slug) {
+                        this.showedRest = this.restaurants
+                    }
+
                 }).catch(err => {
                     console.error(err);
                 })
             return fetchedRestaurants
         },
 
-        filterRestaurants() {
+        async filterRestaurants() {
             // Filtra i ristoranti in base alle tipologie selezionate
             this.state.selectedTypeParams = this.state.selectedTypes.join('');
             console.log('topperia');
-            axios.get(this.state.base_url + `api/restaurants/filter?${this.state.selectedTypeParams}`)
+            await axios.get(this.state.base_url + `api/restaurants/filter?${this.state.selectedTypeParams}`)
                 .then(response => {
                     this.showedRest = response.data;
                     console.log(response.data);
@@ -46,8 +50,8 @@ export default {
             this.state.selectedTypes = []
         },
 
-        async filterHome() {
-            await axios
+        filterHome() {
+            axios
                 .get(this.state.base_url + `api/restaurants/filter?${this.$route.params.slug}`)
                 .then(response => {
                     this.showedRest = response.data
@@ -62,11 +66,16 @@ export default {
 
     async mounted() {
 
+
+
+    },
+    created() {
         this.fetchRestaurants()
         this.state.fetchTypes()
         this.filterHome()
 
     }
+
 }
 </script>
 
@@ -93,7 +102,9 @@ export default {
                 </div>
 
                 <button @click="filterRestaurants" class="btn my_btn mt-2 me-3">Filtra</button>
-                <button @click="removeFilter" class="btn my_btn_clear mt-2">Svuota</button>
+                <div @click="removeFilter">
+                    <RouterLink to="/all-restaurants" class="btn my_btn_clear mt-2">Svuota</RouterLink>
+                </div>
 
             </div>
             <!-- /.col -->
