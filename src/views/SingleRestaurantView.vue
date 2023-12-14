@@ -1,6 +1,7 @@
 <script>
 import { state } from '../state.js';
 import axios from 'axios';
+import { useCheckoutStore } from '../state.js';
 
 export default {
   name: 'SingleRestaurant',
@@ -12,17 +13,23 @@ export default {
       base_url: 'http://127.0.0.1:8000/',
       quantities: {},
       selectedRestaurant: '',
+      
     };
+  },
+  computed: {
+    cart() {
+      return useCheckoutStore().cart;
+    }
   },
   methods: {
 
     addToCart(dish) {
       // Check if the dish is already in the cart
-      const existingDishIndex = this.state.cart.findIndex(item => item.name === dish.name);
-
+      const existingDishIndex = useCheckoutStore().cart.findIndex(item => item.name === dish.name);
+      
       if (existingDishIndex !== -1) {
         // If the dish is already in the cart, update its quantity
-        this.state.cart[existingDishIndex].quantity += this.quantities[dish.id] || 1;
+        useCheckoutStore().cart[existingDishIndex].quantity += this.quantities[dish.id] || 1;
       } else {
         // If the dish is not in the cart, add a new instance with quantity 1
         const dishWithQuantity = {
@@ -30,36 +37,38 @@ export default {
           price: Number(dish.price),
           description: dish.description,
           img: dish.img,
-          quantity: this.quantities[dish.id] || 1
+          quantity: this.quantities[dish.id] || 1,
+          restaurant: dish.user_id
         };
 
         // Push the dish with quantity to the cart
-        this.state.cart.push(dishWithQuantity);
+        useCheckoutStore().cart.push(dishWithQuantity);
+        console.log(useCheckoutStore().cart);
       }
     },
 
     // Function to increment the quantity of a dish in the cart
     incrementQuantityCart(dish) {
-      const existingItemIndex = this.state.cart.findIndex(item => item.name === dish.name);
+      const existingItemIndex = useCheckoutStore().cart.findIndex(item => item.name === dish.name);
 
       if (existingItemIndex !== -1) {
         // If the dish is in the cart, increment its quantity
-        this.state.cart[existingItemIndex].quantity += 1;
+        useCheckoutStore().cart[existingItemIndex].quantity += 1;
       }
       // You can add additional logic if the item is not found (optional)
     },
 
     // Function to decrement the quantity of a dish in the cart
     decrementQuantityCart(dish) {
-      const existingItemIndex = this.state.cart.findIndex(item => item.name === dish.name);
+      const existingItemIndex = useCheckoutStore().cart.findIndex(item => item.name === dish.name);
 
       if (existingItemIndex !== -1) {
         // If the dish is in the cart and its quantity is greater than 1, decrement the quantity
-        if (this.state.cart[existingItemIndex].quantity > 1) {
-          this.state.cart[existingItemIndex].quantity -= 1;
+        if (useCheckoutStore().cart[existingItemIndex].quantity > 1) {
+          useCheckoutStore().cart[existingItemIndex].quantity -= 1;
         } else {
           // Optionally, remove the item from the cart if the quantity becomes 0
-          this.state.cart.splice(existingItemIndex, 1);
+          useCheckoutStore().cart.splice(existingItemIndex, 1);
         }
       }
       // You can add additional logic if the item is not found (optional)
@@ -84,17 +93,18 @@ export default {
   },
 
   mounted() {
-    axios.get(this.base_url + `api/restaurants/user/${this.$route.params.slug}`)
-      .then(response => {
-        console.log('topperia');
-        console.log(`http://localhost:8000/api/restaurants/user/${this.$route.params.slug}`);
-        this.singleRestaurant = response.data.result;
-      }).catch(err => {
-        console.error(err);
-      })
+    
+  axios.get(this.base_url + `api/restaurants/user/${this.$route.params.slug}`)
+    .then(response => {
+      console.log('topperia');
+      console.log(`http://localhost:8000/api/restaurants/user/${this.$route.params.slug}`);
 
-
-
+      this.singleRestaurant = response.data.result;
+      console.log(this.singleRestaurant);
+      useCheckoutStore().setSingleRestaurant(this.singleRestaurant); // Aggiorna singleRestaurant nel tuo store Pinia
+    }).catch(err => {
+      console.error(err);
+    })
   }
 }
 </script>
@@ -205,7 +215,7 @@ export default {
           <div class="card-body p-2">
 
             <!-- view if no element on cart -->
-            <p v-if="state.cart.length === 0" class="fw-bold">
+            <p v-if="cart.length === 0" class="fw-bold">
               Non hai aggiunto prodotti al momento, quando lo farai appariranno qua!
             </p>
 
@@ -216,7 +226,7 @@ export default {
               <ul class="list-unstyled">
 
                 <!-- vfor to generate li orders -->
-                <li v-for="dish in state.cart" class="pb-3">
+                <li  v-for="(dish, index) in cart" :key="index" class="pb-3">
                   <div class="d-flex justify-content-between align-items-center">
 
                     <!-- decrement -->
