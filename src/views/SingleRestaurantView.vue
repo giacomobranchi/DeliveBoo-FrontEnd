@@ -12,60 +12,79 @@ export default {
       singleRestaurant: null,
       base_url: 'http://127.0.0.1:8000/',
       quantities: {},
-      selectedRestaurant: '',
-      
+
     };
   },
   computed: {
     cart() {
       return useCheckoutStore().cart;
+    },
+
+    /* isEmptyCart() {
+      return useCheckoutStore().cart.length === 0 || useCheckoutStore().cart.every(dish => dish.restaurant === this.singleRestaurant.user_id);
     }
+ */
   },
   methods: {
 
     addToCart(dish) {
       // Check if the dish is already in the cart
-      const existingDishIndex = useCheckoutStore().cart.findIndex(item => item.name === dish.name);
-      
+
+      if (useCheckoutStore().cart === '') {
+        useCheckoutStore().cart = []
+      }
+
+      const existingDishIndex = useCheckoutStore().cart.findIndex(item => item.dishes.name === dish.name);
+
+      console.log(existingDishIndex);
+
       if (existingDishIndex !== -1) {
         // If the dish is already in the cart, update its quantity
-        useCheckoutStore().cart[existingDishIndex].quantity += this.quantities[dish.id] || 1;
+        useCheckoutStore().cart[existingDishIndex].dishes.quantity += this.quantities[dish.id] || 1;
       } else {
         // If the dish is not in the cart, add a new instance with quantity 1
         const dishWithQuantity = {
-          name: dish.name,
-          price: Number(dish.price),
-          description: dish.description,
-          img: dish.img,
-          quantity: this.quantities[dish.id] || 1,
-          restaurant: dish.user_id
-        };
+          restaurant: dish.user_id,
+          dishes: {
+            name: dish.name,
+            price: Number(dish.price),
+            description: dish.description,
+            img: dish.img,
+            quantity: this.quantities[dish.id] || 1,
+          }
+        }
 
         // Push the dish with quantity to the cart
         useCheckoutStore().cart.push(dishWithQuantity);
         console.log(useCheckoutStore().cart);
+
       }
     },
 
     // Function to increment the quantity of a dish in the cart
     incrementQuantityCart(dish) {
-      const existingItemIndex = useCheckoutStore().cart.findIndex(item => item.name === dish.name);
+
+      const existingItemIndex = useCheckoutStore().cart.findIndex(item => item.dishes.name === dish.name);
 
       if (existingItemIndex !== -1) {
         // If the dish is in the cart, increment its quantity
-        useCheckoutStore().cart[existingItemIndex].quantity += 1;
+        useCheckoutStore().cart[existingItemIndex].dishes.quantity += 1;
+
+        console.log('success');
       }
-      // You can add additional logic if the item is not found (optional)
+      console.log('nope');
     },
 
     // Function to decrement the quantity of a dish in the cart
     decrementQuantityCart(dish) {
-      const existingItemIndex = useCheckoutStore().cart.findIndex(item => item.name === dish.name);
+      const existingItemIndex = useCheckoutStore().cart.findIndex(item => item.dishes.name === dish.name);
 
       if (existingItemIndex !== -1) {
         // If the dish is in the cart and its quantity is greater than 1, decrement the quantity
-        if (useCheckoutStore().cart[existingItemIndex].quantity > 1) {
-          useCheckoutStore().cart[existingItemIndex].quantity -= 1;
+        if (useCheckoutStore().cart[existingItemIndex].dishes.quantity > 1) {
+
+          useCheckoutStore().cart[existingItemIndex].dishes.quantity -= 1;
+
         } else {
           // Optionally, remove the item from the cart if the quantity becomes 0
           useCheckoutStore().cart.splice(existingItemIndex, 1);
@@ -93,18 +112,20 @@ export default {
   },
 
   mounted() {
-    
-  axios.get(this.base_url + `api/restaurants/user/${this.$route.params.slug}`)
-    .then(response => {
-      console.log('topperia');
-      console.log(`http://localhost:8000/api/restaurants/user/${this.$route.params.slug}`);
 
-      this.singleRestaurant = response.data.result;
-      console.log(this.singleRestaurant);
-      useCheckoutStore().setSingleRestaurant(this.singleRestaurant); // Aggiorna singleRestaurant nel tuo store Pinia
-    }).catch(err => {
-      console.error(err);
-    })
+    axios.get(this.base_url + `api/restaurants/user/${this.$route.params.slug}`)
+      .then(response => {
+        console.log('topperia');
+        console.log(`http://localhost:8000/api/restaurants/user/${this.$route.params.slug}`);
+
+        this.singleRestaurant = response.data.result;
+        this.dishes = response.data.result.dish[0].user_id
+        console.log(this.dishes);
+        console.log(this.singleRestaurant);
+        useCheckoutStore().setSingleRestaurant(this.singleRestaurant); // Aggiorna singleRestaurant nel tuo store Pinia
+      }).catch(err => {
+        console.error(err);
+      })
   }
 }
 </script>
@@ -175,6 +196,7 @@ export default {
                         <button class="btn btn-primary" @click="decrementQuantity(dish)">
                           -
                         </button>
+
                         <div class="counter">
                           <span class="fs-5">
                             {{ quantities[dish.id] || 1 }}
@@ -184,6 +206,7 @@ export default {
                         <button class="btn btn-primary" @click="incrementQuantity(dish)">
                           +
                         </button>
+
                         <button class="btn btn-primary mr-2" @click="addToCart(dish)">
                           Add to Cart
                         </button>
@@ -226,17 +249,17 @@ export default {
               <ul class="list-unstyled">
 
                 <!-- vfor to generate li orders -->
-                <li  v-for="(dish, index) in cart" :key="index" class="pb-3">
+                <li v-for="(dish, index) in cart" :key="index" class="pb-3">
                   <div class="d-flex justify-content-between align-items-center">
 
                     <!-- decrement -->
-                    <button class="btn my_check_btn" @click="decrementQuantityCart(dish)">
+                    <button class="btn my_check_btn" @click="decrementQuantityCart(dish.dishes)">
                       -
                     </button>
 
                     <!-- name order with counter -->
                     <span class="px-3 fw-semibold">
-                      {{ dish.name }} - {{ dish.quantity }}x
+                      {{ dish.dishes.name }} - {{ dish.dishes.quantity }}x
                     </span>
 
                     <!-- increment -->
