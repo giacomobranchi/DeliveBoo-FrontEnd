@@ -8,21 +8,21 @@ export default {
   <footer>
     <div class="footer-top">
       <div class="container footer flex-wrap">
-        <div class="lists d-flex flex-wrap justify-content-between">
+        <div class="lists d-flex flex-wrap justify-content-between ">
 
-          <div class="about col-12 col-lg-6 col-xl-4 p-3">
+          <div class="about col-12 col-lg-4 col-xl-3 py-3">
             <h5>Aiuto</h5>
             <div class="line"></div>
             <ul class="list-unstyled my-2">
               <li><a href="">Contatti</a></li>
-              <li><a href="">FAQ</a></li>
+              <li><router-link class="nav-link effect" aria-current="page" to="/FAQ">FAQ</router-link></li>
               <li><a href="">Tipi di cucina</a></li>
             </ul>
           </div>
 
           <!-- End section Aiuto -->
 
-          <div class="about col-12 col-lg-6 col-xl-4 p-4">
+          <div class="about col-12 col-lg-4 col-xl-3 p-3">
             <h5>Note Legali</h5>
             <div class="line"></div>
             <ul class="list-unstyled my-2">
@@ -34,7 +34,7 @@ export default {
 
           <!-- End section Note legali -->
 
-          <div class="about col-12 col-lg-6 col-xl-3 p-4">
+          <div class="about col-12 col-lg-6 col-xl-3 p-3">
               <h5>Scopri DeliveBoo</h5>
               <div class="line"></div>
               <ul class="list-unstyled my-2">
@@ -88,6 +88,8 @@ footer {
   .lists {
     color: $d_boo_light;
     padding-top: 2rem;
+
+    
   }
 
   .icons {
@@ -120,6 +122,12 @@ footer {
   span {
     color: $d_boo_primary;
   }
+
+  @media (max-width: 576px) {
+  .about {
+    padding-left: 1rem;
+  }
+}
   
 }
 </style>
