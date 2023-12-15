@@ -5,6 +5,7 @@ import RestaurantsView from './views/RestaurantsView.vue';
 import SingleRestaurantView from './views/SingleRestaurantView.vue';
 import AllRestaurantsView from './views/AllRestaurantsView.vue';
 import CheckoutView from './views/CheckoutView.vue';
+import PaymentView from './views/PaymentView.vue';
 
 const router = createRouter({
 
@@ -35,6 +36,11 @@ const router = createRouter({
             path: '/checkout/:slug',
             name: 'CheckoutView',
             component: CheckoutView,
+        },
+        {
+            path: '/payment',
+            name: 'PaymentView',
+            component: PaymentView,
         },
     ]
 });
