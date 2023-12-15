@@ -142,7 +142,6 @@ export default {
       color: $d_boo_light;
       border: 2px solid;
       border-bottom: none;
-
     }
   }
 }
