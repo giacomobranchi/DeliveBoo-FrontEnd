@@ -58,27 +58,26 @@ export default {
     <div class="container">
 
       <div class="row">
-        <!-- <h2>{{ item.name }}</h2> -->
         <div class="col-12">
-          <h1 class="text-center mb-3 pt-3">Benvenuto al tuo Carrello {{ checkoutStore.singleRestaurant.name }}</h1>
+          <h1 class="text-center mb-3 p-5">Benvenuti al Carrello -{{ checkoutStore.singleRestaurant.name }}-</h1>
           <div v-for="(dish, index) in checkoutStore.cart" class="card mb-3">
             <div class="card-body d-flex justify-content-around shadow flex-wrap  card_body">
-              <div class="col-lg-3">
+              <div class="col-12 col-md-6 col-lg-3">
                 <img v-if="dish.img.indexOf('http') !== -1" :src="dish.img" alt="External Image">
                 <img v-else :src="this.state.base_url + 'storage/' + dish.img" alt="Local Image">
               </div>
-              <div class="col-lg-3  mx-5">
+              <div class="col-12 col-md-6 col-lg-3  mx-5">
                 <h5 class="card-title mb-3">{{ dish.name }}</h5>
                 <hr>
                 <p class="card-text mb-3">Prezzo: € {{ dish.price }}</p>
                 <p class="card-text mb-3">Quantita': {{ dish.quantity }}pz</p>
               </div>
-              <div class="col-lg-3 mb-3">
+              <div class="col-12 col-md-12 col-lg-3 mb-3">
                 <h5>Descrizione prodotto</h5>
                 <hr>
                 <p class="card-text">{{ dish.description }}</p>
               </div>
-              <div class="col-lg-3">
+              <div class="col-12 col-lg-3">
                 <button class="btn btn-danger mr-2 mx-2" @click="removeItem(index)"><i
                     class="fa-solid fa-trash"></i></button>
               </div>
@@ -91,14 +90,14 @@ export default {
             <button class="btn btn-outline-danger text-dark border-2" @click="emptyCart">Svuota il carrello</button>
             <button class="btn btn-outline-primary text-dark border-2" @click="checkout">Procedi al Pagamento</button>
           </div>
-          <div class="d-flex justify-content-end">
+          <div class="d-flex justify-content-end fixed-bottom mx-5">
             <button v-if="!isTop" @click="backToTop" class="scrollToTop"><i class="fas fa-angle-up"></i></button>
           </div>
         </div>
       </div>
-      <div v-if="checkoutStore.cart.length === 0" class="row">
-        <div class="col-12 vh-100 text-white m-5 text-center">
-          <h1 class="pb-5">Il tuo carrello e' vuoto</h1>
+      <div v-if="checkoutStore.cart.length === 0" class="row text-center">
+        <div class="col-12 vh-100 text-white my-5 ">
+          <h1 class="text-center pb-5">Il tuo carrello e' vuoto</h1>
           <!-- <button class="btn btn-outline-secondary text-dark border-2" @click="goBack">Torna indietro</button> -->
         </div>
       </div>
@@ -127,6 +126,7 @@ export default {
     &:hover {
       cursor: pointer;
       background-color: antiquewhite;
+      border-radius: 10px;
     }
   }
 
@@ -134,32 +134,17 @@ export default {
     width: 50px;
     height: 50px;
     font-size: 20px;
+    border-bottom: none;
     color: $d_boo_orange;
 
     &:hover {
       background-color: $d_boo_orange;
       color: $d_boo_light;
       border: 2px solid;
+      border-bottom: none;
 
     }
   }
-
 }
 </style>
-                  <!-- <template>
-                    <div class="text-white">
-                      
-                      
-                      
-                      <div v-for="(item, index) in checkoutStore.cart" :key="index">
-                        <h2>{{ item.name }}</h2>
-                        <p>Quantità: {{ item.quantity }}</p>
-                        <p>Prezzo: {{ item.price }}</p>
-                      </div>
-                      <h1>{{ checkoutStore.singleRestaurant.name }}</h1>
-                      <p>{{ checkoutStore.singleRestaurant.address }}</p>
-                      
-                      
-                      <p>Totale: {{ total }}</p>
-                    </div>
-                  </template> -->
+                  
