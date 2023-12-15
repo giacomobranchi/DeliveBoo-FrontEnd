@@ -6,6 +6,8 @@ import SingleRestaurantView from './views/SingleRestaurantView.vue';
 import AllRestaurantsView from './views/AllRestaurantsView.vue';
 import CheckoutView from './views/CheckoutView.vue';
 import FAQView from './views/FAQView.vue';
+import PaymentView from './views/PaymentView.vue';
+
 
 const router = createRouter({
 
@@ -38,9 +40,15 @@ const router = createRouter({
             component: CheckoutView,
         },
         {
+
             path: '/FAQ',
             name: 'FAQView',
             component: FAQView,
+        },
+        {
+            path: '/payment',
+            name: 'PaymentView',
+            component: PaymentView,
         },
     ]
 });
