@@ -1,19 +1,20 @@
 <script>
 import axios from 'axios';
+import { state } from '../state';
 
 export default {
     name: 'AppHome',
 
     data() {
         return {
+            state,
             restaurants_api: 'http://127.0.0.1:8000/api/restaurants',
             types_api: 'http://127.0.0.1:8000/api/types',
             restaurants: [],
             displayedRestaurants: [],
             types: [],
-            displayedTypes: [],
             items: 8,
-            loading: true,
+            checked: false,
         }
     },
 
@@ -36,7 +37,6 @@ export default {
             .then(response => {
 
                 this.types = response.data.result
-                this.displayedTypes = this.types.slice(0, this.items);
                 console.log(this.types);
             })
 
@@ -44,14 +44,14 @@ export default {
 
     methods: {
 
+        isChecked(value) {
+            return this.state.selectedTypes.includes(value)
+        },
 
-        loadMore() {
-            let start = this.displayedTypes.length
-            let end = start + this.items
-            this.displayedTypes = this.displayedTypes.concat(this.types.slice(start, end))
-            console.log(this.displayedTypes);
+        filterRestaurants() {
+            this.state.selectedTypeParams = this.state.selectedTypes.join('');
+            this.$router.push({ name: 'allRestaurantsList', params: { slug: this.state.selectedTypeParams } });
         }
-
     }
 }    
 </script>
@@ -93,11 +93,11 @@ export default {
 
                 <!-- to all restaurants button -->
                 <button class="my_btn_rest my-4" v-if="this.displayedRestaurants < this.restaurants">
-                        <router-link to="/restaurants" class="text-decoration-none">
-                            <h6>
-                                Look at all our restaurants!
-                            </h6>
-                        </router-link>
+                    <router-link to="/all-restaurants" class="text-decoration-none">
+                        <h6>
+                            Look at all our restaurants!
+                        </h6>
+                    </router-link>
                 </button>
 
             </div>
@@ -111,31 +111,48 @@ export default {
             </h2>
 
             <!-- types cards -->
-            <div class="row g-1 pb-5">
 
-                <div v-for="( single_type, index ) in  this.displayedTypes " :key="single_type.id" class="col-3">
+            <!-- <div class="my_card_types">
 
-                    <div class="my_card_types">
+                        <input type="checkbox" name="{{ single_type.name }}" id="">
+                        <h6>
+                            {{ single_type.name }}
+                        </h6>
 
-                        <router-link :to="{ name: 'restaurantsList', params: { slug: single_type.slug } }"
-                            class="text-decoration-none">
-                            <h6>
+                    </div> -->
+
+            <div class="row g-3 pb-5">
+
+                <div v-for="( single_type, index ) in    this.types   " :key="single_type.id" class="col-3">
+
+                    <div class="form-check my_card_types"
+                        :class="{ 'active': isChecked('types[]=' + single_type.slug + '&') }">
+
+                        <div class="text-decoration-none m-1 text-center" :key="single_type.slug">
+
+                            <input v-model="this.state.selectedTypes" class="form-check-input d-none" :for="single_type.id"
+                                type="checkbox" :value="'types[]=' + single_type.slug + '&'" :id="single_type.id" />
+                            <label class="form-check-label w-100 text-light" :for="single_type.id">
                                 {{ single_type.name }}
-                            </h6>
-                        </router-link>
+                            </label>
+
+                        </div>
 
                     </div>
 
                 </div>
 
-                <!-- load more types -->
-                <button class="my_btn_types my-4 text-dark" @click="loadMore" v-if="this.displayedTypes < this.types">
-                    <h6 class="text-black">
-                        Show more
-                    </h6>
+                <button class="my_btn_types my-4" @click="filterRestaurants">Filtra ristoranti
+                    <!-- <router-link :to="{ name: 'allRestaurantsList', params: { slug: this.state.selectedTypeParams } }"
+                        class="text-decoration-none">
+                        <h6>
+                            
+                        </h6>
+                    </router-link> -->
                 </button>
 
             </div>
+
 
         </section>
 
@@ -160,6 +177,7 @@ h2 {
 
 h6 {
     margin: 0;
+    color: black;
 }
 
 .my_card {
@@ -174,7 +192,7 @@ h6 {
     }
 
     &:hover {
-        transform: scale(1.20);
+        transform: scale(1.05);
         border: 1px solid white;
         cursor: pointer;
         box-shadow: inset 0px 0px 5px 0px white;
@@ -194,13 +212,21 @@ h6 {
     }
 
     &:hover {
-        transform: scale(1.20);
+        transform: scale(1.05);
         border: 1px solid $d_boo_orange;
         cursor: pointer;
         box-shadow: inset 0px 0px 5px 0px $d_boo_orange;
     }
-
 }
+
+.active {
+    transform: scale(1.05);
+    border: 1px solid $d_boo_orange;
+    cursor: pointer;
+    box-shadow: inset 0px 0px 5px 0px $d_boo_orange;
+}
+
+
 
 .my_btn_types {
     background-color: $d_boo_orange;
