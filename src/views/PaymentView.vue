@@ -1,202 +1,360 @@
 <script>
+import axios from "axios";
+import braintree from "braintree-web";
 import { state } from '../state.js';
-import axios from 'axios';
-import braintree from 'braintree-web';
+import { useCheckoutStore } from '../state';
 
 export default {
-  name: 'PaymentView',
   data() {
+    const checkoutStore = useCheckoutStore();
     return {
+      checkoutStore,
       state,
-      hostedFieldInstance: false,
-      amount: '',
-      nonce: '',
-      error: '',
-    }
+      title: "Pagina Pagamento",
+      cart: [],
+      total_price: 0,
+
+      // logica braintree
+      braintreeClient: null,
+      braintreeHostedFields: null,
+      myUrl: "http://localhost:8000",
+      error: {},
+      payLoad: false,
+
+      //   oggetto che si riempie all'inserimento dei dati
+      formData: {
+        ui_name: "",
+        ui_address: "",
+        ui_phone: "",
+        ui_mail: "",
+        total_price: this.total_price,
+        user_id: '',
+        success: true
+      },
+      errors: {
+        ui_name: "",
+        ui_address: "",
+        ui_phone: "",
+        ui_mail: ""
+      },
+    };
   },
+  created() {
+
+    this.cart = this.checkoutStore.cart;
+    this.total_price = this.checkoutStore.cart.reduce((total, dish) => total + dish.price * dish.quantity, 0);
+    this.initializeBraintree();
+    this.formData.total_price = this.checkoutStore.cart.reduce((total, dish) => total + dish.price * dish.quantity, 0);
+
+  },
+  /* "SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'total_price' cannot be null (Connection: mysql, SQL: insert into `orders` (`ui_name`, `ui_address`, `ui_phone`, `ui_mail`, `total_price`, `updated_at`, `created_at`) values (Giacomo Branchi, Via Marzabotto 2, 3701069657, jack.bra99@gmail.com, ?, 2023-12-16 16:05:13, 2023-12-16 16:05:13))" */
+
   methods: {
-    payWithCreditCard() {
-      if (this.hostedFieldInstance) {
-        this.error = "";
-        this.nonce = "";
-        this.hostedFieldInstance.tokenize().then(payload => {
-          console.log(payload);
-          this.nonce = payload.nonce;
-
-          // Aggiungi la chiamata <link>axios</link> per inviare i dati al backend
-          axios.post(this.state.base_url + 'api/payment', {
-            amount: this.amount,
-            nonce: this.nonce
-          }).then(response => {
-            console.log(response);
-            // Gestisci la risposta dal backend, ad esempio:
-            if (response.data.success) {
-              // Se il backend restituisce un messaggio di successo, gestiscilo qui
-              console.log("Pagamento completato con successo!");
-            } else {
-              // Se il backend restituisce un messaggio di errore, gestiscilo qui
-              console.error("Errore durante il pagamento: " + response.data.error);
-            }
-          }).catch(error => {
-            console.error(error);
-            // Gestisci l'errore della chiamata al backend, se necessario
-          });
-        })
-          .catch(err => {
-            console.error(err);
-            this.error = err.message;
-          })
+    // Controllo validazione input
+    submitForm() {
+      if (!this.formData.ui_name) {
+        this.errors.ui_name = "Inserisci il nome.";
+        return;
+      } else {
+        this.errors.ui_name = "";
       }
-      console.log(this.amount);
-    },
-    /*    payWithCreditCard() {
-         if (this.hostedFieldInstance) {
-   
-           this.error = "";
-           this.nonce = "";
-           this.hostedFieldInstance.tokenize().then(payload => {
-             console.log(payload);
-             this.nonce = payload.nonce
-           })
-             .catch(err => {
-               console.error(err);
-               this.error = err.message;
-             })
-         }
-         console.log(this.amount);
-       }, */
-    /*     fetchPayments() {
-          axios.post(this.state.base_url + 'payment')
-            .then(response => {
-              console.log(response);
-    
-    
-            })
-        }, */
-  },
-  computed: {
+      if (!this.formData.ui_address) {
+        this.errors.ui_address = "Inserisci l'indirizzo.";
+        return;
+      } else {
+        this.errors.ui_address = "";
+      }
+      if (!this.formData.ui_phone) {
+        this.errors.ui_phone = "Inserisci un numero di telefono.";
+        return;
+      } else {
+        this.errors.ui_phone = ""; // Cancella eventuali errori precedenti
+      }
 
-  },
-  mounted() {
-    braintree.client.create({
-      authorization: "sandbox_s9gw8n2j_h7vcm998tqqpwgc3"
-    })
-      .then(clientInstance => {
-        let options = {
-          client: clientInstance,
+      if (isNaN(this.formData.ui_phone)) {
+        this.errors.ui_phone = "Inserisci un numero di telefono valido.";
+        return;
+      } else {
+        this.errors.ui_phone = ""; // Cancella eventuali errori precedenti
+      }
+      if (!this.formData.ui_mail) {
+        this.errors.ui_mail = "Inserisci un indirizzo mail valido.";
+        return;
+      } else {
+        this.errors.ui_mail = "";
+      }
+
+      this.payWithCard();
+      // Aggiungi l'array cart al formData
+      this.formData.cart = this.cart;
+      // chiamata axios che manda i dati al back-end (Orders)
+      this.formData.total_price = 10
+      this.formData.user_id = parseInt(this.$route.params.user_id)
+      axios
+        .post("http://localhost:8000/api/orders", this.formData)
+        .then((response) => {
+          console.log("Dati inviati con successo:", response.data);
+        });
+    },
+    // pulizia carrello
+    clearCart() {
+      this.cart = [];
+      this.saveCart();
+      this.showModal = false;
+      this.showModalemptyCart = false;
+      // this.$emit("cart-cleared");
+    },
+
+    saveCart() {
+      let parsed = JSON.stringify(this.cart);
+      localStorage.setItem("cart", parsed);
+      // window.dispatchEvent(new Event("cart-updated"));
+    },
+
+    // RICHIESTA GET PER IL TOKEN BRAINTREE
+    async initializeBraintree() {
+      try {
+        const resp = await axios.get("http://localhost:8000/api/generate");
+        const token = resp.data.token;
+
+        const client = await braintree.client.create({
+          authorization: token,
+        });
+
+        // Resto del codice per la gestione del cliente Braintree
+        const hostedFieldsInstance = await braintree.hostedFields.create({
+          client,
           styles: {
             input: {
-              'font-size': '14px',
-              'font-family': 'Open Sans'
-            }
+              "font-size": "14px",
+              "font-family": "Open Sans",
+            },
           },
           fields: {
             number: {
-              selector: '#creditCardNumber',
-              placeholder: 'Enter Credit Card'
+              selector: "#creditCardNumber",
+              placeholder: "Inserisci numero carta",
             },
             cvv: {
-              selector: '#cvv',
-              placeholder: 'Enter CVV'
+              selector: "#cvv",
+              placeholder: "Inserisci CVV",
             },
             expirationDate: {
-              selector: '#expireDate',
-              placeholder: '00 / 0000'
-            }
-          }
-        }
-        return braintree.hostedFields.create(options)
-      })
-      .then(hostedFieldInstance => {
-        // @TODO - Use hostedFieldInstance to send data to Braintree
-        this.hostedFieldInstance = hostedFieldInstance;
-      })
-      .catch(err => {
-      });
-  }
-}
+              selector: "#expireDate",
+              placeholder: "MM / AAAA",
+            },
+          },
+        });
+
+
+        this.braintreeHostedFields = hostedFieldsInstance;
+      } catch (error) {
+        console.error("Error fetching or using the token:", error);
+      }
+    },
+
+
+    // RICHIESTA AXIOS POST PER INVIARE I DATI AL BACK END
+    payWithCard() {
+      if (this.braintreeHostedFields) {
+        this.payLoad = true;
+        this.error = "";
+
+        this.braintreeHostedFields.tokenize().then((payload) => {
+          axios
+            .post("http://localhost:8000/api/payment", {
+              amount: Number(this.total_price),
+              token: payload.nonce,
+            })
+            .then((resp) => {
+              this.payLoad = false;
+              this.clearCart();
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        });
+      }
+    },
+  },
+};
 </script>
 
 <template>
-  <div class="container pt-5">
-    <div class="col-6 offset-3">
-      <div class="card bg-light">
-        <div class="card-header">Payment Information</div>
-        <div class="card-body">
-
-
-          <div class="alert alert-success" v-if="nonce">
-            Successfully generated nonce.
-          </div>
-
-          <div class="alert alert-danger" v-if="error">
-            {{ error }}
-          </div>
-
-          <form>
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label for="ui_name">Name</label>
-                  <div class="input-group">
-                    <input type="text" v-model="amount" id="amount" class="form-control" placeholder="Type your name">
-                  </div>
-                  <label for="ui_phone">Phone</label>
-                  <div class="input-group">
-                    <input type="number" v-model="amount" id="amount" class="form-control" placeholder="Type your phone number">
-                  </div>
-                </div>
-                <div class="col-6">
-                  <label for="ui_mail">Mail</label>
-                  <div class="input-group">
-                    <input type="email" v-model="amount" id="amount" class="form-control" placeholder="Type your email">
-                  </div>
-                  <label for="ui_mail">Address</label>
-                  <div class="input-group">
-                    <input type="text" v-model="amount" id="amount" class="form-control" placeholder="Type your address">
-                  </div>
-                </div>
-              </div>
-              <label for="ui_name">Restaurant</label>
-                  <div class="input-group">
-                    <input type="text" v-model="amount" id="amount" class="form-control" placeholder="Type restaurant name">
-                  </div>
-              <label for="amount">Amount</label>
-              <div class="input-group">
-                <div class="input-group-prepend"><span class="input-group-text rounded-end-0">$</span></div>
-                <input type="number" v-model="amount" id="amount" class="form-control rounded-start-0" placeholder="Enter Amount">
-              </div>
-            </div>
-            <hr />
-            <div class="form-group">
-              <label>Credit Card Number</label>
-              <div id="creditCardNumber" class="form-control"></div>
-            </div>
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label>Expire Date</label>
-                  <div id="expireDate" class="form-control"></div>
-                </div>
-                <div class="col-6">
-                  <label>CVV</label>
-                  <div id="cvv" class="form-control"></div>
-                </div>
-              </div>
-            </div>
-            <button class="btn btn-primary btn-block mt-3" @click="payWithCreditCard">Enter</button>
-          </form>
-        </div>
+  <div class="total-cont">
+    <div class="container form">
+      <h1>{{ title }}</h1>
+      <div class="mb-3">
+        <em>I campi contrassegnati con "<span class="text-danger">*</span>" sono
+          obbligatori.</em>
       </div>
+      <form @submit="submitForm">
+        <!--* contenuto del form (dati utente) -->
+        <div class="row">
+          <div class="col-lg-6 my-2">
+            <label for="name" class="form-label">Nome<span class="text-danger">*</span></label>
+            <input v-model="formData.ui_name" type="text" name="name" id="name" class="form-control"
+              :class="{ 'is-invalid': errors.ui_name }" placeholder="Es. Federica / Fabio" />
+            <div class="invalid-feedback">{{ errors.ui_name }}</div>
+          </div>
+          <div class="col-lg-4 my-2">
+            <label for="address" class="form-label">Indirizzo<span class="text-danger">*</span></label>
+            <input v-model="formData.ui_address" type="text" name="address" id="address" class="form-control"
+              :class="{ 'is-invalid': errors.ui_address }" placeholder="Es. Via Cerasi 4" />
+            <div class="invalid-feedback">{{ errors.ui_address }}</div>
+          </div>
+          <div class="col-lg-4 my-2">
+            <label for="phone" class="form-label">Numero<span class="text-danger">*</span></label>
+            <input v-model="formData.ui_phone" type="text" name="phone" id="phone" class="form-control"
+              :class="{ 'is-invalid': errors.ui_phone }" placeholder="Es. 3287485948" />
+            <div class="invalid-feedback">{{ errors.ui_phone }}</div>
+          </div>
+
+          <div class="col-lg-4 my-2">
+            <label for="email" class="form-label">Email<span class="text-danger">*</span></label>
+            <input v-model="formData.ui_mail" type="email" name="email" id="email" class="form-control"
+              :class="{ 'is-invalid': errors.ui_mail }" placeholder="Es. FedericaRossi@live.it" />
+            <div class="invalid-feedback">{{ errors.ui_mail }}</div>
+          </div>
+        </div>
+
+
+        <!--* Template Carta nuovo  -->
+        <div>
+          <div class="form-group">
+            <label class="text mt-3">
+              Numero di carta di credito <span class="need text-danger">*</span>
+            </label>
+            <!--* Brand Icons -->
+            <span class="brands-cont">
+              <img src="../../../public/img/mastercard.png" alt="mastercard logo" />
+              <img src="../../../public/img/paypal.png" alt="paypal logo" />
+              <img src="../../../public/img/visa.svg.png" alt="visa logo" />
+            </span>
+            <div id="creditCardNumber" class="form-control mt-2">
+              <span style="color: red" class="error-message" v-if="error.uiName">Es. 4111 1111 1111 1111</span>
+
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="d-flex justify-content-between">
+              <div class="col-lg-6">
+                <label class="text">
+                  Data di scadenza
+                  <span class="need text-danger">*</span></label>
+                <div id="expireDate" class="form-control">
+                  <span style="color: red" class="error-message" v-if="error.uiName">Inserire data di scadenza</span>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <label class="text">
+                  CVV <span class="need text-danger">*</span></label>
+                <div id="cvv" class="form-control">
+                  <span style="color: red" class="error-message" v-if="error.uiName">Inserire CVV</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+        <div class="last-cont mt-2">
+          <div class="total">
+            <span><strong class="me-2">Totale:</strong>€ {{ this.total_price }}</span>
+          </div>
+          <div class="my-3">
+            <div v-if="this.total_price <= 0" class="bg-danger mb-3">
+              <span class="ps-3">Carrello vuoto, effettua un ordine.</span>
+              <span class="fas fa-arrow-right"></span>
+            </div>
+            <button type="submit" v-else class="btn btn-checkout mb-3">
+              <span class="">Ordina Adesso</span>
+              <div v-show="payLoad" class="cell"></div>
+            </button>
+          </div>
+        </div>
+        <!-- <h3>Totale da pagare: € {{ this.total_price }}</h3>
+
+        <button type="submit" class="btn btn-primary mt-4">Invia dati</button> -->
+      </form>
     </div>
   </div>
 </template>
 
-  
-<style scoped lang="scss">
-@use '../assets/scss/partials/variables' as *;
+<style lang="scss" scoped>
+.total-cont {
+  background-image: url(../../../public/img/pattern.png);
+  background-position: center;
+  background-repeat: repeat;
+  background-size: 550px;
+  padding-top: 55px;
+  padding-bottom: 55px;
 
-.form-control, .input-group-text{
-  height: 40px;
+  .container.form {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+}
+
+#creditCardNumber {
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+/* color: rgb(48, 169, 129); */
+::placeholder {
+  color: rgb(196, 196, 196);
+}
+
+.container {
+  width: 60%;
+  border: 2px solid rgb(48, 169, 129);
+  padding: 35px;
+  border-radius: 20px;
+  margin: 10px auto;
+  background-color: white;
+
+  h1 {
+    color: rgb(234, 94, 61);
+  }
+}
+
+.brands-cont {
+  img {
+    width: 20px;
+    margin: 0px 10px;
+  }
+}
+
+#expireDate {
+  height: 50px;
+  width: 90%;
+}
+
+#cvv {
+  height: 50px;
+  width: 90%;
+}
+
+.btn-checkout {
+  background-color: rgb(48, 169, 129);
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+
+  &:hover {
+    background-color: rgb(234, 94, 61) !important;
+    color: white;
+  }
 }
 </style>
+
+
+<!-- essage
+: 
+"SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'total_price' cannot be null (Connection: mysql, SQL: insert into `orders` (`ui_name`, `ui_address`, `ui_phone`, `ui_mail`, `total_price`, `updated_at`, `created_at`) values (Giacomo Branchi, Via Marzabotto 2, 3701069657, jack.bra99@gmail.com, ?, 2023-12-16 16:22:23, 2023-12-16 16:22:23))"
+t
+
+SQLSTATE[HY000]: General error: 1364 Field 'user_id' doesn't have a default value (Connection: mysql, SQL: insert into `orders` (`ui_name`, `ui_address`, `ui_phone`, `ui_mail`, `total_price`, `updated_at`, `created_at`) values (Giacomo Branchi, Via Marzabotto 2, 3701069657, jack.bra99@gmail.com, 10, 2023-12-16 16:40:19, 2023-12-16 16:40:19))"
+t -->
+

@@ -1,6 +1,7 @@
 <script>
 import { useCheckoutStore } from '../state';
 import { state } from '../state.js';
+import axios from 'axios';
 
 export default {
   name: 'CheckoutView',
@@ -23,6 +24,7 @@ export default {
         .catch(err => {
           console.error(err);
         });
+      this.$router.push({ name: 'PaymentView', params: { 'user_id': this.checkoutStore.singleRestaurant.id } });
     },
     emptyCart() {
       this.checkoutStore.cart = [];

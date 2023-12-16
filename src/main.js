@@ -1,10 +1,9 @@
-import { createApp } from 'vue';
-import { createPinia } from 'pinia';
-import './assets/scss/style.scss';
-import App from './App.vue';
-import { router } from './router.js';
+import { createApp } from 'vue'
+import './assets/scss/style.scss'
+import App from './App.vue'
+import { router } from './router.js'
 import braintree from 'braintree-web';
-
+import { createPinia } from 'pinia';
 
 // Crea un'istanza di Pinia
 const app = createApp(App);

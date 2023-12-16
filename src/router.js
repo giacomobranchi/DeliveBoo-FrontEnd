@@ -47,7 +47,7 @@ const router = createRouter({
             component: FAQView,
         },
         {
-            path: '/payment',
+            path: '/payment/:user_id',
             name: 'PaymentView',
             component: PaymentView,
         },
