@@ -7,6 +7,7 @@ import AllRestaurantsView from './views/AllRestaurantsView.vue';
 import CheckoutView from './views/CheckoutView.vue';
 import FAQView from './views/FAQView.vue';
 import PaymentView from './views/PaymentView.vue';
+import TerminiPrivacyCookiesView from './views/TerminiPrivacyCookiesView.vue';
 
 
 const router = createRouter({
@@ -49,6 +50,12 @@ const router = createRouter({
             path: '/payment/:user_id',
             name: 'PaymentView',
             component: PaymentView,
+        },
+        {
+
+            path: '/TerminiPrivacyCookies',
+            name: 'TerminiPrivacyCookiesView',
+            component: TerminiPrivacyCookiesView,
         },
     ]
 });

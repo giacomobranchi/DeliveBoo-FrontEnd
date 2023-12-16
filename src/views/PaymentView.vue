@@ -146,11 +146,13 @@ export default {
           },
         });
 
+
         this.braintreeHostedFields = hostedFieldsInstance;
       } catch (error) {
         console.error("Error fetching or using the token:", error);
       }
     },
+
 
     // RICHIESTA AXIOS POST PER INVIARE I DATI AL BACK END
     payWithCard() {
@@ -216,6 +218,7 @@ export default {
           </div>
         </div>
 
+
         <!--* Template Carta nuovo  -->
         <div>
           <div class="form-group">
@@ -230,6 +233,7 @@ export default {
             </span>
             <div id="creditCardNumber" class="form-control mt-2">
               <span style="color: red" class="error-message" v-if="error.uiName">Es. 4111 1111 1111 1111</span>
+
             </div>
           </div>
 
@@ -251,7 +255,9 @@ export default {
                 </div>
               </div>
             </div>
+
           </div>
+
         </div>
         <div class="last-cont mt-2">
           <div class="total">
@@ -351,3 +357,4 @@ t
 
 SQLSTATE[HY000]: General error: 1364 Field 'user_id' doesn't have a default value (Connection: mysql, SQL: insert into `orders` (`ui_name`, `ui_address`, `ui_phone`, `ui_mail`, `total_price`, `updated_at`, `created_at`) values (Giacomo Branchi, Via Marzabotto 2, 3701069657, jack.bra99@gmail.com, 10, 2023-12-16 16:40:19, 2023-12-16 16:40:19))"
 t -->
+
