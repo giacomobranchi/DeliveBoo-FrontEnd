@@ -8,38 +8,44 @@ export default {
   <footer>
     <div class="footer-top">
       <div class="container footer flex-wrap">
-        <div class="lists d-flex flex-wrap justify-content-between ">
+        <div class="lists d-flex flex-wrap justify-content-between  ">
 
-          <div class="about col-12 col-lg-4 col-xl-3 py-3">
+          <div class="aiuto col-12 col-lg-4 col-xl-3 py-3">
             <h5>Aiuto</h5>
             <div class="line"></div>
             <ul class="list-unstyled my-2">
               <li><a href="">Contatti</a></li>
               <li><router-link class="nav-link effect" aria-current="page" to="/FAQ">FAQ</router-link></li>
-              <li><a href="">Tipi di cucina</a></li>
+              <li @click="reload" class="nav-item">
+              <router-link :to="{ name: 'allRestaurantsList', params: { slug: '' } }"
+                class="nav-link">Tipi di cucina</router-link>
+              </li>
             </ul>
           </div>
 
           <!-- End section Aiuto -->
 
-          <div class="about col-12 col-lg-4 col-xl-3 p-3">
+          <div class="note_legali col-12 col-lg-4 col-xl-3 py-3">
             <h5>Note Legali</h5>
             <div class="line"></div>
             <ul class="list-unstyled my-2">
-              <li><a href="">Termini & Condizioni</a></li>
-              <li><a href="">Informazioni sulla privacy</a></li>
-              <li><a href="">Cookies</a></li>
+              <li><router-link class="nav-link effect" aria-current="page" to="/TerminiPrivacyCookies">Termini & Condizioni</router-link></li>
+              <li><router-link class="nav-link effect" aria-current="page" to="/TerminiPrivacyCookies">Informazioni sulla privacy</router-link></li>
+              <li><router-link class="nav-link effect" aria-current="page" to="/TerminiPrivacyCookies">Cookies</router-link></li>
             </ul>
           </div>
 
           <!-- End section Note legali -->
 
-          <div class="about col-12 col-lg-6 col-xl-3 p-3">
+          <div class="scopri_deliveboo col-12 col-lg-6 col-xl-3 py-3">
               <h5>Scopri DeliveBoo</h5>
               <div class="line"></div>
               <ul class="list-unstyled my-2">
                   <li><a href="">Team di sviluppo</a></li>
-                  <li><a href="">Ristoranti</a></li>
+                  <li @click="reload" class="nav-item">
+                  <router-link :to="{ name: 'allRestaurantsList', params: { slug: '' } }"
+                    class="nav-link">Ristoranti</router-link>
+                  </li>
                   <li><a href="">Altro </a></li>
               </ul>
           </div>
@@ -84,12 +90,16 @@ export default {
 footer {
 
   background: linear-gradient(rgba(23, 32, 43, 0.9), rgba(55, 67, 81, 0.753));
-
+  
+  .aiuto h5, .note_legali h5, .scopri_deliveboo h5 {
+    font-size: 2.6rem;
+  }
+  .aiuto, .note_legali, .scopri_deliveboo {
+    font-size: 1.3rem;
+  }
   .lists {
     color: $d_boo_light;
     padding-top: 2rem;
-
-    
   }
 
   .icons {
@@ -98,7 +108,7 @@ footer {
 
   .line {
     border: 2px solid $d_boo_orange;
-    width: 40px;
+    width: 60px;
   }
 
   .list-unstyled a {
