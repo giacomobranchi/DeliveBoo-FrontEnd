@@ -118,7 +118,7 @@ export default {
 </script>
 
 <template>
-  <div class="container">
+  <div class="container pt-5">
     <div class="col-6 offset-3">
       <div class="card bg-light">
         <div class="card-header">Payment Information</div>
@@ -135,10 +135,36 @@ export default {
 
           <form>
             <div class="form-group">
+              <div class="row">
+                <div class="col-6">
+                  <label for="ui_name">Name</label>
+                  <div class="input-group">
+                    <input type="text" v-model="amount" id="amount" class="form-control" placeholder="Type your name">
+                  </div>
+                  <label for="ui_phone">Phone</label>
+                  <div class="input-group">
+                    <input type="number" v-model="amount" id="amount" class="form-control" placeholder="Type your phone number">
+                  </div>
+                </div>
+                <div class="col-6">
+                  <label for="ui_mail">Mail</label>
+                  <div class="input-group">
+                    <input type="email" v-model="amount" id="amount" class="form-control" placeholder="Type your email">
+                  </div>
+                  <label for="ui_mail">Address</label>
+                  <div class="input-group">
+                    <input type="text" v-model="amount" id="amount" class="form-control" placeholder="Type your address">
+                  </div>
+                </div>
+              </div>
+              <label for="ui_name">Restaurant</label>
+                  <div class="input-group">
+                    <input type="text" v-model="amount" id="amount" class="form-control" placeholder="Type restaurant name">
+                  </div>
               <label for="amount">Amount</label>
               <div class="input-group">
-                <div class="input-group-prepend"><span class="input-group-text">$</span></div>
-                <input type="number" v-model="amount" id="amount" class="form-control" placeholder="Enter Amount">
+                <div class="input-group-prepend"><span class="input-group-text rounded-end-0">$</span></div>
+                <input type="number" v-model="amount" id="amount" class="form-control rounded-start-0" placeholder="Enter Amount">
               </div>
             </div>
             <hr />
@@ -158,7 +184,7 @@ export default {
                 </div>
               </div>
             </div>
-            <button class="btn btn-primary btn-block" @click="payWithCreditCard">Enter</button>
+            <button class="btn btn-primary btn-block mt-3" @click="payWithCreditCard">Enter</button>
           </form>
         </div>
       </div>
@@ -167,6 +193,10 @@ export default {
 </template>
 
   
-<style lang="scss">
+<style scoped lang="scss">
 @use '../assets/scss/partials/variables' as *;
+
+.form-control, .input-group-text{
+  height: 40px;
+}
 </style>
