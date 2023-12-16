@@ -1,5 +1,6 @@
 <script>
-import { useCheckoutStore } from '../state';
+import { useCheckoutStore } from '../state.js';
+import axios from 'axios';
 import { state } from '../state.js';
 
 export default {
@@ -14,6 +15,7 @@ export default {
     };
   },
   methods: {
+
     checkout() {
       axios.post(this.checkoutStore.base_url + 'api/checkout', this.checkoutStore.cart)
         .then(response => {
@@ -24,6 +26,42 @@ export default {
           console.error(err);
         });
     },
+
+    calculateTotalPrice(item) {
+      return (item.quantity * item.price).toFixed(2);
+    },
+
+    calculateRestaurantTotal(restaurantOrders) {
+      let total = 0;
+      restaurantOrders.forEach(order => {
+        total += parseFloat(this.calculateTotalPrice(order.dishes));
+      });
+      return total.toFixed(2);
+    },
+
+    calculateTotalForAllOrders() {
+      let total = 0;
+      this.checkoutStore.cart.forEach(order => {
+        total += parseFloat(this.calculateTotalPrice(order.dishes));
+      });
+      return total.toFixed(2);
+    },
+
+    // Get unique restaurants from the cart
+    getUniqueRestaurants() {
+      const uniqueRestaurants = [];
+      const visitedRestaurants = new Set();
+
+      this.checkoutStore.cart.forEach(order => {
+        if (!visitedRestaurants.has(order.restaurant)) {
+          visitedRestaurants.add(order.restaurant);
+          uniqueRestaurants.push(this.checkoutStore.cart.filter(o => o.restaurant === order.restaurant));
+        }
+      });
+
+      return uniqueRestaurants;
+    },
+
     emptyCart() {
       this.checkoutStore.cart = [];
     },
@@ -37,13 +75,10 @@ export default {
       window.scrollTo(0, 0);
     },
   },
-  computed: {
-    total() {
-      let total = this.checkoutStore.cart.reduce((total, dish) => total + dish.price * dish.quantity, 0);
-      return total.toFixed(2);
-    }
-  },
   mounted() {
+
+    console.log(this.checkoutStore.cart);
+
     window.addEventListener('scroll', () => {
       this.isTop = scrollY > 100 ? false : true;
     });
@@ -56,54 +91,61 @@ export default {
   <main id="container_cart">
 
     <div class="container">
+      <h1 class="text-center mb-3 pt-3">Carrello</h1>
 
-      <div class="row">
-        <!-- <h2>{{ item.name }}</h2> -->
-        <div class="col-12">
-          <h1 class="text-center mb-3 pt-3">Benvenuto al tuo Carrello {{ checkoutStore.singleRestaurant.name }}</h1>
-          <div v-for="(dish, index) in checkoutStore.cart" class="card mb-3">
-            <div class="card-body d-flex justify-content-around shadow flex-wrap  card_body">
+      <!-- Iterate over unique restaurants in the cart -->
+      <div v-for="(restaurantOrders, restaurantIndex) in getUniqueRestaurants()" :key="restaurantIndex"
+        class="border-bottom border-black pb-3">
+
+        <h2 class="text-center my-4 p-2 border border-2 rounded-5 border-black bg-secondary text-light">{{
+          restaurantOrders[0].restaurant }}</h2>
+        <!-- Display all items from the same restaurant in a single col-12 block -->
+
+        <div class="row">
+
+          <div v-for="(order, orderIndex) in restaurantOrders" :key="orderIndex" class="col-lg-6 col-12 mb-3">
+
+            <div class="card my_card d-flex flex-row justify-content-between align-items-center shadow">
+
               <div class="col-lg-3">
-                <img v-if="dish.img.indexOf('http') !== -1" :src="dish.img" alt="External Image">
-                <img v-else :src="this.state.base_url + 'storage/' + dish.img" alt="Local Image">
+                <img class="img-fluid rounded-2" :src="this.state.base_url + 'storage/' + order.dishes.img"
+                  alt="Local Image">
               </div>
-              <div class="col-lg-3  mx-5">
-                <h5 class="card-title mb-3">{{ dish.name }}</h5>
-                <hr>
-                <p class="card-text mb-3">Prezzo: € {{ dish.price }}</p>
-                <p class="card-text mb-3">Quantita': {{ dish.quantity }}pz</p>
+
+              <div class="col-lg-5">
+                <h5 class="card-title mb-3">{{ order.dishes.name }}</h5>
+                <p class="card-text mb-3">Quantità : {{ order.dishes.quantity }}</p>
+                <p class="card-text mb-3">Totale: € {{ calculateTotalPrice(order.dishes) }}</p>
               </div>
-              <div class="col-lg-3 mb-3">
-                <h5>Descrizione prodotto</h5>
-                <hr>
-                <p class="card-text">{{ dish.description }}</p>
+
+              <div class="col-lg-2">
+                <button class="btn btn-danger mr-2 mx-2" @click="removeItem(orderIndex)">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
               </div>
-              <div class="col-lg-3">
-                <button class="btn btn-danger mr-2 mx-2" @click="removeItem(index)"><i
-                    class="fa-solid fa-trash"></i></button>
-              </div>
+
             </div>
 
           </div>
-          <h1 class="text-center my-5">Totale: € {{ total }}</h1>
-          <div class="d-flex justify-content-center flex-wrap mb-5 gap-2">
-            <button class="btn btn-outline-secondary text-dark border-2" @click="goBack">Torna indietro</button>
-            <button class="btn btn-outline-danger text-dark border-2" @click="emptyCart">Svuota il carrello</button>
-            <button class="btn btn-outline-primary text-dark border-2" @click="checkout">Procedi al Pagamento</button>
-          </div>
-          <div class="d-flex justify-content-end">
-            <button v-if="!isTop" @click="backToTop" class="scrollToTop"><i class="fas fa-angle-up"></i></button>
-          </div>
+
+          <h4 class="text-center my-3">
+            Totale: € {{ calculateRestaurantTotal(restaurantOrders) }}
+          </h4>
+
         </div>
+
       </div>
-      <div v-if="checkoutStore.cart.length === 0" class="row">
-        <div class="col-12 vh-100 text-white m-5 text-center">
-          <h1 class="pb-5">Il tuo carrello e' vuoto</h1>
-          <!-- <button class="btn btn-outline-secondary text-dark border-2" @click="goBack">Torna indietro</button> -->
-        </div>
+
+      <h1 class="text-center my-5">Totale ordine: € {{ calculateTotalForAllOrders() }}</h1>
+      <div class="d-flex justify-content-center flex-wrap mb-5 gap-2">
+        <button class="btn btn-outline-secondary text-dark border-2" @click="goBack">Torna indietro</button>
+        <button class="btn btn-outline-danger text-dark border-2" @click="emptyCart">Svuota il carrello</button>
+        <button class="btn btn-outline-primary text-dark border-2" @click="checkout">Procedi al Pagamento</button>
+      </div>
+      <div class="d-flex justify-content-end">
+        <button v-if="!isTop" @click="backToTop" class="scrollToTop"><i class="fas fa-angle-up"></i></button>
       </div>
     </div>
-
   </main>
 </template>
   
@@ -145,21 +187,17 @@ export default {
   }
 
 }
+
+.my_card {
+  border: 2px solid black;
+  border-width: 2px;
+  padding: 1rem;
+
+
+  &:hover {
+    transform: scale(1.01);
+  }
+
+}
 </style>
-                  <!-- <template>
-                    <div class="text-white">
-                      
-                      
-                      
-                      <div v-for="(item, index) in checkoutStore.cart" :key="index">
-                        <h2>{{ item.name }}</h2>
-                        <p>Quantità: {{ item.quantity }}</p>
-                        <p>Prezzo: {{ item.price }}</p>
-                      </div>
-                      <h1>{{ checkoutStore.singleRestaurant.name }}</h1>
-                      <p>{{ checkoutStore.singleRestaurant.address }}</p>
-                      
-                      
-                      <p>Totale: {{ total }}</p>
-                    </div>
-                  </template> -->
+                  

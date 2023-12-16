@@ -44,7 +44,7 @@ export default {
       } else {
         // If the dish is not in the cart, add a new instance with quantity 1
         const dishWithQuantity = {
-          restaurant: dish.user_id,
+          restaurant: this.singleRestaurant.name,
           dishes: {
             name: dish.name,
             price: Number(dish.price),
