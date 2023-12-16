@@ -110,49 +110,29 @@ export default {
                 What do you like to eat?
             </h2>
 
-            <!-- types cards -->
-
-            <!-- <div class="my_card_types">
-
-                        <input type="checkbox" name="{{ single_type.name }}" id="">
-                        <h6>
-                            {{ single_type.name }}
-                        </h6>
-
-                    </div> -->
-
             <div class="row g-3 pb-5">
 
+                <!-- iterate each type -->
                 <div v-for="( single_type, index ) in    this.types   " :key="single_type.id" class="col-3">
 
-                    <div class="form-check my_card_types"
+                    <div class="text-decoration-none m-1 text-center my_card_types" :key="single_type.slug"
                         :class="{ 'active': isChecked('types[]=' + single_type.slug + '&') }">
 
-                        <div class="text-decoration-none m-1 text-center" :key="single_type.slug">
-
-                            <input v-model="this.state.selectedTypes" class="form-check-input d-none" :for="single_type.id"
-                                type="checkbox" :value="'types[]=' + single_type.slug + '&'" :id="single_type.id" />
-                            <label class="form-check-label w-100 text-light" :for="single_type.id">
-                                {{ single_type.name }}
-                            </label>
-
-                        </div>
+                        <input v-model="this.state.selectedTypes" class="form-check-input d-none" :for="single_type.id"
+                            type="checkbox" :value="'types[]=' + single_type.slug + '&'" :id="single_type.id" />
+                        <label class="form-check-label w-100 text-light my_p" :for="single_type.id">
+                            {{ single_type.name }}
+                        </label>
 
                     </div>
 
                 </div>
 
-                <button class="my_btn_types my-4" @click="filterRestaurants">Filtra ristoranti
-                    <!-- <router-link :to="{ name: 'allRestaurantsList', params: { slug: this.state.selectedTypeParams } }"
-                        class="text-decoration-none">
-                        <h6>
-                            
-                        </h6>
-                    </router-link> -->
+                <button class="my_btn_types my-4" @click="filterRestaurants">
+                    Filtra ristoranti
                 </button>
 
             </div>
-
 
         </section>
 
@@ -203,7 +183,6 @@ h6 {
 .my_card_types {
     background-color: black;
     border-radius: 5px;
-    padding: 1.4rem;
     transition: .3s ease-in-out;
     border: 1px solid transparent;
 
@@ -226,7 +205,9 @@ h6 {
     box-shadow: inset 0px 0px 5px 0px $d_boo_orange;
 }
 
-
+.my_p {
+    padding: 1.4rem;
+}
 
 .my_btn_types {
     background-color: $d_boo_orange;

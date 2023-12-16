@@ -27,10 +27,12 @@ export default {
         });
     },
 
+    //total price for each dish
     calculateTotalPrice(item) {
       return (item.quantity * item.price).toFixed(2);
     },
 
+    //total for each restaurants
     calculateRestaurantTotal(restaurantOrders) {
       let total = 0;
       restaurantOrders.forEach(order => {
@@ -39,6 +41,7 @@ export default {
       return total.toFixed(2);
     },
 
+    //total price for all rest orders
     calculateTotalForAllOrders() {
       let total = 0;
       this.checkoutStore.cart.forEach(order => {
@@ -97,14 +100,17 @@ export default {
       <div v-for="(restaurantOrders, restaurantIndex) in getUniqueRestaurants()" :key="restaurantIndex"
         class="border-bottom border-black pb-3">
 
-        <h2 class="text-center my-4 p-2 border border-2 rounded-5 border-black bg-secondary text-light">{{
-          restaurantOrders[0].restaurant }}</h2>
-        <!-- Display all items from the same restaurant in a single col-12 block -->
+        <h2 class="text-center my-4 p-2 border border-2 rounded-5 border-black bg-secondary text-light">
+          {{ restaurantOrders[0].restaurant }}
+        </h2>
+
 
         <div class="row">
 
+          <!-- iterate over each restaurant order -->
           <div v-for="(order, orderIndex) in restaurantOrders" :key="orderIndex" class="col-lg-6 col-12 mb-3">
 
+            <!-- card for each item -->
             <div class="card my_card d-flex flex-row justify-content-between align-items-center shadow">
 
               <div class="col-lg-3">
@@ -128,6 +134,7 @@ export default {
 
           </div>
 
+          <!-- total price for eìeverything -->
           <h4 class="text-center my-3">
             Totale: € {{ calculateRestaurantTotal(restaurantOrders) }}
           </h4>
@@ -136,12 +143,28 @@ export default {
 
       </div>
 
-      <h1 class="text-center my-5">Totale ordine: € {{ calculateTotalForAllOrders() }}</h1>
-      <div class="d-flex justify-content-center flex-wrap mb-5 gap-2">
-        <button class="btn btn-outline-secondary text-dark border-2" @click="goBack">Torna indietro</button>
-        <button class="btn btn-outline-danger text-dark border-2" @click="emptyCart">Svuota il carrello</button>
-        <button class="btn btn-outline-primary text-dark border-2" @click="checkout">Procedi al Pagamento</button>
+
+      <!-- if cart is empty -->
+      <h2 v-if="checkoutStore.cart.length === 0" class="text-center my-5">
+
+        Il carrello è vuoto
+
+      </h2>
+
+      <!-- if cart has items -->
+      <div v-else>
+
+        <h2 class="text-center my-5">
+          Totale ordine: € {{ calculateTotalForAllOrders() }}
+        </h2>
+
+        <div class="d-flex justify-content-center flex-wrap mb-5 gap-2">
+          <button class="btn btn-outline-secondary text-dark border-2" @click="goBack">Torna indietro</button>
+          <button class="btn btn-outline-danger text-dark border-2" @click="emptyCart">Svuota il carrello</button>
+          <button class="btn btn-outline-primary text-dark border-2" @click="checkout">Procedi al Pagamento</button>
+        </div>
       </div>
+
       <div class="d-flex justify-content-end">
         <button v-if="!isTop" @click="backToTop" class="scrollToTop"><i class="fas fa-angle-up"></i></button>
       </div>
