@@ -29,7 +29,8 @@ export default {
         ui_mail: "",
         total_price: this.total_price,
         user_id: '',
-        success: true
+        success: true,
+        dishes: []
       },
       errors: {
         ui_name: "",
@@ -45,6 +46,8 @@ export default {
     this.total_price = this.checkoutStore.cart.reduce((total, dish) => total + dish.price * dish.quantity, 0);
     this.initializeBraintree();
     this.formData.total_price = this.checkoutStore.cart.reduce((total, dish) => total + dish.price * dish.quantity, 0);
+    this.formData.dishes = this.cart.map(item => ({ id: item.id, quantity: item.quantity }))
+    this.formData.user_id = parseInt(this.$route.params.user_id)
 
   },
   /* "SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'total_price' cannot be null (Connection: mysql, SQL: insert into `orders` (`ui_name`, `ui_address`, `ui_phone`, `ui_mail`, `total_price`, `updated_at`, `created_at`) values (Giacomo Branchi, Via Marzabotto 2, 3701069657, jack.bra99@gmail.com, ?, 2023-12-16 16:05:13, 2023-12-16 16:05:13))" */
@@ -88,8 +91,7 @@ export default {
       // Aggiungi l'array cart al formData
       this.formData.cart = this.cart;
       // chiamata axios che manda i dati al back-end (Orders)
-      this.formData.total_price = 10
-      this.formData.user_id = parseInt(this.$route.params.user_id)
+      //this.formData.total_price = 10
       axios
         .post("http://localhost:8000/api/orders", this.formData)
         .then((response) => {
@@ -186,7 +188,7 @@ export default {
         <em>I campi contrassegnati con "<span class="text-danger">*</span>" sono
           obbligatori.</em>
       </div>
-      <form @submit="submitForm">
+      <form @submit.prevent="submitForm">
         <!--* contenuto del form (dati utente) -->
         <div class="row">
           <div class="col-lg-6 my-2">
@@ -223,11 +225,11 @@ export default {
               Numero di carta di credito <span class="need text-danger">*</span>
             </label>
             <!--* Brand Icons -->
-            <span class="brands-cont">
+            <!--  <span class="brands-cont">
               <img src="../../../public/img/mastercard.png" alt="mastercard logo" />
               <img src="../../../public/img/paypal.png" alt="paypal logo" />
               <img src="../../../public/img/visa.svg.png" alt="visa logo" />
-            </span>
+            </span> -->
             <div id="creditCardNumber" class="form-control mt-2">
               <span style="color: red" class="error-message" v-if="error.uiName">Es. 4111 1111 1111 1111</span>
             </div>
@@ -240,7 +242,8 @@ export default {
                   Data di scadenza
                   <span class="need text-danger">*</span></label>
                 <div id="expireDate" class="form-control">
-                  <span style="color: red" class="error-message" v-if="error.uiName">Inserire data di scadenza</span>
+                  <span aria-required="true" style="color: red" class="error-message" v-if="error.uiName">Inserire data di
+                    scadenza</span>
                 </div>
               </div>
               <div class="col-lg-6">
@@ -342,6 +345,7 @@ export default {
   }
 }
 </style>
+
 
 
 <!-- essage
