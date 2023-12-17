@@ -13,7 +13,7 @@ export default {
       base_url: 'http://127.0.0.1:8000/',
       quantities: {},
       selectedRestaurant: '',
-      
+
     };
   },
   computed: {
@@ -26,7 +26,7 @@ export default {
     addToCart(dish) {
       // Check if the dish is already in the cart
       const existingDishIndex = useCheckoutStore().cart.findIndex(item => item.name === dish.name);
-      
+
       if (existingDishIndex !== -1) {
         // If the dish is already in the cart, update its quantity
         useCheckoutStore().cart[existingDishIndex].quantity += this.quantities[dish.id] || 1;
@@ -38,7 +38,8 @@ export default {
           description: dish.description,
           img: dish.img,
           quantity: this.quantities[dish.id] || 1,
-          restaurant: dish.user_id
+          restaurant: dish.user_id,
+          id: dish.id
         };
 
         // Push the dish with quantity to the cart
@@ -93,18 +94,18 @@ export default {
   },
 
   mounted() {
-    
-  axios.get(this.base_url + `api/restaurants/user/${this.$route.params.slug}`)
-    .then(response => {
-      console.log('topperia');
-      console.log(`http://localhost:8000/api/restaurants/user/${this.$route.params.slug}`);
 
-      this.singleRestaurant = response.data.result;
-      console.log(this.singleRestaurant);
-      useCheckoutStore().setSingleRestaurant(this.singleRestaurant); // Aggiorna singleRestaurant nel tuo store Pinia
-    }).catch(err => {
-      console.error(err);
-    })
+    axios.get(this.base_url + `api/restaurants/user/${this.$route.params.slug}`)
+      .then(response => {
+        console.log('topperia');
+        console.log(`http://localhost:8000/api/restaurants/user/${this.$route.params.slug}`);
+
+        this.singleRestaurant = response.data.result;
+        console.log(this.singleRestaurant);
+        useCheckoutStore().setSingleRestaurant(this.singleRestaurant); // Aggiorna singleRestaurant nel tuo store Pinia
+      }).catch(err => {
+        console.error(err);
+      })
   }
 }
 </script>
@@ -226,7 +227,7 @@ export default {
               <ul class="list-unstyled">
 
                 <!-- vfor to generate li orders -->
-                <li  v-for="(dish, index) in cart" :key="index" class="pb-3">
+                <li v-for="(dish, index) in cart" :key="index" class="pb-3">
                   <div class="d-flex justify-content-between align-items-center">
 
                     <!-- decrement -->
