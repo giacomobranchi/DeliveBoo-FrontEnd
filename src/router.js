@@ -36,7 +36,7 @@ const router = createRouter({
             component: AllRestaurantsView
         },
         {
-            path: '/checkout/:slug',
+            path: '/checkout/:slug?',
             name: 'CheckoutView',
             component: CheckoutView,
         },

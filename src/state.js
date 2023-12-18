@@ -6,6 +6,7 @@ export const state = reactive({
     base_url: 'http://127.0.0.1:8000/',
     selectedTypes: [],
     selectedTypeParams: '',
+    prezzo: 0,
 
     async fetchRestaurants() {
         const fetchedRestaurants = await axios.get(this.base_url + 'api/restaurants/')
@@ -46,6 +47,7 @@ export const useCheckoutStore = defineStore({
     id: 'checkout',
     state: () => ({
         cart: [],
+        restaurantCartTotal: 0,
         singleRestaurant: null, // Aggiungi singleRestaurant allo stato del tuo store
         // altri stati...
     }),
