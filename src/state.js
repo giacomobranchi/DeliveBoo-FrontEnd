@@ -7,8 +7,6 @@ export const state = reactive({
     selectedTypes: [],
     selectedTypeParams: '',
 
-
-
     async fetchRestaurants() {
         const fetchedRestaurants = await axios.get(this.base_url + 'api/restaurants/')
             .then(response => {
@@ -27,10 +25,6 @@ export const state = reactive({
                 console.error(err);
             })
     },
-
-
-
-
 
     /* fetchSingleRestaurant() {
         axios.get(this.base_url + `api/restaurants/${this.$route.params.slug}`)

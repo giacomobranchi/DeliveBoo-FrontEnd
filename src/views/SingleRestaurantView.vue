@@ -60,7 +60,8 @@ export default {
             img: dish.img,
             quantity: this.quantities[dish.id] || 1,
           }
-        }
+        } 
+
 
         // Push the dish with quantity to the cart
         useCheckoutStore().cart.push(dishWithQuantity);
@@ -125,14 +126,15 @@ export default {
         console.log(`http://localhost:8000/api/restaurants/user/${this.$route.params.slug}`);
 
         this.singleRestaurant = response.data.result;
+
         this.dishes = response.data.result.dish[0].user_id
         console.log(this.dishes);
+
         console.log(this.singleRestaurant);
         useCheckoutStore().setSingleRestaurant(this.singleRestaurant); // Aggiorna singleRestaurant nel tuo store Pinia
       }).catch(err => {
         console.error(err);
       })
-
   }
 }
 </script>
@@ -256,6 +258,7 @@ export default {
               <ul class="list-unstyled">
 
                 <!-- vfor to generate li orders -->
+
                 <li v-for="(dish, index) in filteredCart" :key="index" class="pb-3">
                   <div class="d-flex justify-content-between align-items-center">
 

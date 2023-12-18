@@ -2,6 +2,7 @@
 import { useCheckoutStore } from '../state.js';
 import axios from 'axios';
 import { state } from '../state.js';
+import axios from 'axios';
 
 export default {
   name: 'CheckoutView',
@@ -25,6 +26,7 @@ export default {
         .catch(err => {
           console.error(err);
         });
+      this.$router.push({ name: 'PaymentView', params: { 'user_id': this.checkoutStore.singleRestaurant.id } });
     },
 
     //total price for each dish
@@ -174,13 +176,14 @@ export default {
                   <i class="fa-solid fa-trash"></i>
                 </button>
 
+
               </div>
 
             </div>
 
           </div>
 
-          <!-- total price for eìeverything -->
+          <!-- total price for everything -->
           <h4 class="text-center my-3">
             Totale: € {{ calculateRestaurantTotal(restaurantOrders) }}
           </h4>
@@ -203,6 +206,7 @@ export default {
                 Procedi al Pagamento
               </button>
             </div>
+
 
           </div>
 
@@ -265,6 +269,7 @@ export default {
     &:hover {
       cursor: pointer;
       background-color: antiquewhite;
+      border-radius: 10px;
     }
   }
 
@@ -272,16 +277,16 @@ export default {
     width: 50px;
     height: 50px;
     font-size: 20px;
+    border-bottom: none;
     color: $d_boo_orange;
 
     &:hover {
       background-color: $d_boo_orange;
       color: $d_boo_light;
       border: 2px solid;
-
+      border-bottom: none;
     }
   }
-
 }
 
 .my_card {
