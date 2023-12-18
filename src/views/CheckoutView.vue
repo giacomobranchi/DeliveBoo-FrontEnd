@@ -2,7 +2,6 @@
 import { useCheckoutStore } from '../state.js';
 import axios from 'axios';
 import { state } from '../state.js';
-import axios from 'axios';
 
 export default {
   name: 'CheckoutView',
