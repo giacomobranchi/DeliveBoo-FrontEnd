@@ -27,7 +27,7 @@ export default {
         ui_address: "",
         ui_phone: "",
         ui_mail: "",
-        total_price: this.total_price,
+        total_price: /* this.total_price */0,
         user_id: '',
         success: true,
         dishes: []
@@ -43,10 +43,11 @@ export default {
   created() {
 
     this.cart = this.checkoutStore.cart;
-    this.total_price = this.checkoutStore.cart.reduce((total, dish) => total + dish.price * dish.quantity, 0);
+    /* this.total_price = calculateRestaurantTotal().cart.reduce((total, dish) => total + dish.price * dish.quantity, 0);*/
+    this.total_price = this.state.prezzo
     this.initializeBraintree();
-    this.formData.total_price = this.checkoutStore.cart.reduce((total, dish) => total + dish.price * dish.quantity, 0);
-    this.formData.dishes = this.cart.map(item => ({ id: item.id, quantity: item.quantity }))
+    this.formData.total_price = this.state.prezzo
+    this.formData.dishes = this.checkoutStore.cart.map(item => ({ id: item.dishes.id, quantity: item.dishes.quantity }))
     this.formData.user_id = parseInt(this.$route.params.user_id)
 
   },
