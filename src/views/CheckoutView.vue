@@ -56,13 +56,42 @@ export default {
       const visitedRestaurants = new Set();
 
       this.checkoutStore.cart.forEach(order => {
-        if (!visitedRestaurants.has(order.restaurant)) {
-          visitedRestaurants.add(order.restaurant);
-          uniqueRestaurants.push(this.checkoutStore.cart.filter(o => o.restaurant === order.restaurant));
+        if (!visitedRestaurants.has(order.restaurant.id)) {
+          visitedRestaurants.add(order.restaurant.id);
+          uniqueRestaurants.push(this.checkoutStore.cart.filter(o => o.restaurant.id === order.restaurant.id));
         }
       });
 
       return uniqueRestaurants;
+    },
+
+    incrementQuantityCart(dish) {
+
+      const existingItemIndex = useCheckoutStore().cart.findIndex(item => item.dishes.name === dish.name);
+
+      if (existingItemIndex !== -1) {
+        // If the dish is in the cart, increment its quantity
+        useCheckoutStore().cart[existingItemIndex].dishes.quantity += 1;
+
+      }
+    },
+
+    // Function to decrement the quantity of a dish in the cart
+    decrementQuantityCart(dish) {
+      const existingItemIndex = useCheckoutStore().cart.findIndex(item => item.dishes.name === dish.name);
+
+      if (existingItemIndex !== -1) {
+        // If the dish is in the cart and its quantity is greater than 1, decrement the quantity
+        if (useCheckoutStore().cart[existingItemIndex].dishes.quantity > 1) {
+
+          useCheckoutStore().cart[existingItemIndex].dishes.quantity -= 1;
+
+        } else {
+          // Optionally, remove the item from the cart if the quantity becomes 0
+          useCheckoutStore().cart.splice(existingItemIndex, 1);
+        }
+      }
+      // You can add additional logic if the item is not found (optional)
     },
 
     emptyCart() {
@@ -97,12 +126,15 @@ export default {
       <h1 class="text-center mb-3 pt-3">Carrello</h1>
 
       <!-- Iterate over unique restaurants in the cart -->
-      <div v-for="(restaurantOrders, restaurantIndex) in getUniqueRestaurants()" :key="restaurantIndex"
-        class="border-bottom border-black pb-3">
+      <div id="single_cart" v-for="(restaurantOrders, restaurantIndex) in getUniqueRestaurants()" :key="restaurantIndex"
+        class="border-bottom border-black pb-5 mb-5">
 
-        <h2 class="text-center my-4 p-2 border border-2 rounded-5 border-black bg-secondary text-light">
-          {{ restaurantOrders[0].restaurant }}
-        </h2>
+        <router-link :to="{ name: 'singleRestaurant', params: { slug: restaurantOrders[0].restaurant.slug } }"
+          class="text-decoration-none">
+          <h2 class="text-center my-4 p-2 border border-2 rounded-5 border-black">
+            {{ restaurantOrders[0].restaurant.name }}
+          </h2>
+        </router-link>
 
 
         <div class="row">
@@ -124,10 +156,24 @@ export default {
                 <p class="card-text mb-3">Totale: € {{ calculateTotalPrice(order.dishes) }}</p>
               </div>
 
-              <div class="col-lg-2">
-                <button class="btn btn-danger mr-2 mx-2" @click="removeItem(orderIndex)">
+              <!-- actions -->
+              <div class="col-lg-2 d-flex flex-column align-items-center">
+
+                <!-- decrement -->
+                <button class="btn" @click="decrementQuantityCart(order.dishes)">
+                  -
+                </button>
+
+                <!-- increment -->
+                <button class="btn my-2" @click="incrementQuantityCart(order.dishes)">
+                  +
+                </button>
+
+                <!-- delete -->
+                <button class="btn" @click="removeItem(orderIndex)">
                   <i class="fa-solid fa-trash"></i>
                 </button>
+
               </div>
 
             </div>
@@ -138,6 +184,28 @@ export default {
           <h4 class="text-center my-3">
             Totale: € {{ calculateRestaurantTotal(restaurantOrders) }}
           </h4>
+
+
+          <!-- actions section for single rest -->
+          <div class="col-12 d-flex justify-content-around">
+
+            <div class="col-5">
+              <router-link class="fw-bold border-2 w-100"
+                :to="{ name: 'singleRestaurant', params: { slug: restaurantOrders[0].restaurant.slug } }">
+                <button class="btn text-light w-100">
+                  Torna al ristorante
+                </button>
+              </router-link>
+            </div>
+
+            <div class="col-5">
+              <button class="btn h-100 w-100" @click="checkout">
+                Procedi al Pagamento
+              </button>
+            </div>
+
+          </div>
+
 
         </div>
 
@@ -159,9 +227,9 @@ export default {
         </h2>
 
         <div class="d-flex justify-content-center flex-wrap mb-5 gap-2">
-          <button class="btn btn-outline-secondary text-dark border-2" @click="goBack">Torna indietro</button>
+
           <button class="btn btn-outline-danger text-dark border-2" @click="emptyCart">Svuota il carrello</button>
-          <button class="btn btn-outline-primary text-dark border-2" @click="checkout">Procedi al Pagamento</button>
+
         </div>
       </div>
 
@@ -178,6 +246,11 @@ export default {
 #container_cart {
   background-color: $d_boo_orange;
   min-height: 100vh;
+
+  h2 {
+    background-color: black;
+    color: $d_boo_orange;
+  }
 
   .card_body {
 
@@ -221,6 +294,21 @@ export default {
     transform: scale(1.01);
   }
 
+}
+
+#single_cart {
+
+  button {
+    background-color: black;
+    color: $d_boo_orange;
+    border: 1px solid $d_boo_orange;
+    font-weight: 600;
+    width: 50%;
+
+    &:hover {
+      background-color: $d_boo_bg;
+    }
+  }
 }
 </style>
                   

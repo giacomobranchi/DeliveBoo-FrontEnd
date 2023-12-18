@@ -23,7 +23,11 @@ export default {
     /* isEmptyCart() {
       return useCheckoutStore().cart.length === 0 || useCheckoutStore().cart.every(dish => dish.restaurant === this.singleRestaurant.user_id);
     }
- */
+    */
+    filteredCart() {
+      // Replace 'restaurantId' with the actual property that identifies the restaurant
+      return this.cart.filter(item => item.restaurant.name === this.singleRestaurant.name);
+    },
   },
   methods: {
 
@@ -44,7 +48,11 @@ export default {
       } else {
         // If the dish is not in the cart, add a new instance with quantity 1
         const dishWithQuantity = {
-          restaurant: this.singleRestaurant.name,
+          restaurant: {
+            name: this.singleRestaurant.name,
+            id: this.singleRestaurant.id,
+            slug: this.singleRestaurant.slug
+          },
           dishes: {
             name: dish.name,
             price: Number(dish.price),
@@ -70,9 +78,7 @@ export default {
         // If the dish is in the cart, increment its quantity
         useCheckoutStore().cart[existingItemIndex].dishes.quantity += 1;
 
-        console.log('success');
       }
-      console.log('nope');
     },
 
     // Function to decrement the quantity of a dish in the cart
@@ -126,6 +132,7 @@ export default {
       }).catch(err => {
         console.error(err);
       })
+
   }
 }
 </script>
@@ -249,7 +256,7 @@ export default {
               <ul class="list-unstyled">
 
                 <!-- vfor to generate li orders -->
-                <li v-for="(dish, index) in cart" :key="index" class="pb-3">
+                <li v-for="(dish, index) in filteredCart" :key="index" class="pb-3">
                   <div class="d-flex justify-content-between align-items-center">
 
                     <!-- decrement -->
@@ -263,7 +270,7 @@ export default {
                     </span>
 
                     <!-- increment -->
-                    <button class="btn my_check_btn" @click="incrementQuantityCart(dish)">
+                    <button class="btn my_check_btn" @click="incrementQuantityCart(dish.dishes)">
                       +
                     </button>
 
