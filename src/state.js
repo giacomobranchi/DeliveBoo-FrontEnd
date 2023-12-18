@@ -43,24 +43,22 @@ export const state = reactive({
 import { defineStore } from 'pinia';
 
 export const useCheckoutStore = defineStore({
-  id: 'checkout',
-  state: () => ({
-    cart: [],
-    singleRestaurant: null, // Aggiungi singleRestaurant allo stato del tuo store
-    // altri stati...
-  }),
-  actions: {
-    addToCart(dish) {
-      // il tuo metodo addToCart...
-    },
-    setSingleRestaurant(restaurant) {
-      // Aggiungi un metodo per aggiornare singleRestaurant
-      
-      this.singleRestaurant = restaurant;
-    },
-    // altre azioni...
-  },
-  persist: true, // Add this line to persist the state of this store
-});
- 
+    id: 'checkout',
+    state: () => ({
+        cart: [],
+        singleRestaurant: null, // Aggiungi singleRestaurant allo stato del tuo store
+        // altri stati...
+    }),
+    actions: {
+        addToCart(dish) {
+            // il tuo metodo addToCart...
+        },
+        setSingleRestaurant(restaurant) {
+            // Aggiungi un metodo per aggiornare singleRestaurant
 
+            this.singleRestaurant = restaurant;
+        },
+        // altre azioni...
+    },
+    persist: true, // Add this line to persist the state of this store
+});

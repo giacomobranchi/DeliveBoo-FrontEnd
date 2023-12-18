@@ -1,5 +1,6 @@
 <script>
-import { useCheckoutStore } from '../state';
+import { useCheckoutStore } from '../state.js';
+import axios from 'axios';
 import { state } from '../state.js';
 import axios from 'axios';
 
@@ -15,6 +16,7 @@ export default {
     };
   },
   methods: {
+
     checkout() {
       axios.post(this.checkoutStore.base_url + 'api/checkout', this.checkoutStore.cart)
         .then(response => {
@@ -26,6 +28,74 @@ export default {
         });
       this.$router.push({ name: 'PaymentView', params: { 'user_id': this.checkoutStore.singleRestaurant.id } });
     },
+
+    //total price for each dish
+    calculateTotalPrice(item) {
+      return (item.quantity * item.price).toFixed(2);
+    },
+
+    //total for each restaurants
+    calculateRestaurantTotal(restaurantOrders) {
+      let total = 0;
+      restaurantOrders.forEach(order => {
+        total += parseFloat(this.calculateTotalPrice(order.dishes));
+      });
+      return total.toFixed(2);
+    },
+
+    //total price for all rest orders
+    calculateTotalForAllOrders() {
+      let total = 0;
+      this.checkoutStore.cart.forEach(order => {
+        total += parseFloat(this.calculateTotalPrice(order.dishes));
+      });
+      return total.toFixed(2);
+    },
+
+    // Get unique restaurants from the cart
+    getUniqueRestaurants() {
+      const uniqueRestaurants = [];
+      const visitedRestaurants = new Set();
+
+      this.checkoutStore.cart.forEach(order => {
+        if (!visitedRestaurants.has(order.restaurant.id)) {
+          visitedRestaurants.add(order.restaurant.id);
+          uniqueRestaurants.push(this.checkoutStore.cart.filter(o => o.restaurant.id === order.restaurant.id));
+        }
+      });
+
+      return uniqueRestaurants;
+    },
+
+    incrementQuantityCart(dish) {
+
+      const existingItemIndex = useCheckoutStore().cart.findIndex(item => item.dishes.name === dish.name);
+
+      if (existingItemIndex !== -1) {
+        // If the dish is in the cart, increment its quantity
+        useCheckoutStore().cart[existingItemIndex].dishes.quantity += 1;
+
+      }
+    },
+
+    // Function to decrement the quantity of a dish in the cart
+    decrementQuantityCart(dish) {
+      const existingItemIndex = useCheckoutStore().cart.findIndex(item => item.dishes.name === dish.name);
+
+      if (existingItemIndex !== -1) {
+        // If the dish is in the cart and its quantity is greater than 1, decrement the quantity
+        if (useCheckoutStore().cart[existingItemIndex].dishes.quantity > 1) {
+
+          useCheckoutStore().cart[existingItemIndex].dishes.quantity -= 1;
+
+        } else {
+          // Optionally, remove the item from the cart if the quantity becomes 0
+          useCheckoutStore().cart.splice(existingItemIndex, 1);
+        }
+      }
+      // You can add additional logic if the item is not found (optional)
+    },
+
     emptyCart() {
       this.checkoutStore.cart = [];
     },
@@ -39,13 +109,10 @@ export default {
       window.scrollTo(0, 0);
     },
   },
-  computed: {
-    total() {
-      let total = this.checkoutStore.cart.reduce((total, dish) => total + dish.price * dish.quantity, 0);
-      return total.toFixed(2);
-    }
-  },
   mounted() {
+
+    console.log(this.checkoutStore.cart);
+
     window.addEventListener('scroll', () => {
       this.isTop = scrollY > 100 ? false : true;
     });
@@ -58,53 +125,122 @@ export default {
   <main id="container_cart">
 
     <div class="container">
+      <h1 class="text-center mb-3 pt-3">Carrello</h1>
 
-      <div class="row">
-        <div class="col-12">
-          <h1 class="text-center mb-3 p-5">Benvenuti al Carrello -{{ checkoutStore.singleRestaurant.name }}-</h1>
-          <div v-for="(dish, index) in checkoutStore.cart" class="card mb-3">
-            <div class="card-body d-flex justify-content-around shadow flex-wrap  card_body">
-              <div class="col-12 col-md-6 col-lg-3">
-                <img v-if="dish.img.indexOf('http') !== -1" :src="dish.img" alt="External Image">
-                <img v-else :src="this.state.base_url + 'storage/' + dish.img" alt="Local Image">
+      <!-- Iterate over unique restaurants in the cart -->
+      <div id="single_cart" v-for="(restaurantOrders, restaurantIndex) in getUniqueRestaurants()" :key="restaurantIndex"
+        class="border-bottom border-black pb-5 mb-5">
+
+        <router-link :to="{ name: 'singleRestaurant', params: { slug: restaurantOrders[0].restaurant.slug } }"
+          class="text-decoration-none">
+          <h2 class="text-center my-4 p-2 border border-2 rounded-5 border-black">
+            {{ restaurantOrders[0].restaurant.name }}
+          </h2>
+        </router-link>
+
+
+        <div class="row">
+
+          <!-- iterate over each restaurant order -->
+          <div v-for="(order, orderIndex) in restaurantOrders" :key="orderIndex" class="col-lg-6 col-12 mb-3">
+
+            <!-- card for each item -->
+            <div class="card my_card d-flex flex-row justify-content-between align-items-center shadow">
+
+              <div class="col-lg-3">
+                <img class="img-fluid rounded-2" :src="this.state.base_url + 'storage/' + order.dishes.img"
+                  alt="Local Image">
               </div>
-              <div class="col-12 col-md-6 col-lg-3  mx-5">
-                <h5 class="card-title mb-3">{{ dish.name }}</h5>
-                <hr>
-                <p class="card-text mb-3">Prezzo: € {{ dish.price }}</p>
-                <p class="card-text mb-3">Quantita': {{ dish.quantity }}pz</p>
+
+              <div class="col-lg-5">
+                <h5 class="card-title mb-3">{{ order.dishes.name }}</h5>
+                <p class="card-text mb-3">Quantità : {{ order.dishes.quantity }}</p>
+                <p class="card-text mb-3">Totale: € {{ calculateTotalPrice(order.dishes) }}</p>
               </div>
-              <div class="col-12 col-md-12 col-lg-3 mb-3">
-                <h5>Descrizione prodotto</h5>
-                <hr>
-                <p class="card-text">{{ dish.description }}</p>
+
+              <!-- actions -->
+              <div class="col-lg-2 d-flex flex-column align-items-center">
+
+                <!-- decrement -->
+                <button class="btn" @click="decrementQuantityCart(order.dishes)">
+                  -
+                </button>
+
+                <!-- increment -->
+                <button class="btn my-2" @click="incrementQuantityCart(order.dishes)">
+                  +
+                </button>
+
+                <!-- delete -->
+                <button class="btn" @click="removeItem(orderIndex)">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+
+
               </div>
-              <div class="col-12 col-lg-3">
-                <button class="btn btn-danger mr-2 mx-2" @click="removeItem(index)"><i
-                    class="fa-solid fa-trash"></i></button>
-              </div>
+
             </div>
 
           </div>
-          <h1 class="text-center my-5">Totale: € {{ total }}</h1>
-          <div class="d-flex justify-content-center flex-wrap mb-5 gap-2">
-            <button class="btn btn-outline-secondary text-dark border-2" @click="goBack">Torna indietro</button>
-            <button class="btn btn-outline-danger text-dark border-2" @click="emptyCart">Svuota il carrello</button>
-            <button class="btn btn-outline-primary text-dark border-2" @click="checkout">Procedi al Pagamento</button>
+
+          <!-- total price for everything -->
+          <h4 class="text-center my-3">
+            Totale: € {{ calculateRestaurantTotal(restaurantOrders) }}
+          </h4>
+
+
+          <!-- actions section for single rest -->
+          <div class="col-12 d-flex justify-content-around">
+
+            <div class="col-5">
+              <router-link class="fw-bold border-2 w-100"
+                :to="{ name: 'singleRestaurant', params: { slug: restaurantOrders[0].restaurant.slug } }">
+                <button class="btn text-light w-100">
+                  Torna al ristorante
+                </button>
+              </router-link>
+            </div>
+
+            <div class="col-5">
+              <button class="btn h-100 w-100" @click="checkout">
+                Procedi al Pagamento
+              </button>
+            </div>
+
+
           </div>
-          <div class="d-flex justify-content-end fixed-bottom mx-5">
-            <button v-if="!isTop" @click="backToTop" class="scrollToTop"><i class="fas fa-angle-up"></i></button>
-          </div>
+
+
+        </div>
+
+      </div>
+
+
+      <!-- if cart is empty -->
+      <h2 v-if="checkoutStore.cart.length === 0" class="text-center my-5">
+
+        Il carrello è vuoto
+
+      </h2>
+
+      <!-- if cart has items -->
+      <div v-else>
+
+        <h2 class="text-center my-5">
+          Totale ordine: € {{ calculateTotalForAllOrders() }}
+        </h2>
+
+        <div class="d-flex justify-content-center flex-wrap mb-5 gap-2">
+
+          <button class="btn btn-outline-danger text-dark border-2" @click="emptyCart">Svuota il carrello</button>
+
         </div>
       </div>
-      <div v-if="checkoutStore.cart.length === 0" class="row text-center">
-        <div class="col-12 vh-100 text-white my-5 ">
-          <h1 class="text-center pb-5">Il tuo carrello e' vuoto</h1>
-          <!-- <button class="btn btn-outline-secondary text-dark border-2" @click="goBack">Torna indietro</button> -->
-        </div>
+
+      <div class="d-flex justify-content-end">
+        <button v-if="!isTop" @click="backToTop" class="scrollToTop"><i class="fas fa-angle-up"></i></button>
       </div>
     </div>
-
   </main>
 </template>
   
@@ -114,6 +250,11 @@ export default {
 #container_cart {
   background-color: $d_boo_orange;
   min-height: 100vh;
+
+  h2 {
+    background-color: black;
+    color: $d_boo_orange;
+  }
 
   .card_body {
 
@@ -144,6 +285,33 @@ export default {
       color: $d_boo_light;
       border: 2px solid;
       border-bottom: none;
+    }
+  }
+}
+
+.my_card {
+  border: 2px solid black;
+  border-width: 2px;
+  padding: 1rem;
+
+
+  &:hover {
+    transform: scale(1.01);
+  }
+
+}
+
+#single_cart {
+
+  button {
+    background-color: black;
+    color: $d_boo_orange;
+    border: 1px solid $d_boo_orange;
+    font-weight: 600;
+    width: 50%;
+
+    &:hover {
+      background-color: $d_boo_bg;
     }
   }
 }
