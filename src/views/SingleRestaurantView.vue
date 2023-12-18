@@ -59,8 +59,9 @@ export default {
             description: dish.description,
             img: dish.img,
             quantity: this.quantities[dish.id] || 1,
+            id: dish.id
           }
-        } 
+        }
 
 
         // Push the dish with quantity to the cart
@@ -116,7 +117,13 @@ export default {
         this.quantities[dish.id]--;
       }
     },
+    svuota() {
+      useCheckoutStore().cart = []
+      useCheckoutStore().restaurantCartTotal = 0
+      this.state.prezzo = 0
+    }
   },
+
 
   mounted() {
 
@@ -287,7 +294,9 @@ export default {
                   <button class="btn">
                     Go to Checkout
                   </button>
+
                 </router-link>
+                <button class="btn my_check_btn py-2" @click="svuota()"><i class="fa-solid fa-trash"></i></button>
               </div>
 
             </div>
