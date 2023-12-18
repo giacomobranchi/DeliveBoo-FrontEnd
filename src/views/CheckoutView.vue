@@ -3,7 +3,6 @@ import { useCheckoutStore } from '../state.js';
 import axios from 'axios';
 import { state } from '../state.js';
 
-
 export default {
   name: 'CheckoutView',
   data() {
@@ -16,8 +15,6 @@ export default {
     };
   },
   methods: {
-
-
 
     //total price for each dish
     calculateTotalPrice(item) {
@@ -200,11 +197,15 @@ export default {
             </div>
 
             <div class="col-5">
-              <button class="btn h-100 w-100" @click="pushTotal(calculateRestaurantTotal(restaurantOrders))">
 
-                <router-link
-                  :to="{ name: 'PaymentView', params: { 'user_id': restaurantOrders[0].restaurant.id } }">Paga</router-link>
+
+              <button class="btn h-100 w-100" @click="pushTotal(calculateRestaurantTotal(restaurantOrders))">
+                <router-link :to="{ name: 'PaymentView', params: { 'user_id': restaurantOrders[0].restaurant.id } }">
+                  Paga
+                </router-link>
+
               </button>
+
             </div>
 
 
@@ -217,7 +218,7 @@ export default {
 
 
       <!-- if cart is empty -->
-      <h2 v-if="checkoutStore.cart.length === 0" class="text-center my-5">
+      <h2 v-if="checkoutStore.cart.length === 0" class="text-center my-5 rounded-5 p-3">
 
         Il carrello è vuoto
 

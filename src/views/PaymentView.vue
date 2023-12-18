@@ -27,7 +27,7 @@ export default {
         ui_address: "",
         ui_phone: "",
         ui_mail: "",
-        total_price: /* this.total_price */0,
+        total_price: 0,
         user_id: '',
         success: true,
         dishes: []

@@ -112,11 +112,13 @@ export default {
         this.quantities[dish.id]++;
       }
     },
+
     decrementQuantity(dish) {
       if (this.quantities[dish.id] && this.quantities[dish.id] > 1) {
         this.quantities[dish.id]--;
       }
     },
+
     svuota() {
       useCheckoutStore().cart = []
       useCheckoutStore().restaurantCartTotal = 0
@@ -149,8 +151,6 @@ export default {
 
 <template>
   <div class="container py-4" v-if="singleRestaurant">
-
-
 
 
     <h1>{{ singleRestaurant.name }}</h1>
@@ -296,7 +296,12 @@ export default {
                   </button>
 
                 </router-link>
-                <button class="btn my_check_btn py-2" @click="svuota()"><i class="fa-solid fa-trash"></i></button>
+
+
+                <button class="btn ms-3" @click="svuota()">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+
               </div>
 
             </div>
