@@ -59,8 +59,9 @@ export default {
             description: dish.description,
             img: dish.img,
             quantity: this.quantities[dish.id] || 1,
+            id: dish.id
           }
-        } 
+        }
 
 
         // Push the dish with quantity to the cart
@@ -111,11 +112,19 @@ export default {
         this.quantities[dish.id]++;
       }
     },
+
     decrementQuantity(dish) {
       if (this.quantities[dish.id] && this.quantities[dish.id] > 1) {
         this.quantities[dish.id]--;
       }
     },
+
+    svuota() {
+      useCheckoutStore().cart = []
+      useCheckoutStore().restaurantCartTotal = 0
+      this.state.prezzo = 0
+    }
+
   },
 
   mounted() {
@@ -142,8 +151,6 @@ export default {
 
 <template>
   <div class="container py-4" v-if="singleRestaurant">
-
-
 
 
     <h1>{{ singleRestaurant.name }}</h1>
@@ -288,6 +295,10 @@ export default {
                     Go to Checkout
                   </button>
                 </router-link>
+
+                <button class="btn ms-3" @click="svuota()">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
               </div>
 
             </div>

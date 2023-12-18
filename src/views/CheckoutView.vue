@@ -2,7 +2,6 @@
 import { useCheckoutStore } from '../state.js';
 import axios from 'axios';
 import { state } from '../state.js';
-import axios from 'axios';
 
 export default {
   name: 'CheckoutView',
@@ -17,18 +16,6 @@ export default {
   },
   methods: {
 
-    checkout() {
-      axios.post(this.checkoutStore.base_url + 'api/checkout', this.checkoutStore.cart)
-        .then(response => {
-          console.log(response);
-          this.checkoutStore.cart = [];
-        })
-        .catch(err => {
-          console.error(err);
-        });
-      this.$router.push({ name: 'PaymentView', params: { 'user_id': this.checkoutStore.singleRestaurant.id } });
-    },
-
     //total price for each dish
     calculateTotalPrice(item) {
       return (item.quantity * item.price).toFixed(2);
@@ -41,6 +28,12 @@ export default {
         total += parseFloat(this.calculateTotalPrice(order.dishes));
       });
       return total.toFixed(2);
+    },
+
+    pushTotal(price) {
+      this.state.prezzo = 0
+
+      this.state.prezzo = price
     },
 
     //total price for all rest orders
@@ -202,9 +195,13 @@ export default {
             </div>
 
             <div class="col-5">
-              <button class="btn h-100 w-100" @click="checkout">
-                Procedi al Pagamento
+
+              <button class="btn h-100 w-100" @click="pushTotal(calculateRestaurantTotal(restaurantOrders))">
+                <router-link :to="{ name: 'PaymentView', params: { 'user_id': restaurantOrders[0].restaurant.id } }">
+                  Paga
+                </router-link>
               </button>
+
             </div>
 
 
@@ -217,7 +214,7 @@ export default {
 
 
       <!-- if cart is empty -->
-      <h2 v-if="checkoutStore.cart.length === 0" class="text-center my-5">
+      <h2 v-if="checkoutStore.cart.length === 0" class="text-center my-5 rounded-5 p-3">
 
         Il carrello è vuoto
 
