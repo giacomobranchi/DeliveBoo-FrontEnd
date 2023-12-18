@@ -124,8 +124,8 @@ export default {
       useCheckoutStore().restaurantCartTotal = 0
       this.state.prezzo = 0
     }
-
   },
+
 
   mounted() {
 
@@ -294,11 +294,14 @@ export default {
                   <button class="btn">
                     Go to Checkout
                   </button>
+
                 </router-link>
+
 
                 <button class="btn ms-3" @click="svuota()">
                   <i class="fa-solid fa-trash"></i>
                 </button>
+
               </div>
 
             </div>

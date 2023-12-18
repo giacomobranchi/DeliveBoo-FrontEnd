@@ -27,6 +27,7 @@ export default {
       restaurantOrders.forEach(order => {
         total += parseFloat(this.calculateTotalPrice(order.dishes));
       });
+
       return total.toFixed(2);
     },
 
@@ -91,6 +92,7 @@ export default {
 
     emptyCart() {
       this.checkoutStore.cart = [];
+
     },
     goBack() {
       this.$router.go(-1);
@@ -121,7 +123,7 @@ export default {
       <h1 class="text-center mb-3 pt-3">Carrello</h1>
 
       <!-- Iterate over unique restaurants in the cart -->
-      <div id="single_cart" v-for="(restaurantOrders, restaurantIndex) in getUniqueRestaurants()" :key="restaurantIndex"
+      <div id="single_cart" v-for="(restaurantOrders, restaurantIndex) in  getUniqueRestaurants() " :key="restaurantIndex"
         class="border-bottom border-black pb-5 mb-5">
 
         <router-link :to="{ name: 'singleRestaurant', params: { slug: restaurantOrders[0].restaurant.slug } }"
@@ -196,10 +198,12 @@ export default {
 
             <div class="col-5">
 
+
               <button class="btn h-100 w-100" @click="pushTotal(calculateRestaurantTotal(restaurantOrders))">
                 <router-link :to="{ name: 'PaymentView', params: { 'user_id': restaurantOrders[0].restaurant.id } }">
                   Paga
                 </router-link>
+
               </button>
 
             </div>
