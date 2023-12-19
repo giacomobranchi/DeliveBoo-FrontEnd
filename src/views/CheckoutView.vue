@@ -148,8 +148,10 @@ export default {
             <div class="card my_card d-flex flex-row justify-content-between align-items-center shadow">
 
               <div class="col-lg-3">
-                <img class="img-fluid rounded-2" :src="this.state.base_url + 'storage/' + order.dishes.img"
-                  alt="Local Image">
+                <img v-if="order.dishes.img.indexOf('http') !== -1" :src="order.dishes.img" alt="External Image"
+                  class="img-fluid rounded-2">
+                <img v-else :src="this.state.base_url + 'storage/' + order.dishes.img" alt="Local Image"
+                  class="img-fluid rounded-2">
               </div>
 
               <div class="col-lg-5">
