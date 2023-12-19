@@ -9,16 +9,15 @@ export default {
     const checkoutStore = useCheckoutStore();
     return {
       state,
-      checkoutStore,
-      singleRestaurant: null, // Aggiungi la definizione di singleRestaurant qui se necessario
+      checkoutStore, // Aggiungi la definizione di singleRestaurant qui se necessario
       isTop: true,
     };
   },
   methods: {
 
     pushTotal(price) {
-      this.state.prezzo = 0
-      this.state.prezzo = price
+      useCheckoutStore().prezzo = 0
+      useCheckoutStore().prezzo = price
     },
 
     //total price for each dish
@@ -36,10 +35,13 @@ export default {
       return total.toFixed(2);
     },
 
-    pushTotal(price) {
-      this.state.prezzo = 0
+    pushTotal(price, restaurantOrders) {
+      useCheckoutStore().prezzo = 0
+      useCheckoutStore().prezzo = price
 
-      this.state.prezzo = price
+      useCheckoutStore().singleRestaurant = restaurantOrders[0].restaurant
+      console.log(useCheckoutStore().singleRestaurant);
+
     },
 
     //total price for all rest orders
@@ -147,20 +149,22 @@ export default {
             <!-- card for each item -->
             <div class="card my_card d-flex flex-row justify-content-between align-items-center shadow">
 
+
               <div class="col-lg-3">
                 <img v-if="order.dishes.img.indexOf('http') !== -1" :src="order.dishes.img" alt="External Image"
-                      class="img-fluid rounded-2">
-                    <img v-else :src="this.state.base_url + 'storage/' + order.dishes.img" alt="Local Image" class="img-fluid rounded-2">
+                  class="img-fluid rounded-2">
+                <img v-else :src="this.state.base_url + 'storage/' + order.dishes.img" alt="Local Image"
+                  class="img-fluid rounded-2">
               </div>
 
-              <div class="col-lg-5">
+              <div class="col-lg-5 col-5">
                 <h5 class="card-title mb-3">{{ order.dishes.name }}</h5>
                 <p class="card-text mb-3">Quantità : {{ order.dishes.quantity }}</p>
                 <p class="card-text mb-3">Totale: € {{ calculateTotalPrice(order.dishes) }}</p>
               </div>
 
               <!-- actions -->
-              <div class="col-lg-2 d-flex flex-column align-items-center">
+              <div class="col-lg-3 col-3 d-flex flex-column align-items-center">
 
                 <!-- decrement -->
                 <button class="btn" @click="decrementQuantityCart(order.dishes)">
@@ -203,7 +207,8 @@ export default {
             </div>
 
             <div class="col-5">
-              <button class="btn h-100 w-100" @click="pushTotal(calculateRestaurantTotal(restaurantOrders))">
+              <button class="btn h-100 w-100"
+                @click="pushTotal(calculateRestaurantTotal(restaurantOrders), restaurantOrders)">
                 <router-link :to="{ name: 'PaymentView', params: { 'user_id': restaurantOrders[0].restaurant.id } }"
                   class="text-decoration-none text-light">
                   Procedi al pagamento
@@ -231,7 +236,7 @@ export default {
       <!-- if cart has items -->
       <div v-else>
 
-        <h2 class="text-center my-5">
+        <h2 class="text-center my-5 rounded-5 p-3">
           Totale ordine: € {{ calculateTotalForAllOrders() }}
         </h2>
 
@@ -243,7 +248,9 @@ export default {
       </div>
 
       <div class="d-flex justify-content-end">
-        <button v-if="!isTop" @click="backToTop" class="scrollToTop"><i class="fas fa-angle-up"></i></button>
+        <button v-if="!isTop" @click="backToTop" class="scrollToTop btn">
+          <i class="fas fa-angle-up"></i>
+        </button>
       </div>
     </div>
   </main>
@@ -281,15 +288,14 @@ export default {
   .scrollToTop {
     width: 50px;
     height: 50px;
-    font-size: 20px;
-    border-bottom: none;
-    color: $d_boo_orange;
+    color: $d_boo_bg;
+    background-color: $d_boo_orange;
+    border: 2px solid $d_boo_bg;
 
     &:hover {
-      background-color: $d_boo_orange;
-      color: $d_boo_light;
-      border: 2px solid;
-      border-bottom: none;
+      background-color: $d_boo_bg;
+      color: $d_boo_orange;
+      border: 2px solid $d_boo_bg;
     }
   }
 }
