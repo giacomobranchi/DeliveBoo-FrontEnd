@@ -147,19 +147,19 @@ export default {
             <!-- card for each item -->
             <div class="card my_card d-flex flex-row justify-content-between align-items-center shadow">
 
-              <div class="col-lg-3">
+              <div class="col-lg-3 col-3">
                 <img class="img-fluid rounded-2" :src="this.state.base_url + 'storage/' + order.dishes.img"
                   alt="Local Image">
               </div>
 
-              <div class="col-lg-5">
+              <div class="col-lg-5 col-5">
                 <h5 class="card-title mb-3">{{ order.dishes.name }}</h5>
                 <p class="card-text mb-3">Quantità : {{ order.dishes.quantity }}</p>
                 <p class="card-text mb-3">Totale: € {{ calculateTotalPrice(order.dishes) }}</p>
               </div>
 
               <!-- actions -->
-              <div class="col-lg-2 d-flex flex-column align-items-center">
+              <div class="col-lg-3 col-3 d-flex flex-column align-items-center">
 
                 <!-- decrement -->
                 <button class="btn" @click="decrementQuantityCart(order.dishes)">

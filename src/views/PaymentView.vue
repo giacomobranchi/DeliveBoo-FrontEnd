@@ -241,8 +241,8 @@ export default {
           </div>
 
           <div class="form-group">
-            <div class="d-flex justify-content-between">
-              <div class="col-lg-6">
+            <div class="d-flex flex-wrap justify-content-between">
+              <div class="col-md-6 col-12">
                 <label class="text">
                   Data di scadenza
                   <span class="need text-danger">*</span></label>
@@ -251,7 +251,7 @@ export default {
                     scadenza</span>
                 </div>
               </div>
-              <div class="col-lg-6">
+              <div class="col-md-6 col-12">
                 <label class="text">
                   CVV <span class="need text-danger">*</span></label>
                 <div id="cvv" class="form-control">
@@ -312,7 +312,7 @@ export default {
 }
 
 .container {
-  width: 60%;
+  width: 80%;
   border: 2px solid rgb(48, 169, 129);
   padding: 35px;
   border-radius: 20px;
