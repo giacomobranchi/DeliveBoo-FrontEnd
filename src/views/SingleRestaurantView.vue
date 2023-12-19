@@ -59,7 +59,7 @@ export default {
             description: dish.description,
             img: dish.img,
             quantity: this.quantities[dish.id] || 1,
-            id: dish.id
+            id: dish.id,
           }
         }
 
@@ -120,9 +120,18 @@ export default {
     },
 
     svuota() {
-      useCheckoutStore().cart = []
-      useCheckoutStore().restaurantCartTotal = 0
-      this.state.prezzo = 0
+      const filteredCart = useCheckoutStore().cart.filter(item => item.restaurant.name === this.singleRestaurant.name);
+
+      // Loop through the items in filteredCart and remove them from the cart
+      for (const item of filteredCart) {
+        const index = useCheckoutStore().cart.indexOf(item);
+        if (index !== -1) {
+          useCheckoutStore().cart.splice(index, 1);
+        }
+      }
+      // Reset other related properties
+      useCheckoutStore().restaurantCartTotal = 0;
+      this.state.prezzo = 0;
     }
   },
 
@@ -151,7 +160,6 @@ export default {
 
 <template>
   <div class="container py-4" v-if="singleRestaurant">
-
 
     <h1>{{ singleRestaurant.name }}</h1>
     <p class="text-light pt-2">
@@ -254,7 +262,7 @@ export default {
           <div class="card-body p-2">
 
             <!-- view if no element on cart -->
-            <p v-if="cart.length === 0" class="fw-bold">
+            <p v-if="filteredCart.length === 0" class="fw-bold">
               Non hai aggiunto prodotti al momento, quando lo farai appariranno qua!
             </p>
 
@@ -290,13 +298,12 @@ export default {
 
               <!-- checkout button -->
               <div class="text-center py-3">
+
                 <router-link :to="{ name: 'CheckoutView', params: { slug: singleRestaurant.slug } }">
                   <button class="btn">
                     Go to Checkout
                   </button>
-
                 </router-link>
-
 
                 <button class="btn ms-3" @click="svuota()">
                   <i class="fa-solid fa-trash"></i>

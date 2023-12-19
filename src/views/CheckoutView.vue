@@ -16,6 +16,11 @@ export default {
   },
   methods: {
 
+    pushTotal(price) {
+      this.state.prezzo = 0
+      this.state.prezzo = price
+    },
+
     //total price for each dish
     calculateTotalPrice(item) {
       return (item.quantity * item.price).toFixed(2);
@@ -197,13 +202,11 @@ export default {
             </div>
 
             <div class="col-5">
-
-
               <button class="btn h-100 w-100" @click="pushTotal(calculateRestaurantTotal(restaurantOrders))">
-                <router-link :to="{ name: 'PaymentView', params: { 'user_id': restaurantOrders[0].restaurant.id } }">
-                  Paga
+                <router-link :to="{ name: 'PaymentView', params: { 'user_id': restaurantOrders[0].restaurant.id } }"
+                  class="text-decoration-none text-light">
+                  Procedi al pagamento
                 </router-link>
-
               </button>
 
             </div>
