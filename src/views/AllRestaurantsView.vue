@@ -81,14 +81,14 @@ export default {
 
 <template>
     <div class="container text-white">
-        <div class="row py-5">
+        <div class="row row-cols-1 row-cols-lg-2 py-5">
 
             <!-- SIDEBAR -->
-            <div class="col-3">
+            <div class="col col-lg-3">
                 <h3 class="text-uppercase">Filtra per tipologia</h3>
                 <div class="type_list overflow_hidden">
-                    <div class="form-check">
-                        <div class="text-decoration-none m-1" v-for="(singleType, index) in this.state.types"
+                    <div class="form-check row row-cols-2 row-cols-lg-1 d-flex">
+                        <div class="text-decoration-none m-0 col" v-for="(singleType, index) in this.state.types"
                             :key="singleType.slug">
 
                             <input v-model="state.selectedTypes" class="form-check-input" :for="singleType.id"
@@ -100,21 +100,21 @@ export default {
 
                     </div>
                 </div>
-
-                <button @click="filterRestaurants" class="btn my_btn mt-2 me-3">Filtra</button>
-                <div @click="removeFilter">
-                    <RouterLink to="/all-restaurants" class="btn my_btn_clear mt-2">Svuota</RouterLink>
+                <div class="d-flex justify-content-start">
+                    <button @click="filterRestaurants" class="btn my_btn mt-2 me-3">Filtra</button>
+                    <div @click="removeFilter">
+                        <RouterLink to="/all-restaurants" class="btn my_btn_clear mt-2 mb-3">Svuota</RouterLink>
+                    </div>
                 </div>
-
             </div>
             <!-- /.col -->
 
-            <div class="col-9">
+            <div class="col col-lg-9">
 
 
-                <div class="row row-cols-3 g-4">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
 
-                    <div v-for="restaurant in this.showedRest" class="col-4">
+                    <div v-for="restaurant in this.showedRest" class="col">
 
                         <router-link :to="{ name: 'singleRestaurant', params: { slug: restaurant.slug } }"
                             class="text-decoration-none">
@@ -176,7 +176,7 @@ export default {
 
 .my_btn {
     background-color: $d_boo_orange;
-    margin: auto;
+    margin: auto 0;
     padding: 1rem 1.5rem;
     border-radius: 10px;
     font-weight: 600;

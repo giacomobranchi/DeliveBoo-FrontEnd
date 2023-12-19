@@ -56,11 +56,7 @@ export default {
 }    
 </script>
 <template>
-    <section id="jumbotron">
-
-        <h1 class="py-5 text-center">
-            Welcome to DeliveBoo!
-        </h1>
+    <section id="jumbotron" class="py-5">
 
     </section>
 
@@ -73,8 +69,8 @@ export default {
             </h2>
 
             <!-- restaurants cards -->
-            <div class="row g-1 pb-5">
-                <div v-for="restaurant in this.displayedRestaurants" class="col-3">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-1 pb-5">
+                <div v-for="restaurant in this.displayedRestaurants" class="col">
 
                     <div class="my_card">
                         <router-link :to="{ name: 'singleRestaurant', params: { slug: restaurant.slug } }"
@@ -110,10 +106,10 @@ export default {
                 What do you like to eat?
             </h2>
 
-            <div class="row g-3 pb-5">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3 pb-5">
 
                 <!-- iterate each type -->
-                <div v-for="( single_type, index ) in    this.types   " :key="single_type.id" class="col-3">
+                <div v-for="( single_type, index ) in    this.types " :key="single_type.id" class="col">
 
                     <div class="text-decoration-none m-1 text-center my_card_types" :key="single_type.slug"
                         :class="{ 'active': isChecked('types[]=' + single_type.slug + '&') }">
@@ -146,7 +142,7 @@ export default {
 #jumbotron {
     background-image: url(../assets/img/Capture.PNG);
     background-size: contain;
-    height: 50vh;
+    background-repeat: repeat-x;    
 }
 
 h2 {
@@ -211,7 +207,6 @@ h6 {
 
 .my_btn_types {
     background-color: $d_boo_orange;
-    width: 15%;
     margin: auto;
     padding: 1rem;
     border-radius: 10px;
@@ -227,7 +222,6 @@ h6 {
 
 .my_btn_rest {
     background-color: black;
-    width: 25%;
     margin: auto;
     padding: 1rem;
     border-radius: 10px;

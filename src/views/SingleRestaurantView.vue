@@ -132,7 +132,7 @@ export default {
       // Reset other related properties
       useCheckoutStore().restaurantCartTotal = 0;
       this.state.prezzo = 0;
-    }
+    }, 
   },
 
 
@@ -171,12 +171,12 @@ export default {
     <div class="row py-3">
 
       <!-- column with dishes -->
-      <div class="col-9">
+      <div class="col-lg-9 col-12">
 
-        <div class="row row-cols-1 row-cols-md-2">
+        <div class="row row-cols-1 row-cols-xl-2">
 
           <!-- dinamic generation of dish column with cards -->
-          <div v-for="dish in singleRestaurant.dish" class="col col-md-6 pb-3">
+          <div v-for="dish in singleRestaurant.dish" class="col pb-3">
 
             <div class="my_card text-break d-flex flex-column">
 
@@ -207,32 +207,37 @@ export default {
                 <!-- bottom column with price and action -->
                 <div class="col-12">
 
-                  <div class="row justify-content-between align-items-center">
+                  <div class="row row-cols-sm-2 justify-content-between align-items-center">
 
                     <!-- price -->
-                    <div class="fs-5 fw-bolder col-3">
+                    <div class="fs-5 fw-bolder col">
                       €{{ dish.price }}
                     </div>
 
                     <!-- actions -->
-                    <div class="col-7">
-                      <div id="actions" class="d-flex justify-content-between align-items-center">
-                        <button class="btn btn-primary" @click="decrementQuantity(dish)">
+                    <div class="col">
+                      <div id="actions" class="d-flex justify-content-evenly align-items-center">
+                        <div class="d-flex align-items-center">
+                          <button class="btn btn-primary" @click="decrementQuantity(dish)">
                           -
-                        </button>
+                          </button>
 
-                        <div class="counter">
-                          <span class="fs-5">
-                            {{ quantities[dish.id] || 1 }}
-                          </span>
+                          <div class="counter px-4">
+                            <span class="fs-5">
+                              {{ quantities[dish.id] || 1 }}
+                            </span>
+                          </div>
+
+                          <button class="btn btn-primary me-2" @click="incrementQuantity(dish)">
+                            +
+                          </button>
                         </div>
-
-                        <button class="btn btn-primary" @click="incrementQuantity(dish)">
-                          +
-                        </button>
+                        
 
                         <button class="btn btn-primary mr-2" @click="addToCart(dish)">
-                          Add to Cart
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart4" viewBox="0 0 16 16">
+                          <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l.5 2H5V5zM6 5v2h2V5zm3 0v2h2V5zm3 0v2h1.36l.5-2zm1.11 3H12v2h.61zM11 8H9v2h2zM8 8H6v2h2zM5 8H3.89l.5 2H5zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0"/>
+                          </svg>
                         </button>
                       </div>
                     </div>
@@ -250,7 +255,7 @@ export default {
 
 
       <!-- col with checkout order -->
-      <div class="col-3">
+      <div class="col-12 col-lg-3">
 
         <!-- card with order -->
         <div class="card checkout text-break text-center">
@@ -334,10 +339,10 @@ h1 {
 }
 
 img {
-  max-height: 115px;
-  max-width: 150px;
-  min-height: 115px;
-  min-width: 150px;
+  max-height: 100px;
+  max-width: 125px;
+  min-height: 100px;
+  min-width: 125px;
 }
 
 .checkout {
@@ -365,9 +370,7 @@ img {
   padding: 1rem;
   border-radius: 10px;
   max-height: 210px;
-  max-width: 470px;
   min-height: 210px;
-  min-width: 470px;
   transition: .2s ease-in-out;
 
   &:hover {
