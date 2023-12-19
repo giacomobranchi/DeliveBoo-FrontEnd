@@ -1,6 +1,5 @@
 <script>
 import { state } from '../state.js';
-import AllRestaurantsView from '../views/AllRestaurantsView.vue';
 
 export default {
   name: 'ComponentNavbar',
@@ -25,13 +24,19 @@ export default {
 
 <template>
   <header>
-    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark p-3">
       <div class="container">
-        <a class="navbar-brand" href="#">DeliveBoo</a>
+
+        <router-link id="logo" class="navbar-brand" to="/">
+          <img src="../assets/img/db-logo.PNG" alt="deliveboo logo" class="img-fluid">
+        </router-link>
+
+        <!-- dropdown button responsive -->
         <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
           aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="mainNav">
           <ul class="navbar-nav me-auto mt-2 mt-lg-0">
             <li class="nav-item">
@@ -41,9 +46,11 @@ export default {
             </li>
             <li @click="reload" class="nav-item">
               <router-link :to="{ name: 'allRestaurantsList', params: { slug: '' } }"
-                class="nav-link">Restaurants</router-link>
+                class="nav-link">Ristoranti</router-link>
             </li>
-
+            <li class="nav-item">
+              <router-link to="/checkout" class="nav-link">Carrello</router-link>
+            </li>
           </ul>
           <div class="admin">
             <a href="http://127.0.0.1:8000/admin" class="btn admin-btn p-2" target="__blank">
@@ -58,6 +65,10 @@ export default {
 
 <style lang="scss" scoped>
 @use '../assets/scss/partials/variables' as *;
+
+#logo {
+  width: 70px;
+}
 
 .navbar {
   background-color: linear-gradient(rgba(23, 32, 43, 0.9), rgba(55, 67, 81, 0.753));
@@ -86,7 +97,7 @@ export default {
 
   &:hover {
     color: $d_boo_light;
-    border-color: transparent;
+    border: 1px solid white;
   }
 }
 </style>
