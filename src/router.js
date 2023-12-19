@@ -8,6 +8,7 @@ import CheckoutView from './views/CheckoutView.vue';
 import FAQView from './views/FAQView.vue';
 import PaymentView from './views/PaymentView.vue';
 import TerminiPrivacyCookiesView from './views/TerminiPrivacyCookiesView.vue';
+import TeamSviluppoView from './views/TeamSviluppoView.vue';
 
 
 const router = createRouter({
@@ -56,6 +57,12 @@ const router = createRouter({
             path: '/TerminiPrivacyCookies',
             name: 'TerminiPrivacyCookiesView',
             component: TerminiPrivacyCookiesView,
+        },
+        {
+
+            path: '/TeamSviluppo',
+            name: 'TeamSviluppoView',
+            component: TeamSviluppoView,
         },
     ]
 });

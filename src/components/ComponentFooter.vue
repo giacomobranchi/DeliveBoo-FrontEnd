@@ -41,7 +41,7 @@ export default {
               <h5>Scopri DeliveBoo</h5>
               <div class="line"></div>
               <ul class="list-unstyled my-2">
-                  <li><a href="">Team di sviluppo</a></li>
+                <li><router-link class="nav-link effect" aria-current="page" to="/TeamSviluppo">Team di Sviluppo</router-link></li>
                   <li @click="reload" class="nav-item">
                   <router-link :to="{ name: 'allRestaurantsList', params: { slug: '' } }"
                     class="nav-link">Ristoranti</router-link>
@@ -50,18 +50,29 @@ export default {
               </ul>
           </div>
           <!-- End section Scopri DeliveBoo -->
+
+          <div id="social-media-icons" class="about col-12 ">
+            <ul class="list-unstyled social-icons d-flex justify-content-around">
+              <li><a href="#"><i class="fab fa-facebook-f icon"></i></a></li>
+              <li><a href="#"><i class="fab fa-twitter icon"></i></a></li>
+              <li><a href="#"><i class="fab fa-linkedin-in icon"></i></a></li>
+              <li><a href="#"><i class="fab fa-google-plus-g icon"></i></a></li>
+            </ul>
+          </div>
+          <!-- End section Social Media Icons -->
+          <div class="contatti   text-center  py-3">
+              <h5>Contatti</h5>
+              <div class="line text-center" style="width: auto;"></div>
+              <ul class="list-unstyled d-flex my-2 gap-4">
+                <li>Email : <i href="#">supporto@deliveboo.com</i></li>
+                <li>Telefono : +39 3215684795</li>
+                <li>Indirizzo : Via Roma, 1900, 00100 Roma RM, Italia</li>
+              </ul>
+          </div>
+          <!-- End section Contatti -->
           
         </div>
 
-        <div id="social-media-icons" class="about col-12 ">
-            <ul class="list-unstyled social-icons d-flex justify-content-around">
-                <li><a href="#"><i class="fab fa-facebook-f icon"></i></a></li>
-                <li><a href="#"><i class="fab fa-twitter icon"></i></a></li>
-                <li><a href="#"><i class="fab fa-linkedin-in icon"></i></a></li>
-                <li><a href="#"><i class="fab fa-google-plus-g icon"></i></a></li>
-            </ul>
-        </div>
-        <!-- End section Social Media Icons -->
 
       </div>
     </div>
@@ -91,11 +102,15 @@ footer {
 
   background: linear-gradient(rgba(23, 32, 43, 0.9), rgba(55, 67, 81, 0.753));
   
-  .aiuto h5, .note_legali h5, .scopri_deliveboo h5 {
+  .aiuto h5, .note_legali h5, .scopri_deliveboo h5, .contatti h5 {
     font-size: 2.6rem;
   }
-  .aiuto, .note_legali, .scopri_deliveboo {
+  .aiuto, .note_legali, .scopri_deliveboo, .contatti {
     font-size: 1.3rem;
+  }
+
+  .contatti {
+    margin: auto;
   }
   .lists {
     color: $d_boo_light;
