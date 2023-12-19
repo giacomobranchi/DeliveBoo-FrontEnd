@@ -60,10 +60,11 @@ export default {
             </ul>
           </div>
           <!-- End section Social Media Icons -->
-          <div class="contatti   text-center  py-3">
+
+          <div class="contatti  text-center  py-3">
               <h5>Contatti</h5>
               <div class="line text-center" style="width: auto;"></div>
-              <ul class="list-unstyled d-flex my-2 gap-4">
+              <ul class="list-unstyled d-flex flex-wrap my-2 gap-4">
                 <li>Email : <i href="#">supporto@deliveboo.com</i></li>
                 <li>Telefono : +39 3215684795</li>
                 <li>Indirizzo : Via Roma, 1900, 00100 Roma RM, Italia</li>
