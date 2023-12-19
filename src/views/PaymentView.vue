@@ -13,6 +13,10 @@ export default {
       title: "Pagina Pagamento",
       cart: [],
       total_price: 0,
+      hostedFieldInstance: false,
+      nonce: "",
+      error: "",
+      success: '',
 
       // logica braintree
       braintreeClient: null,
@@ -44,9 +48,9 @@ export default {
 
     this.cart = this.checkoutStore.cart;
     /* this.total_price = calculateRestaurantTotal().cart.reduce((total, dish) => total + dish.price * dish.quantity, 0);*/
-    this.total_price = this.state.prezzo
+    this.total_price = useCheckoutStore().prezzo
     this.initializeBraintree();
-    this.formData.total_price = this.state.prezzo
+    this.formData.total_price = useCheckoutStore().prezzo
     this.formData.dishes = this.checkoutStore.cart.map(item => ({ id: item.dishes.id, quantity: item.dishes.quantity }))
     this.formData.user_id = parseInt(this.$route.params.user_id)
 
@@ -96,16 +100,36 @@ export default {
       axios
         .post("http://localhost:8000/api/orders", this.formData)
         .then((response) => {
+
+          this.success = response.data
+
           console.log("Dati inviati con successo:", response.data);
-        });
+        })
+        .catch(err => {
+          console.error(err);
+          this.error = err.message;
+        })
     },
     // pulizia carrello
-    clearCart() {
-      this.cart = [];
+
+    clearCartForSelectedRestaurant() {
+      // Get the selected restaurant from the store
+      const selectedRestaurant = useCheckoutStore().singleRestaurant;
+
+      // Filter cart items for the selected restaurant
+      const itemsToRemove = useCheckoutStore().cart.filter(item => item.restaurant.id === selectedRestaurant.id);
+
+      // Remove those items from the cart
+      itemsToRemove.forEach(item => {
+        const index = useCheckoutStore().cart.indexOf(item);
+        useCheckoutStore().cart.splice(index, 1);
+      });
+
       this.saveCart();
+      useCheckoutStore().restaurantCartTotal = 0;
+      useCheckoutStore().prezzo = 0;
       this.showModal = false;
       this.showModalemptyCart = false;
-      // this.$emit("cart-cleared");
     },
 
     saveCart() {
@@ -170,8 +194,8 @@ export default {
               token: payload.nonce,
             })
             .then((resp) => {
+              this.clearCartForSelectedRestaurant();
               this.payLoad = false;
-              this.clearCart();
             })
             .catch((err) => {
               console.log(err);
@@ -191,6 +215,7 @@ export default {
         <em>I campi contrassegnati con "<span class="text-danger">*</span>" sono
           obbligatori.</em>
       </div>
+
       <form @submit.prevent="submitForm">
         <!--* contenuto del form (dati utente) -->
         <div class="row">
@@ -268,9 +293,13 @@ export default {
             <span><strong class="me-2">Totale:</strong>€ {{ this.total_price }}</span>
           </div>
           <div class="my-3">
-            <div v-if="this.total_price <= 0" class="bg-danger mb-3">
-              <span class="ps-3">Carrello vuoto, effettua un ordine.</span>
-              <span class="fas fa-arrow-right"></span>
+            <div v-if="this.total_price <= 0" class="bg-danger p-3 rounded-3">
+              <span>
+                Carrello vuoto,
+              </span>
+              <router-link to="/all-restaurants">
+                <span class="text-dark"> effettua un ordine.</span>
+              </router-link>
             </div>
             <button type="submit" v-else class="btn btn-checkout mb-3">
               <span class="">Ordina Adesso</span>
@@ -282,6 +311,18 @@ export default {
 
         <button type="submit" class="btn btn-primary mt-4">Invia dati</button> -->
       </form>
+
+
+      <!-- success message -->
+      <div class="alert alert-success" v-if="success">
+        Pagamento avvenuto con successo!
+        <router-link to="/checkout">
+          <span class="text-black">
+            Torna al carrello
+          </span>
+        </router-link>
+      </div>
+
     </div>
   </div>
 </template>
