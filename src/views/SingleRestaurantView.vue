@@ -112,6 +112,7 @@ export default {
         this.quantities[dish.id]++;
       }
     },
+
     decrementQuantity(dish) {
       if (this.quantities[dish.id] && this.quantities[dish.id] > 1) {
         this.quantities[dish.id]--;
@@ -132,8 +133,8 @@ export default {
       useCheckoutStore().restaurantCartTotal = 0;
       this.state.prezzo = 0;
     }
-
   },
+
 
   mounted() {
 
