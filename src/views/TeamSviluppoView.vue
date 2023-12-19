@@ -11,7 +11,7 @@
           <div class="col-lg-8 text-center">
             <h3 class="name">Giacomo Branchi</h3>
             <hr>
-            <h5 class="position">jr Full Stack Developre</h5>
+            <h5 class="position">Jr Full Stack Developer</h5>
             <div class="description">
               Ciao, sono Giacomo Branchi, uno sviluppatore Full Stack Junior appassionato di tecnologia e programmazione. Ho contribuito allo sviluppo di Deliveboo in vari modi, tra cui la progettazione e l'implementazione di funzionalità back-end e front-end.
             </div>
@@ -26,7 +26,7 @@
           <div class="col-lg-8 text-center order-lg-1">
             <h3 class="name">Lorenzo Neri</h3>
             <hr>
-            <h5 class="position">jr Full Stack Developre</h5>
+            <h5 class="position">Jr Full Stack Developer</h5>
             <div class="description">
               Ciao, sono Lorenzo Neri, uno sviluppatore Full Stack Junior appassionato di tecnologia e programmazione. Ho contribuito allo sviluppo di Deliveboo in vari modi, tra cui la progettazione e l'implementazione di funzionalità back-end e front-end.
             </div>
@@ -41,7 +41,7 @@
           <div class="col-lg-8 text-center">
             <h3 class="name">Pietro Cipolla</h3>
             <hr>
-            <h5 class="position">jr Full Stack Developre</h5>
+            <h5 class="position">Jr Full Stack Developer</h5>
             <div class="description">
               Ciao, sono Pietro Cipolla, uno sviluppatore Full Stack Junior appassionato di tecnologia e programmazione. Ho contribuito allo sviluppo di Deliveboo in vari modi, tra cui la progettazione e l'implementazione di funzionalità back-end e front-end.
             </div>
@@ -56,7 +56,7 @@
           <div class="col-lg-8 text-center order-lg-1">
             <h3 class="name">Claudio Bernardinetti</h3>
             <hr>
-            <h5 class="position">jr Full Stack Developre</h5>
+            <h5 class="position">Jr Full Stack Developer</h5>
             <div class="description">
               Ciao, sono Claudio Bernardinetti, uno sviluppatore Full Stack Junior appassionato di tecnologia e programmazione. Ho contribuito allo sviluppo di Deliveboo in vari modi, tra cui la progettazione e l'implementazione di funzionalità back-end e front-end.
             </div>
@@ -71,7 +71,7 @@
           <div class="col-lg-8 text-center">
             <h3 class="name">Fabio Vasi</h3>
             <hr>
-            <h5 class="position">jr Full Stack Developre</h5>
+            <h5 class="position">Jr Full Stack Developer</h5>
             <div class="description">
               Ciao, sono Fabio Vasi, uno sviluppatore Full Stack Junior appassionato di tecnologia e programmazione. Ho contribuito allo sviluppo di Deliveboo in vari modi, tra cui la progettazione e l'implementazione di funzionalità back-end e front-end.
             </div>
