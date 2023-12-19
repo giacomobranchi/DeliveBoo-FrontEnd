@@ -9,16 +9,15 @@ export default {
     const checkoutStore = useCheckoutStore();
     return {
       state,
-      checkoutStore,
-      singleRestaurant: null, // Aggiungi la definizione di singleRestaurant qui se necessario
+      checkoutStore, // Aggiungi la definizione di singleRestaurant qui se necessario
       isTop: true,
     };
   },
   methods: {
 
     pushTotal(price) {
-      this.state.prezzo = 0
-      this.state.prezzo = price
+      useCheckoutStore().prezzo = 0
+      useCheckoutStore().prezzo = price
     },
 
     //total price for each dish
@@ -36,10 +35,13 @@ export default {
       return total.toFixed(2);
     },
 
-    pushTotal(price) {
-      this.state.prezzo = 0
+    pushTotal(price, restaurantOrders) {
+      useCheckoutStore().prezzo = 0
+      useCheckoutStore().prezzo = price
 
-      this.state.prezzo = price
+      useCheckoutStore().singleRestaurant = restaurantOrders[0].restaurant
+      console.log(useCheckoutStore().singleRestaurant);
+
     },
 
     //total price for all rest orders
@@ -202,7 +204,8 @@ export default {
             </div>
 
             <div class="col-5">
-              <button class="btn h-100 w-100" @click="pushTotal(calculateRestaurantTotal(restaurantOrders))">
+              <button class="btn h-100 w-100"
+                @click="pushTotal(calculateRestaurantTotal(restaurantOrders), restaurantOrders)">
                 <router-link :to="{ name: 'PaymentView', params: { 'user_id': restaurantOrders[0].restaurant.id } }"
                   class="text-decoration-none text-light">
                   Procedi al pagamento
@@ -230,7 +233,7 @@ export default {
       <!-- if cart has items -->
       <div v-else>
 
-        <h2 class="text-center my-5">
+        <h2 class="text-center my-5 rounded-5 p-3">
           Totale ordine: € {{ calculateTotalForAllOrders() }}
         </h2>
 
@@ -242,7 +245,9 @@ export default {
       </div>
 
       <div class="d-flex justify-content-end">
-        <button v-if="!isTop" @click="backToTop" class="scrollToTop"><i class="fas fa-angle-up"></i></button>
+        <button v-if="!isTop" @click="backToTop" class="scrollToTop btn">
+          <i class="fas fa-angle-up"></i>
+        </button>
       </div>
     </div>
   </main>
@@ -280,15 +285,14 @@ export default {
   .scrollToTop {
     width: 50px;
     height: 50px;
-    font-size: 20px;
-    border-bottom: none;
-    color: $d_boo_orange;
+    color: $d_boo_bg;
+    background-color: $d_boo_orange;
+    border: 2px solid $d_boo_bg;
 
     &:hover {
-      background-color: $d_boo_orange;
-      color: $d_boo_light;
-      border: 2px solid;
-      border-bottom: none;
+      background-color: $d_boo_bg;
+      color: $d_boo_orange;
+      border: 2px solid $d_boo_bg;
     }
   }
 }

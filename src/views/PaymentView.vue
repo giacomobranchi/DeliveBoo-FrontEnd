@@ -13,6 +13,9 @@ export default {
       title: "Pagina Pagamento",
       cart: [],
       total_price: 0,
+      hostedFieldInstance: false,
+      nonce: "",
+      error: "",
 
       // logica braintree
       braintreeClient: null,
@@ -44,9 +47,9 @@ export default {
 
     this.cart = this.checkoutStore.cart;
     /* this.total_price = calculateRestaurantTotal().cart.reduce((total, dish) => total + dish.price * dish.quantity, 0);*/
-    this.total_price = this.state.prezzo
+    this.total_price = useCheckoutStore().prezzo
     this.initializeBraintree();
-    this.formData.total_price = this.state.prezzo
+    this.formData.total_price = useCheckoutStore().prezzo
     this.formData.dishes = this.checkoutStore.cart.map(item => ({ id: item.dishes.id, quantity: item.dishes.quantity }))
     this.formData.user_id = parseInt(this.$route.params.user_id)
 
@@ -97,15 +100,32 @@ export default {
         .post("http://localhost:8000/api/orders", this.formData)
         .then((response) => {
           console.log("Dati inviati con successo:", response.data);
-        });
+        })
+        .catch(err => {
+          console.error(err);
+          this.error = err.message;
+        })
     },
     // pulizia carrello
-    clearCart() {
-      this.cart = [];
+
+    clearCartForSelectedRestaurant() {
+      // Get the selected restaurant from the store
+      const selectedRestaurant = useCheckoutStore().singleRestaurant;
+
+      // Filter cart items for the selected restaurant
+      const itemsToRemove = useCheckoutStore().cart.filter(item => item.restaurant.id === selectedRestaurant.id);
+
+      // Remove those items from the cart
+      itemsToRemove.forEach(item => {
+        const index = useCheckoutStore().cart.indexOf(item);
+        useCheckoutStore().cart.splice(index, 1);
+      });
+
       this.saveCart();
+      useCheckoutStore().restaurantCartTotal = 0;
+      useCheckoutStore().prezzo = 0;
       this.showModal = false;
       this.showModalemptyCart = false;
-      // this.$emit("cart-cleared");
     },
 
     saveCart() {
@@ -170,8 +190,8 @@ export default {
               token: payload.nonce,
             })
             .then((resp) => {
+              this.clearCartForSelectedRestaurant();
               this.payLoad = false;
-              this.clearCart();
             })
             .catch((err) => {
               console.log(err);
@@ -191,6 +211,13 @@ export default {
         <em>I campi contrassegnati con "<span class="text-danger">*</span>" sono
           obbligatori.</em>
       </div>
+
+
+      <div class="alert alert-success" v-if="nonce">
+        Pagamento avvenuto con successo!
+      </div>
+
+
       <form @submit.prevent="submitForm">
         <!--* contenuto del form (dati utente) -->
         <div class="row">
