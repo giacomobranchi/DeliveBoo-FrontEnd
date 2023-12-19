@@ -91,7 +91,7 @@ export default {
                 <button class="my_btn_rest my-4" v-if="this.displayedRestaurants < this.restaurants">
                     <router-link to="/all-restaurants" class="text-decoration-none">
                         <h6>
-                            Look at all our restaurants!
+                            Guarda i nostri ristoranti
                         </h6>
                     </router-link>
                 </button>
@@ -142,7 +142,7 @@ export default {
 #jumbotron {
     background-image: url(../assets/img/Capture.PNG);
     background-size: contain;
-    background-repeat: repeat-x;    
+    background-repeat: repeat-x;
 }
 
 h2 {

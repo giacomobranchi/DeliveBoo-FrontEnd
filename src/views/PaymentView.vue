@@ -51,7 +51,7 @@ export default {
     this.total_price = useCheckoutStore().prezzo
     this.initializeBraintree();
     this.formData.total_price = useCheckoutStore().prezzo
-    this.formData.dishes = this.checkoutStore.cart.map(item => ({ id: item.dishes.id, quantity: item.dishes.quantity }))
+    this.formData.dishes = this.checkoutStore.cart.filter(item => item.restaurant.id === this.checkoutStore.singleRestaurant.id).map(item => ({ id: item.dishes.id, quantity: item.dishes.quantity }))
     this.formData.user_id = parseInt(this.$route.params.user_id)
 
   },
