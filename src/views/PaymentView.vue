@@ -16,6 +16,7 @@ export default {
       hostedFieldInstance: false,
       nonce: "",
       error: "",
+      success: '',
 
       // logica braintree
       braintreeClient: null,
@@ -99,6 +100,9 @@ export default {
       axios
         .post("http://localhost:8000/api/orders", this.formData)
         .then((response) => {
+
+          this.success = response.data
+
           console.log("Dati inviati con successo:", response.data);
         })
         .catch(err => {
@@ -212,12 +216,6 @@ export default {
           obbligatori.</em>
       </div>
 
-
-      <div class="alert alert-success" v-if="nonce">
-        Pagamento avvenuto con successo!
-      </div>
-
-
       <form @submit.prevent="submitForm">
         <!--* contenuto del form (dati utente) -->
         <div class="row">
@@ -295,9 +293,13 @@ export default {
             <span><strong class="me-2">Totale:</strong>€ {{ this.total_price }}</span>
           </div>
           <div class="my-3">
-            <div v-if="this.total_price <= 0" class="bg-danger mb-3">
-              <span class="ps-3">Carrello vuoto, effettua un ordine.</span>
-              <span class="fas fa-arrow-right"></span>
+            <div v-if="this.total_price <= 0" class="bg-danger p-3 rounded-3">
+              <span>
+                Carrello vuoto,
+              </span>
+              <router-link to="/all-restaurants">
+                <span class="text-dark"> effettua un ordine.</span>
+              </router-link>
             </div>
             <button type="submit" v-else class="btn btn-checkout mb-3">
               <span class="">Ordina Adesso</span>
@@ -309,6 +311,18 @@ export default {
 
         <button type="submit" class="btn btn-primary mt-4">Invia dati</button> -->
       </form>
+
+
+      <!-- success message -->
+      <div class="alert alert-success" v-if="success">
+        Pagamento avvenuto con successo!
+        <router-link to="/checkout">
+          <span class="text-black">
+            Torna al carrello
+          </span>
+        </router-link>
+      </div>
+
     </div>
   </div>
 </template>
