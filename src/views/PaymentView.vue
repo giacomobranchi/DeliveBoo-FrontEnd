@@ -305,13 +305,16 @@ export default {
               <span class="">Ordina Adesso</span>
               <div v-show="payLoad" class="cell"></div>
             </button>
+            <div class=" d-flex justify-content-end">
+              <img width="50" src="../assets/img/Visa.png" style="margin-right : 1rem;" alt="">
+              <img width="50" src="../assets/img/master_card.png" alt="">
+            </div>
           </div>
         </div>
         <!-- <h3>Totale da pagare: € {{ this.total_price }}</h3>
 
         <button type="submit" class="btn btn-primary mt-4">Invia dati</button> -->
       </form>
-
 
       <!-- success message -->
       <div class="alert alert-success" v-if="success">
