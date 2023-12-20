@@ -70,12 +70,14 @@ export default {
 
             <!-- restaurants cards -->
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-1 pb-5">
-                <div v-for="restaurant in this.displayedRestaurants" class="col">
+                <div v-for="restaurant in this.displayedRestaurants" class="col p-2">
 
                     <div class="my_card">
                         <router-link :to="{ name: 'singleRestaurant', params: { slug: restaurant.slug } }"
                             class="text-decoration-none">
-                            <h6 class="pb-1">
+                            <img class="card-img-top rounded-3 img-fluid border border-black "
+                                :src="state.base_url + 'storage/' + restaurant.img" alt="...">
+                            <h6 class="py-2">
                                 {{ restaurant.name }}
                             </h6>
                             <p class="text-light m-0">
@@ -167,11 +169,13 @@ h6 {
         color: $d_boo_bg;
     }
 
+
     &:hover {
         transform: scale(1.05);
         border: 1px solid white;
         cursor: pointer;
         box-shadow: inset 0px 0px 5px 0px white;
+        border: 2px solid black;
     }
 
 }

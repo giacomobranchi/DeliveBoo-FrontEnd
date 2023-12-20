@@ -114,18 +114,17 @@ export default {
 
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
 
-                    <div v-for="restaurant in this.showedRest" class="col">
+                    <div v-for="restaurant in  this.showedRest " class="col">
 
                         <router-link :to="{ name: 'singleRestaurant', params: { slug: restaurant.slug } }"
                             class="text-decoration-none">
                             <div class="card bg-black overlay bg-transparent border-0">
                                 <img class="card-img-top rounded-3 img-fluid"
-                                    src="https://imgs.search.brave.com/Q37xS1P9QR74fgVCUo7CA6Zpn_woGWjzvP9x8e4nUCk/rs:fit:500:0:0/g:ce/aHR0cHM6Ly93d3cu/cmlzdG9yYW50ZXJv/Y2NhLmNvbS93cC1j/b250ZW50L3VwbG9h/ZHMvZWxlbWVudG9y/L3RodW1icy9yZXN0/YXVyYW50X2Rvd25z/dGFpcnNfcm9vbS1v/ODYxdmd6cjQ0emlh/M25tMm5zdzlpd2N3/MDc2MW83YXlyeTcz/bXFobXMuanBn"
-                                    alt="...">
+                                    :src="state.base_url + 'storage/' + restaurant.img" alt="...">
 
                                 <div class="card-body shadow py-3 overflow_hidden rounded-3">
                                     <div class="row">
-                                        <div class="col" v-for="singleType in restaurant.types">
+                                        <div class="col" v-for=" singleType  in  restaurant.types ">
                                             <div class="badge bg-danger">
                                                 {{ singleType.name }}
                                             </div>
