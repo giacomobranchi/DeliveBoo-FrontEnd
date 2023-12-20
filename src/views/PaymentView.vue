@@ -301,6 +301,7 @@ export default {
                 <span class="text-dark"> effettua un ordine.</span>
               </router-link>
             </div>
+            <div v-else-if="success"></div>
             <button type="submit" v-else class="btn btn-checkout mb-3">
               <span class="">Ordina Adesso</span>
               <div v-show="payLoad" class="cell"></div>
