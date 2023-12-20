@@ -256,7 +256,7 @@ export default {
   </main>
 </template>
   
-<style lang="scss">
+<style lang="scss" scoped>
 @use '../assets/scss/partials/variables' as *;
 
 #container_cart {
@@ -304,6 +304,11 @@ export default {
   border: 2px solid black;
   border-width: 2px;
   padding: 1rem;
+
+  img {
+    height: 130px;
+    width: 160px;
+  }
 
 
   &:hover {
