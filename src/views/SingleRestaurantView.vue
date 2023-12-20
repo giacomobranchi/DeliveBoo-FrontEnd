@@ -197,7 +197,7 @@ export default {
                     <h5 class="fw-bolder text-truncate">
                       {{ dish.name }}
                     </h5>
-                    <p>
+                    <p class="text-truncate">
                       {{ dish.ingredients }}
                     </p>
                   </div>

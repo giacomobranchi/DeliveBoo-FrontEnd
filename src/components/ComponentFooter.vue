@@ -8,10 +8,10 @@ export default {
   <footer>
     <div class="footer-top">
       <div class="container footer flex-wrap">
-        <div class="lists d-flex flex-wrap justify-content-between  ">
+        <div class="lists d-flex flex-wrap justify-content-around">
 
           <div class="aiuto col-12 col-lg-4 col-xl-3 py-3">
-            <h5>Aiuto</h5>
+            <h4>Aiuto</h4>
             <div class="line"></div>
             <ul class="list-unstyled my-2">
               <li><a href="">Contatti</a></li>
@@ -26,7 +26,7 @@ export default {
           <!-- End section Aiuto -->
 
           <div class="note_legali col-12 col-lg-4 col-xl-3 py-3">
-            <h5>Note Legali</h5>
+            <h4>Note Legali</h4>
             <div class="line"></div>
             <ul class="list-unstyled my-2">
               <li><router-link class="nav-link effect" aria-current="page" to="/TerminiPrivacyCookies">Termini &
@@ -41,7 +41,7 @@ export default {
           <!-- End section Note legali -->
 
           <div class="scopri_deliveboo col-12 col-lg-6 col-xl-3 py-3">
-            <h5>Scopri DeliveBoo</h5>
+            <h4>Scopri DeliveBoo</h4>
             <div class="line"></div>
             <ul class="list-unstyled my-2">
               <li><router-link class="nav-link effect" aria-current="page" to="/TeamSviluppo">Team di
@@ -56,7 +56,7 @@ export default {
           <!-- End section Scopri DeliveBoo -->
 
           <div id="social-media-icons" class="about col-12 py-3">
-            <ul class="list-unstyled social-icons d-flex justify-content-around align-items-center">
+            <ul class="list-unstyled social-icons d-flex justify-content-around align-items-center m-0">
               <li><a href="#"><i class="fab fa-facebook-f icon"></i></a></li>
               <li><a href="#"><i class="fab fa-twitter icon"></i></a></li>
               <li><a href="#"><i class="fab fa-linkedin-in icon"></i></a></li>
@@ -65,7 +65,7 @@ export default {
           </div>
           <!-- End section Social Media Icons -->
 
-          <div class="contatti  text-center  pb-3">
+          <div class="text-center m-auto pb-3">
             <h5>Contatti</h5>
             <div class="line text-center" style="width: auto;"></div>
             <ul class="list-unstyled d-flex flex-wrap my-2 gap-4">
@@ -108,21 +108,9 @@ footer {
 
   background: linear-gradient(rgba(23, 32, 43, 0.9), rgba(55, 67, 81, 0.753));
 
-  h5 {
-    font-size: 2rem;
-  }
-
   .aiuto,
   .note_legali,
   .scopri_deliveboo,
-  .contatti {
-    font-size: 1rem;
-  }
-
-  .contatti {
-    margin: auto;
-  }
-
   .lists {
     color: $d_boo_light;
     padding-top: 2rem;
