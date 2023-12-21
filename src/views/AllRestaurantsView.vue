@@ -119,9 +119,11 @@ export default {
                         <router-link :to="{ name: 'singleRestaurant', params: { slug: restaurant.slug } }"
                             class="text-decoration-none">
                             <div class="card bg-black overlay bg-transparent border-0">
-                                <img class="card-img-top rounded-3 img-fluid"
-                                    :src="state.base_url + 'storage/' + restaurant.img" alt="...">
 
+                                <img v-if="restaurant.img" class="card-img-top rounded-3 img-fluid"
+                                    :src="state.base_url + 'storage/' + restaurant.img" alt="...">
+                                <img v-else style="aspect-ratio: 1;" class="card-img-top rounded-3 img-fluid"
+                                    src="../assets/img/anonimus.jpeg" alt="...">
                                 <div class="card-body shadow py-3 overflow_hidden rounded-3">
                                     <div class="row">
                                         <div class="col" v-for=" singleType  in  restaurant.types ">

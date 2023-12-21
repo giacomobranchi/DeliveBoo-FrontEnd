@@ -75,8 +75,10 @@ export default {
                     <div class="my_card">
                         <router-link :to="{ name: 'singleRestaurant', params: { slug: restaurant.slug } }"
                             class="text-decoration-none">
-                            <img class="card-img-top rounded-3 img-fluid border border-black "
+                            <img v-if="restaurant.img" class="card-img-top rounded-3 img-fluid border border-black "
                                 :src="state.base_url + 'storage/' + restaurant.img" alt="...">
+                            <img v-else style="aspect-ratio: 1;" class="card-img-top rounded-3 img-fluid"
+                                src="../assets/img/anonimus.jpeg" alt="...">
                             <h6 class="py-2">
                                 {{ restaurant.name }}
                             </h6>
